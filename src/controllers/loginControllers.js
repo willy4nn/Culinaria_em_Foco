@@ -79,6 +79,8 @@ const getUsers = async (req, res) => {
   client.end();
 };
 
+
+//Aqui é feito o processo de login, quando o usuário é autenticado ele recebe um cookie
 const autenticate = async (req, res) => {
   const client = conectToDatabase();
   const { username, password } = req.body;
@@ -129,14 +131,18 @@ const logout = (req, res) => {
   res.json({ success: true });
 };
 
+
+//Aqui é feita a criação do usuário
 const addUser = async (req, res) => {
   const client = conectToDatabase();
   const newUser = req.body;
-  if (!newUser.userType) {
-    newUser.userType = ["user"];
+  if (!newUser.user_type) {
+    newUser.user_type = "user";
   }
   const newUsername = newUser.username;
-  const hashedPassword = hashPassword(newUser.password);
+  const hashedPassword = await hashPassword(newUser.password);
+  
+  //Aqui é feito a verificação, caso o usuário não exista ele procede com o registro
   try {
     const result = await client.query('SELECT * FROM users WHERE username = $1', [newUsername]);
     if (result.rowCount > 0) {
@@ -144,14 +150,17 @@ const addUser = async (req, res) => {
       return;
     }
 
-    await client.query('INSERT INTO users (name, username, email, password, user_type, premium_active, premium_date, profile_photo, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)', [newUser.name, newUser.username, newUser.email, hashedPassword, newUser.user_type, newUser.premium_active, newUser.premium_date, newUser.profile_photo, newUser.created_at]);
+    //Aqui é feito o registro do usuário no banco de dados com a senha hasheada
+    await client.query('INSERT INTO users (name, username, email, password, user_type, premium_active, premium_date, profile_photo) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
+     [newUser.name, newUser.username, newUser.email, hashedPassword, newUser.user_type, newUser.premium_active, newUser.premium_date, newUser.profile_photo]);
 
     res.status(201).json({ message: 'Usuário adicionado com sucesso' });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: 'Erro ao adicionar usuário' });
-  } finally {
-    await client.end();
   }
+
+  await client.end();
 };
 
 const updateUser = async (req, res) => {
@@ -162,6 +171,12 @@ const updateUser = async (req, res) => {
   if (sessionToken && userType.includes('admin')) {
     const username = req.params.username;
     const updatedUser = req.body;
+
+    //Caso o usuário troque a senha, ela é hasheada novamente
+    if (updatedUser.password){
+        const hashedPassword = await hashPassword(updatedUser.password);
+        updatedUser.password = hashedPassword;
+    }
 
     try {
       const result = await client.query('SELECT * FROM users WHERE username = $1', [username]);
