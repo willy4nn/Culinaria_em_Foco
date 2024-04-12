@@ -1,0 +1,24 @@
+.header {
+  padding: 3rem 5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header .logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: var(--font-body);
+  line-height: 1rem;
+  font-weight: 500;
+}
+
+.header .logo-image {
+  width: 48px;
+}
+
+.header .buttons {
+  display: flex;
+  gap: 16px;
+}
