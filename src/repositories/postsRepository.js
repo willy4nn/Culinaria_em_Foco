@@ -49,35 +49,18 @@ const postsRepository = {
     },
 
     // UPDATE
-    updateData: async function (
-        id,
-        title,
-        category,
-        content,
-        banner,
-        image,
-        posted_draft,
-        status,
-        updated_at,
-        updated_by
-    ) {
+    updateData: async function (id, title, category, content, banner, image, posted_draft, status, updated_by) {
         const client = await connectToDatabase();
 
-        const query =
-            "UPDATE posts SET title = $2, category = $3, content = $4, image = $5, posted_draft = $6, status = $7, updated_at = $8, updated_by = $9 WHERE id = $1";
+        console.log("status", status);
+        console.log("up", updated_by);
 
+        const query =
+            //"UPDATE posts SET title = $2, category = $3, content = $4, banner = $5, image = $6, posted_draft = $7, status = $8, updated_at = $9, updated_by = $10 WHERE id = $1";
+            "UPDATE posts SET title = $2, category = $3, content = $4, banner = $5, image = $6, posted_draft = $7, status = $8, updated_at = CURRENT_TIMESTAMP, updated_by = $9 WHERE id = $1";
+        console.log("query", query);
         try {
-            await client.query(query, [
-                id,
-                title,
-                category,
-                content,
-                banner,
-                image,
-                posted_draft,
-                status,
-                updated_at,
-                updated_by,
+            await client.query(query, [id, title, category, content, banner, image, posted_draft, status, updated_by,
             ]);
             console.log("Dados atualizados com sucesso!");
         } catch (error) {
@@ -91,6 +74,7 @@ const postsRepository = {
         const client = await connectToDatabase();
 
         const query = "DELETE FROM posts WHERE id = $1";
+        console.log("query", query);
 
         try {
             await client.query(query, [id]);
