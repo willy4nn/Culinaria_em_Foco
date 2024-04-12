@@ -2,13 +2,21 @@ const { config } = require('./config/configFile.js');
 const cookieParser = require('cookie-parser');
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 const port = config.PORT;
 const ip = config.HOST;
 
+// Define o caminho absoluto para a pasta "public"
+const publicPath = path.join(__dirname, '../public');
+
 //Middleware pra analisar o corpo das requisições JSON
 app.use(express.json());
+
+
+// Configura o middleware para servir arquivos estáticos
+app.use(express.static(publicPath));
 
 //Middleware pra lidar com os cookies
 app.use(cookieParser());
@@ -25,6 +33,6 @@ app.use((req, res, next) => {
 const routes = require('./routes');
 app.use('/api', routes);
 
-app.listen(port, ip,() => {
+app.listen(port, ip, () => {
   console.log(`Servidor rodando em http://${ip}:${port}`);
 });
