@@ -1,0 +1,36 @@
+.button {
+  display: block;
+  padding: 12px 24px;
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-weight: 500;
+  line-height: 1rem;
+  border-radius: 24px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.button-fill {
+  background: #021122;
+  color: #f9ffff;
+}
+
+.button-fill:hover {
+  background: #010a14;
+  color: #e4eeee;
+}
+
+.button-line {
+  border: 2px solid #021122;
+  color: #021122;
+  background: #f9ffff;
+}
+
+.button-line:hover {
+  border: 2px solid #010a14;
+  color: #010a14;
+  background: #e4eeee;
+}
