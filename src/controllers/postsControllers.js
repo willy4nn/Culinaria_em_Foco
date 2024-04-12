@@ -23,7 +23,7 @@ const postsController = {
         }
     },
     getPost: async (req, res) => {
-        const { id } = req.body;
+        const id = req.params.id;
 
         try {
             const response = await postsRepository.selectData(id);
@@ -43,18 +43,12 @@ const postsController = {
         }
     },
     updatePost: async (req, res) => {
-        const { id, name, value } = req.body;
-
+        const id = req.params.id;
+        const { title, category, content, banner, image, posted_draft, status, updated_by } = req.body;
+        console.log("id",id);
         try {
             const response = await postsRepository.updateData(
-                id,
-                title,
-                category,
-                content,
-                password,
-                image,
-                posted_draft,
-                created_by
+                id, title, category, content, banner, image, posted_draft, status, updated_by
             );
 
             res.status(200).json({ data: response, status: 200 });
@@ -63,7 +57,8 @@ const postsController = {
         }
     },
     deletePost: async (req, res) => {
-        const { id } = req.body;
+        const id = req.params.id;
+        console.log("id",id);
 
         try {
             const response = await postsRepository.deleteData(id);
