@@ -1,5 +1,7 @@
 // Importando o módulo de roteamento
 import router from './router.js';
+import header from './pages/header.js';
+import footer from './pages/footer.js';
 
 // Criando um ouvinte para o evento customizado 'onstatechange'
 window.addEventListener('onstatechange', function (event) {
@@ -44,4 +46,12 @@ function renderPage(page) {
 // Renderizando a página inicial na div "root" ao carregar a aplicação
 const rootDiv = document.getElementById('root');
 rootDiv.innerHTML = ''; // Limpa qualquer conteúdo anterior
-rootDiv.appendChild(router['/']()); // Adiciona a página inicial renderizada na div "root"
+
+const containerMain = document.createElement('div');
+containerMain.classList.add('containerMain');
+
+containerMain.appendChild(header());
+containerMain.appendChild(router['/']()); // Adiciona a página inicial renderizada na div "root"
+containerMain.appendChild(footer());
+
+rootDiv.appendChild(containerMain);

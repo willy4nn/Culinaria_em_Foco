@@ -1,10 +1,9 @@
 .initial-main {
   width: 100%;
-  height: calc(100vh - 144px); /* Mudança aqui */
+  min-height: calc(100vh - 7rem - 144px); /* Definindo altura mínima */
   padding: 0px 80px;
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  grid-template-rows: 100%;
   gap: 32px;
   align-items: center;
 }
@@ -15,8 +14,15 @@
   grid-template-columns: repeat(6, minmax(0, 1fr));
   column-gap: 32px;
   height: 100%;
-  align-content: center; /* Adição */
-  align-items: start; /* Adição */
+  align-content: center;
+  align-items: start;
+}
+
+.main-content-image {
+  grid-column: span 6;
+  height: 30rem;
+  border-radius: 24px;
+  overflow: hidden;
 }
 
 .main-content-text .title {
@@ -47,13 +53,6 @@
   gap: 16px;
   grid-row: 3;
   grid-column: 1 / span 4;
-}
-
-.main-content-image {
-  grid-column: span 6;
-  height: 30rem;
-  border-radius: 24px;
-  overflow: hidden;
 }
 
 .main-content-image img {
