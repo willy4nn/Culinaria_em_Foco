@@ -1,5 +1,7 @@
 // login.js
 
+import { response } from 'express';
+
 // Exporta a função que retorna a página de login
 export default function login() {
   // HTML do elemento de login
@@ -18,13 +20,13 @@ export default function login() {
       <div class="box-login">
         <form class="form">
           <div class="input-container">
-            <input type="text" name="email" placeholder="Email Address" />
+            <input id="email" type="text" name="email" placeholder="Email Address" />
           </div>  
           <div class="input-container">
-            <input type="password" name="password" placeholder="Password"/>
+            <input id="password" type="password" name="password" placeholder="Password"/>
           </div>
           <a>Forgot your password?</a>
-          <button>Sign In</button>
+          <button id="buttonSignIn">Sign In</button>
         </form>
       </div>
       <a class="login-link">Don’t have an account? Sign up</a>
@@ -38,6 +40,30 @@ export default function login() {
   const loginElement = document.createElement('div');
   loginElement.classList.add('login-element');
   loginElement.innerHTML = loginContentHTML;
+
+  // Pegando valores dos inputs
+  const emailInput = loginElement.querySelector('#email');
+  const passwordInput = loginElement.querySelector('#password');
+
+  // Pegando o botão de login
+  const buttonSignIn = loginElement.querySelector('#buttonSignIn');
+  buttonSignIn.addEventListener('click', (event) => {
+    event.preventDefault();
+
+    const email = emailInput.value;
+    const password = passwordInput.value;
+
+    // fetch(`localhost:3000/api/login/auth`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'content-type': 'application/json',
+    //   },
+    //   body: {
+    //     username: '',
+    //     password: '',
+    //   },
+    // }).then((response) => console.log(response));
+  });
 
   // Retorna o elemento de login
   return loginElement;

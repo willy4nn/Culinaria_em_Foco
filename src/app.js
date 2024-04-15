@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 const routes = require('./routes');
 
 // Rota para lidar com todas as outras solicitações
-app.get('*', (req, res) => {
+app.get('/login', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 
