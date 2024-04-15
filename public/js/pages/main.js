@@ -1,61 +1,52 @@
+// main.js
+
+// Importa a função createCustomEvent do módulo de eventos
 import createCustomEvent from '../eventModule.js';
 
+// Exporta a função principal que retorna a página principal
 export default function main() {
-  // Container principal
-  const mainPageElement = document.createElement('div');
-  mainPageElement.classList.add('initial-main');
+  // HTML do elemento principal
+  const mainContentHTML = `
+    <header class="header">
+      <div class="logo">
+        <img src="./assets/images/croissant-logo.svg" alt="Logo Chef's Corner">
+        <span>Chef's Corner</span>
+      </div>
+      <div class="buttons">
+        <a class="button button-line">Sign In</a>
+        <a class="button button-fill">Sign Up</a>
+      </div>
+    </header>
+    <main class="initial-main">
+      <div class="main-content-text">
+        <h1 class="title">Aguce seu paladar com novas experiências culinárias.</h1>
+        <p class="paragraph">Descubra sabores únicos e inspirações culinárias em nossa revista digital em destaque. Receitas criativas, dicas de chef e histórias que transformarão sua cozinha em um verdadeiro palco de delícias. Explore conosco o mundo da gastronomia!</p>
+        <div class="buttons">
+          <a id="signInButton" class="button button-line">Login</a>
+          <a href="#" class="button button-fill">Register</a>
+        </div>
+      </div>
+      <div class="main-content-image">
+        <img src="./assets/images/initial-main-image.jpg" alt="">
+      </div>
+    </main>
+    <footer class="footer">
+        <p>© 2024 Chef's Corner. All rights reserved.</p>
+    </footer>
+  `;
 
-  // Container de texto
-  const textContainer = document.createElement('div');
-  textContainer.classList.add('main-content-text');
+  // Cria o elemento principal
+  const mainElement = document.createElement('div');
+  mainElement.innerHTML = mainContentHTML;
 
-  // Título
-  const title = document.createElement('h1');
-  title.textContent = 'Arouse your palate to new culinary experiences.';
-  title.classList.add('title');
-
-  // Parágrafo
-  const paragraph = document.createElement('p');
-  paragraph.classList.add('paragraph');
-  paragraph.textContent =
-    'Discover unique flavors and culinary inspirations in our featured digital magazine. Creative recipes, chef tips, and stories that will transform your kitchen into a true stage of delights. Explore with us the world of gastronomy!';
-
-  // Container de botões
-  const buttons = document.createElement('div');
-  buttons.classList.add('buttons');
-
-  const buttonSignIn = document.createElement('a');
-  buttonSignIn.textContent = 'Sign In';
-  buttonSignIn.classList.add('button', 'button-line');
-  buttonSignIn.addEventListener('click', () => {
+  // Adiciona um ouvinte de evento ao botão de login
+  const signInButton = mainElement.querySelector('#signInButton');
+  signInButton.addEventListener('click', () => {
+    // Dispara um evento personalizado de login
     const event = createCustomEvent('/login');
     window.dispatchEvent(event);
   });
 
-  const buttonSignUp = document.createElement('a');
-  buttonSignUp.textContent = 'Sign Up';
-  buttonSignUp.href = '#';
-  buttonSignUp.classList.add('button', 'button-fill');
-
-  // Container da imagem
-  const imageContainer = document.createElement('div');
-  imageContainer.classList.add('main-content-image');
-
-  // Imagem
-  const img = document.createElement('img');
-  img.src = './assets/images/initial-main-image.jpg';
-
-  buttons.appendChild(buttonSignIn);
-  buttons.appendChild(buttonSignUp);
-
-  textContainer.appendChild(title);
-  textContainer.appendChild(paragraph);
-  textContainer.appendChild(buttons);
-
-  imageContainer.appendChild(img);
-
-  mainPageElement.appendChild(textContainer);
-  mainPageElement.appendChild(imageContainer);
-
-  return mainPageElement;
+  // Retorna o elemento principal
+  return mainElement;
 }

@@ -28,7 +28,6 @@ const getLogin = async (req, res) => {
   res.status(200).json(userToken);
 };
 
-
 //Aqui pega os dados gerais de um usuário em específico e os exibe
 //Somente admins tem acesso aos dados
 const getUser = async (req, res) => {

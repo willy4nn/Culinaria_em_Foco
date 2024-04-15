@@ -11,14 +11,13 @@ const ip = config.HOST;
 // Define o caminho absoluto para a pasta "public"
 const publicPath = path.join(__dirname, '../public');
 
-//Middleware pra analisar o corpo das requisições JSON
+// Middleware para analisar o corpo das requisições JSON
 app.use(express.json());
-
 
 // Configura o middleware para servir arquivos estáticos
 app.use(express.static(publicPath));
 
-//Middleware pra lidar com os cookies
+// Middleware para lidar com os cookies
 app.use(cookieParser());
 
 // Middleware cors para habilitar a política de CORS
@@ -31,6 +30,12 @@ app.use((req, res, next) => {
 });
 
 const routes = require('./routes');
+
+// Rota para lidar com todas as outras solicitações
+app.get('*', (req, res) => {
+  res.sendFile(path.join(publicPath, 'index.html'));
+});
+
 app.use('/api', routes);
 
 app.listen(port, ip, () => {
