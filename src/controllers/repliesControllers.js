@@ -1,22 +1,16 @@
-const postsRepository = require("../repositories/postsRepository.js");
+const repliesRepository = require("../repositories/repliesRepository.js");
 
-const postsController = {
+const repliesController = {
 
     // CREATE
-    createPost: async (req, res) => {
-        const { title, category, content, banner, image, posted_draft, status, created_by, updated_by } = req.body;
+    createReply: async (req, res) => {
+        const { posts_comments_id, users_id, content } = req.body;
 
         try {
-            const response = await postsRepository.createPost(
-                title,
-                category,
+            const response = await repliesRepository.createReply(
+                posts_comments_id,
+                users_id,
                 content,
-                banner,
-                image,
-                posted_draft,
-                status,
-                created_by,
-                updated_by,
             );
 
             res.status(200).json({ data: response, status: 200 });
@@ -26,11 +20,11 @@ const postsController = {
     },
 
     // GET BY ID
-    getPost: async (req, res) => {
+    getReply: async (req, res) => {
         const id = req.params.id;
 
         try {
-            const response = await postsRepository.getPost(id);
+            const response = await repliesRepository.getReply(id);
 
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
@@ -39,9 +33,9 @@ const postsController = {
     },
 
     // GET ALL
-    getPosts: async (req, res) => {
+    getReplies: async (req, res) => {
         try {
-            const response = await postsRepository.getPosts();
+            const response = await repliesRepository.getReplies();
 
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
@@ -50,14 +44,12 @@ const postsController = {
     },
 
     // UPDATE
-    updatePost: async (req, res) => {
+    updateReply: async (req, res) => {
         const id = req.params.id;
-        const { title, category, content, banner, image, posted_draft, status, updated_by } = req.body;
+        const { content } = req.body;
 
         try {
-            const response = await postsRepository.updatePost(
-                id, title, category, content, banner, image, posted_draft, status, updated_by
-            );
+            const response = await repliesRepository.updateReply(id, content);
 
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
@@ -66,12 +58,11 @@ const postsController = {
     },
 
     // DELETE
-    deletePost: async (req, res) => {
+    deleteReply: async (req, res) => {
         const id = req.params.id;
-        console.log("id",id);
 
         try {
-            const response = await postsRepository.deletePost(id);
+            const response = await repliesRepository.deleteReply(id);
 
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
@@ -80,4 +71,4 @@ const postsController = {
     },
 };
 
-module.exports = { postsController };
+module.exports = { repliesController };
