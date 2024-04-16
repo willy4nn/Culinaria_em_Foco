@@ -10,7 +10,7 @@ export default function main() {
     <header class="header">
       <div class="logo">
         <img src="./assets/images/croissant-logo.svg" alt="Logo Chef's Corner">
-        <span>Chef's Corner</span>
+        <span class="paragraph-medium">Chef's Corner</span>
       </div>
       <div class="buttons">
         <a class="button button-line">Sign In</a>
@@ -19,11 +19,11 @@ export default function main() {
     </header>
     <main class="initial-main">
       <div class="main-content-text">
-        <h1 class="title">Aguce seu paladar com novas experiências culinárias.</h1>
-        <p class="paragraph">Descubra sabores únicos e inspirações culinárias em nossa revista digital em destaque. Receitas criativas, dicas de chef e histórias que transformarão sua cozinha em um verdadeiro palco de delícias. Explore conosco o mundo da gastronomia!</p>
+        <h1 class="primary-heading">Arouse your palate to new culinary experiences.</h1>
+        <p class="paragraph-normal">Discover unique flavors and culinary inspirations in our featured digital magazine. Creative recipes, chef tips, and stories that will transform your kitchen into a true stage of delights. Explore with us the world of gastronomy!</p>
         <div class="buttons">
-          <a id="signInButton" class="button button-line">Login</a>
-          <a href="#" class="button button-fill">Register</a>
+          <a id="signInButton" class="button button-line">Sign In</a>
+          <a href="#" class="button button-fill">Sign Up</a>
         </div>
       </div>
       <div class="main-content-image">
@@ -31,7 +31,7 @@ export default function main() {
       </div>
     </main>
     <footer class="footer">
-        <p>© 2024 Chef's Corner. All rights reserved.</p>
+        <p class="paragraph-medium">© 2024 Chef's Corner. All rights reserved.</p>
     </footer>
   `;
 
