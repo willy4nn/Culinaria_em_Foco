@@ -3,7 +3,6 @@ const router = express.Router();
 const loginController = require("../controllers/loginControllers");
 
 //Rotas de verificação do login do Usuário
-
 router.get('/user', loginController.getLogin);
 router.get('/all', loginController.getUsers);
 router.get('/:username', loginController.getUser);
