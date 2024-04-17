@@ -7,12 +7,12 @@ const postsRepository = {
 
     // CREATE
     createPost: async function (title, category, content, banner, image, posted_draft, status, created_by, updated_by) {
-        const client = await connectToDatabase();
+        const pool = await connectToDatabase();
 
         const query = `INSERT INTO posts (title, category, content, banner, image, posted_draft, status, created_by, updated_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`;
 
         try {
-            const result = await client.query(query, [
+            const result = await pool.query(query, [
                 title,
                 category,
                 content,
@@ -34,12 +34,12 @@ const postsRepository = {
 
     // GET BY ID
     getPost: async function (id) {
-        const client = await connectToDatabase();
+        const pool = await connectToDatabase();
 
         const query = "SELECT * FROM posts WHERE id = $1";
 
         try {
-            const result = await client.query(query, [id]);
+            const result = await pool.query(query, [id]);
             console.log("Registros encontrados: ");
             console.table(result.rows);
 
@@ -52,12 +52,12 @@ const postsRepository = {
 
     // GET ALL
     getPosts: async function () {
-        const client = await connectToDatabase();
+        const pool = await connectToDatabase();
 
         const query = "SELECT * FROM posts";
 
         try {
-            const result = await client.query(query);
+            const result = await pool.query(query);
             console.log("Registros encontrados: ");
             console.table(result.rows);
 
@@ -70,12 +70,12 @@ const postsRepository = {
 
     // UPDATE
     updatePost: async function (id, title, category, content, banner, image, posted_draft, status, updated_by) {
-        const client = await connectToDatabase();
+        const pool = await connectToDatabase();
 
         const query =
             "UPDATE posts SET title = $2, category = $3, content = $4, banner = $5, image = $6, posted_draft = $7, status = $8, updated_at = CURRENT_TIMESTAMP, updated_by = $9 WHERE id = $1";
         try {
-            await client.query(query, [id, title, category, content, banner, image, posted_draft, status, updated_by]);
+            await pool.query(query, [id, title, category, content, banner, image, posted_draft, status, updated_by]);
             console.log("Dados atualizados com sucesso!");
         } catch (error) {
             console.error("Erro ao atualizar dados: ", error);
@@ -85,12 +85,12 @@ const postsRepository = {
 
     // DELETE
     deletePost: async function (id) {
-        const client = await connectToDatabase();
+        const pool = await connectToDatabase();
 
         const query = "DELETE FROM posts WHERE id = $1";
 
         try {
-            await client.query(query, [id]);
+            await pool.query(query, [id]);
             console.log("Dados excluídos com sucesso!");
         } catch (error) {
             console.error("Erro ao excluir dados: ", error);

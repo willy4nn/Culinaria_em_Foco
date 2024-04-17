@@ -8,7 +8,6 @@ const { config } = require('../config/configFile');
 const jwt = require('jsonwebtoken');
 
 //Função que resgata o array de usertype
-const getUserType = require('../utils/getUserType');
 const { query } = require('express');
 
 const loginController = {

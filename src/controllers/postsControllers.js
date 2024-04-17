@@ -4,7 +4,10 @@ const postsController = {
 
     // CREATE
     createPost: async (req, res) => {
-        const { title, category, content, banner, image, posted_draft, status, created_by, updated_by } = req.body;
+        const { title, category, content, banner, image, posted_draft } = req.body;
+        const created_by = 1; //req.user.id
+        const updated_by = 1; //req.user.id
+        const status = 'active';
 
         try {
             const response = await postsRepository.createPost(
