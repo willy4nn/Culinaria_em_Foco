@@ -36,6 +36,10 @@ app.get('/login', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 
+app.get('/post', (req, res) => {
+  res.sendFile(path.join(publicPath, 'index.html'));
+});
+
 app.use('/api', routes);
 
 app.listen(port, ip, () => {
