@@ -1,24 +1,25 @@
-const { Client } = require("pg");
+const { Pool } = require("pg");
 const { configDatabase } = require("../config/configFile.js");
 
-//Configurações de conexão com o banco de dados
-const conectToDatabase = () => {
-    console.log("oioi");
-    console.log(configDatabase.DB_USERNAME, configDatabase.HOST, configDatabase.DATABASE, configDatabase.PASSWORD);
-    const client = new Client({
-        user: configDatabase.DB_USERNAME,
-        host: configDatabase.HOST,
-        database: configDatabase.DATABASE,
-        password: configDatabase.PASSWORD,
-        port: 5432,
-    });
+// Configurações de conexão com o banco de dados
+const connectToDatabase = () => {
+  const pool = new Pool({
+    user: configDatabase.DB_USERNAME,
+    host: configDatabase.HOST,
+    database: configDatabase.DATABASE,
+    password: configDatabase.PASSWORD,
+    port: 5432,
+    max: 20,
+    connectionTimeoutMillis: 120000,
+    idleTimeoutMillis: 60000,
+    allowExitOnIdle: true,
+  });
+  pool
+    .connect()
+    .then(() => console.log("Conexão bem-sucedida"))
+    .catch((err) => console.error("Erro ao conectar:", err));
 
-    client
-        .connect()
-        .then(() => console.log("Conexão bem Sucedida"))
-        .catch((err) => console.error("Erro ao conectar:", err));
-
-    return client;
+  return pool;
 };
 
-module.exports = conectToDatabase;
+module.exports = connectToDatabase;
