@@ -23,25 +23,14 @@
   height: 30rem;
   border-radius: 24px;
   overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-.main-content-text .title {
-  font-family: var(--font-title);
-  font-weight: 400;
-  font-style: normal;
-  font-size: 64px;
-  line-height: 80px;
-  color: #021122;
+.main-content-text h1 {
   grid-column: 1 / -1;
 }
 
-.main-content-text .paragraph {
-  font-family: var(--font-body);
-  font-weight: 400;
-  font-style: normal;
-  font-size: 16px;
-  line-height: 24px;
-  color: #021122;
+.main-content-text p {
   margin-top: 40px;
   grid-column: 1 / span 6;
 }

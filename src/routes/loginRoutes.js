@@ -5,7 +5,6 @@ const permissionVerify = require("../middlewares/permissionVerify")
 const adminPermissionVerify = require("../middlewares/adminPermissionVerify")
 
 //Rotas de verificação do login do Usuário
-
 router.get('/user', permissionVerify, loginController.getLogin);
 router.get('/all', adminPermissionVerify, loginController.getUsers);
 router.get('/:username', adminPermissionVerify, loginController.getUser);
