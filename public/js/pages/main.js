@@ -23,7 +23,7 @@ export default function main() {
         <p class="paragraph-normal">Discover unique flavors and culinary inspirations in our featured digital magazine. Creative recipes, chef tips, and stories that will transform your kitchen into a true stage of delights. Explore with us the world of gastronomy!</p>
         <div class="buttons">
           <a id="signInButton" class="button button-line">Sign In</a>
-          <a href="#" class="button button-fill">Sign Up</a>
+          <a id="signUpButton" class="button button-fill">Sign Up</a>
         </div>
       </div>
       <div class="main-content-image">
@@ -44,6 +44,13 @@ export default function main() {
   signInButton.addEventListener('click', () => {
     // Dispara um evento personalizado de login
     const event = createCustomEvent('/login');
+    window.dispatchEvent(event);
+  });
+
+  const signUpButton = mainElement.querySelector('#signUpButton');
+  signUpButton.addEventListener('click', () => {
+    // Dispara um evento personalizado de login
+    const event = createCustomEvent('/register');
     window.dispatchEvent(event);
   });
 

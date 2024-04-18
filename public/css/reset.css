@@ -24,4 +24,6 @@ body {
 a {
   text-decoration: none;
   font-family: var(--font-body);
+  cursor: pointer;
+  padding: 12px 24px;
 }
