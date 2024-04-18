@@ -6,41 +6,43 @@ import createCustomEvent from '../eventModule.js';
 export default function login() {
   // Esta variável armazena o código HTML que representa o layout da página de login
   const loginContentHTML = `
-    <header class="header">
-      <div class="logo">
-        <img src="./assets/images/croissant-logo.svg" alt="Logo Chef's Corner" />
-        <span class="paragraph-medium">Chef's Corner</span>
+<header class="header header-login">
+  <div class="logo">
+    <img src="./assets/images/croissant-logo.svg" alt="Logo Chef's Corner" />
+    <span class="paragraph-medium">Chef's Corner</span>
+  </div>
+  <div class="buttons">
+    <a class="button button-fill">Register</a>
+  </div>
+</header>
+<main class="main main-login">
+  <h1 class="primary-heading">Login</h1>
+  <div>
+    <form class="form">
+      <div>
+        <input id="email" type="text" name="email" placeholder="Email Address" />
       </div>
-      <div class="buttons">
-        <a class="button button-fill">Register</a>
+      <div>
+        <input id="password" type="password" name="password" placeholder="Password"/>
       </div>
-    </header>
-    <main class="login-main">
-      <h1 class="primary-heading">Login</h1>
-      <div class="box-login">
-        <form class="form">
-          <div class="input-container">
-            <input id="email" type="text" name="email" placeholder="Email Address" />
-          </div>
-          <div class="input-container">
-            <input id="password" type="password" name="password" placeholder="Password"/>
-          </div>
-          <a class="paragraph-normal">Forgot you password?</a>
-          <button id="buttonSignIn">Sign In</button>
-        </form>
-      </div>
-      <a class="login-link paragraph-medium">Don’t have a account? Sign up</a>
-    </main>
-    <footer class="footer">
-      <p class="paragraph-medium">© 2024 Chef's Corner. All rights reserved.</p>
-    </footer>
+      <a class="paragraph-normal">Forgot you password?</a>
+      <button id="buttonSignIn">Sign In</button>
+    </form>
+  </div>
+  <p class="signup-link paragraph-medium">
+    <a>Don’t have a account? Sign up</a>
+  </p>
+</main>
+<footer class="footer footer-login">
+  <p class="paragraph-medium">© 2024 Chef's Corner. All rights reserved.</p>
+</footer>
   `;
 
   // Esta linha cria um novo elemento HTML do tipo 'div'
   const loginElement = document.createElement('div');
 
   // Esta linha adiciona a classe 'login-element' ao elemento div criado
-  loginElement.classList.add('login-element');
+  loginElement.classList.add('login-container');
 
   // Esta linha define o innerHTML do elemento div para o loginContentHTML (que contém o layout da página de login)
   loginElement.innerHTML = loginContentHTML;

@@ -1,6 +1,7 @@
 import main from './pages/main.js';
 import login from './pages/login.js';
 import home from './pages/home.js';
+import register from './pages/register.js';
 import createPost from './pages/post.js';
 
 const router = {
@@ -9,6 +10,9 @@ const router = {
   },
   '/login': function () {
     return login();
+  },
+  '/register': function () {
+    return register();
   },
   '/home': function () {
     return home();
