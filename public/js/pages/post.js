@@ -1,5 +1,5 @@
-// post.js
 import createCustomEvent from '../eventModule.js';
+import importFile from '../multer/index.js';
 
 // Exporta a função que retorna a página de login
 export default function createPost() {
@@ -100,7 +100,20 @@ export default function createPost() {
         </form>
       </div>
 
-      <div id="container-print"></div>
+      <div class="container">
+        <h1>File Upload</h1>
+        <form id='form'>
+            <div class="input-group">
+                <label for='name'>Your name</label>
+                <input name='name' id='name' placeholder="Enter your name" />
+            </div>
+            <div class="input-group">
+                <label for='files'>Select files</label>
+                <input id='files' type="file" name="files" multiple>
+            </div>
+            <button class="submit-btn" type='submit'>Upload</button>
+        </form>
+    </div>
 
     </main>
     <footer class="footer">
@@ -108,62 +121,62 @@ export default function createPost() {
     </footer>
   `;
 
-  // Cria o elemento de login
   const createPostElement = document.createElement('div');
   createPostElement.classList.add('create-post-element');
   createPostElement.innerHTML = createPostContentHTML;
 
   const titleInput = createPostElement.querySelector('#title');
   const categoryInput = createPostElement.querySelector('#category');
-  const contentInput = createPostElement.querySelector('#content');
   const bannerInput = createPostElement.querySelector('#banner');
   const imageInput = createPostElement.querySelector('#image');
 
   const buttonPost = createPostElement.querySelector('#button-post');
   const buttonSave = createPostElement.querySelector('#button-save');
-  const containerPrint = createPostElement.querySelector('#container-print');
 
-// Crie um elemento script
+  // Crie um elemento script
+  const axiosScriptElement = document.createElement('script');
   const quillScriptElement = document.createElement('script');
 
   // Defina o atributo src com o URL do script externo
+  axiosScriptElement.src = 'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js';
   quillScriptElement.src = 'https://cdn.quilljs.com/1.0.0/quill.js';
   quillScriptElement.id = 'quill-script';
 
   // Adicione o elemento script ao final do corpo do documento
+  createPostElement.appendChild(axiosScriptElement);
   createPostElement.appendChild(quillScriptElement);
 
+  // Carrega o editor de texto
   quillScriptElement.addEventListener('load', function() {
-    console.log('Script carregado com sucesso!');
     var editor = new Quill('#editor', {
       modules: { toolbar: '#toolbar' },
       theme: 'snow'
     });
 
     buttonPost.addEventListener('click', (event) => {
-      // Esta linha evita o comportamento padrão do botão, que é enviar o formulário
       event.preventDefault();
 
+      // Trata o conteúdo princial da postagem e salva as imagens no storage
+      const content = importFile(editor.root.innerHTML)
+
       // Efetua a postagem
-      submitPost(true, editor.root.innerHTML);
-      //containerPrint.innerHTML = editor.root.innerHTML;
+      submitPost(true, content);
     });
 
     buttonSave.addEventListener('click', (event) => {
-      // Esta linha evita o comportamento padrão do botão, que é enviar o formulário
       event.preventDefault();
 
-      // Salva a postagem como rascunho
-      submitPost(false, editor.root.innerHTML);
+      // Trata o conteúdo princial da postagem e salva as imagens no storage
+      const content = importFile(editor.root.innerHTML)
 
-      console.log(editor.getText());
-      console.log("----");
-      console.log(editor.getContents());
-      console.log("----");
-      console.log(editor.root.innerHTML);
+      // Salva a postagem como rascunho
+      submitPost(false, content);
     });
 
   });
+
+  const form = createPostElement.querySelector('#form');
+  form.addEventListener("submit", importFile);
 
   function submitPost(posted_draft, editorContent) {
     const title = titleInput.value.toString();
@@ -174,8 +187,7 @@ export default function createPost() {
 
     const data = { title, category, content, banner, image, posted_draft };
     console.log(data);
-   
-    // Esta linha envia uma requisição POST para o servidor com o nome de usuário e senha no corpo da requisição
+
     fetch(`http://localhost:3000/api/posts/`, {
       method: 'POST',
       headers: {
@@ -184,25 +196,20 @@ export default function createPost() {
       body: JSON.stringify(data),
     })
       .then((response) => {
-        // Esta linha verifica se a resposta do servidor é bem-sucedida
         if (!response.ok) {
           throw new Error('Falha efetuar a postagem');
         }
-        // Esta linha retorna os dados da resposta em formato JSON
         window.dispatchEvent(createCustomEvent('/post'));
         return response.json();
       })
       .then((data) => {
-        // Esta linha registra os dados recebidos do servidor no console (você pode substituir isso por sua própria lógica para lidar com a resposta)
         console.log(data);
       })
       .catch((error) => {
-        // Esta linha captura qualquer erro que ocorra durante o processo de login
         console.error('Erro:', error);
       });
 
   }
 
-  // Retorna o elemento de login
   return createPostElement;
 }
