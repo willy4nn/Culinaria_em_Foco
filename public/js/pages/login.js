@@ -12,7 +12,7 @@ export default function login() {
         <span class="paragraph-medium">Chef's Corner</span>
       </div>
       <div class="buttons">
-        <a class="button button-fill">Cadastre-se</a>
+        <a class="button button-fill">Register</a>
       </div>
     </header>
     <main class="login-main">
@@ -20,19 +20,19 @@ export default function login() {
       <div class="box-login">
         <form class="form">
           <div class="input-container">
-            <input id="email" type="text" name="email" placeholder="Endereço de e-mail" />
+            <input id="email" type="text" name="email" placeholder="Email Address" />
           </div>
           <div class="input-container">
-            <input id="password" type="password" name="password" placeholder="Senha"/>
+            <input id="password" type="password" name="password" placeholder="Password"/>
           </div>
-          <a class="paragraph-normal">Esqueceu sua senha?</a>
-          <button id="buttonSignIn">Entrar</button>
+          <a class="paragraph-normal">Forgot you password?</a>
+          <button id="buttonSignIn">Sign In</button>
         </form>
       </div>
-      <a class="login-link paragraph-medium">Não tem uma conta? Cadastre-se</a>
+      <a class="login-link paragraph-medium">Don’t have a account? Sign up</a>
     </main>
     <footer class="footer">
-      <p class="paragraph-medium">© 2024 Chef's Corner. Todos os direitos reservados.</p>
+      <p class="paragraph-medium">© 2024 Chef's Corner. All rights reserved.</p>
     </footer>
   `;
 
