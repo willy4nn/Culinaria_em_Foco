@@ -60,7 +60,7 @@ export default function login() {
     event.preventDefault();
 
     // Esta linha define duas variáveis com nome de usuário e senha (altere-as para suas credenciais reais)
-    const username = emailInput.value.toString();
+    const email = emailInput.value.toString();
     const password = passwordInput.value.toString();
 
     // Esta linha envia uma requisição POST para o servidor com o nome de usuário e senha no corpo da requisição
@@ -69,7 +69,7 @@ export default function login() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ email, password }),
     })
       .then((response) => {
         // Esta linha verifica se a resposta do servidor é bem-sucedida
