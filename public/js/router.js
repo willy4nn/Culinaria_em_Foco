@@ -4,6 +4,7 @@ import home from './pages/home.js';
 import register from './pages/register.js';
 import createPost from './pages/post.js';
 import displayNews from './pages/latest-news.js';
+import editor from './pages/editor.js';
 
 const router = {
   '/': function () {
@@ -23,6 +24,9 @@ const router = {
   },
   '/latest-news': function () {
     return displayNews();
+  },
+  '/editor': function () {
+    return editor();
   },
   getPage: function (path) {
     return router[path]();

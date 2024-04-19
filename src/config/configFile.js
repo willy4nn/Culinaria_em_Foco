@@ -10,7 +10,7 @@ const config = {
 
 //Configurações Banco de Dados
 const configDatabase = {
-    HOST: process.env.HOST || "localhost",
+    HOST: process.env.HOST || "127.0.0.1",
     DB_USERNAME: process.env.DB_USERNAME || "joaozinho",
     PASSWORD: process.env.PASSWORD || "senha123",
     DATABASE: process.env.DATABASE || "meu_banco",
