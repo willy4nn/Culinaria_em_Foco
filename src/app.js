@@ -21,13 +21,14 @@ const multer = require("multer");
 }); */
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './src/uploads/posts_media')
+    cb(null, './public/uploads/posts_banner')
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname)
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+    cb(null, file.fieldname + '-' + uniqueSuffix)
   }
 });
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 //const upload = multer({ dest: "./src/uploads/posts_media" });
 //const upload = multer({ storage });
 
@@ -76,16 +77,21 @@ app.get('/post', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 
-app.post("/upload_files", upload.array("files"), uploadFiles);
+
+// Upload com Multer
+app.post("/upload_files", upload.single("files"), uploadFiles);
 
 function uploadFiles(req, res) {
     console.log("upload");
     console.log(req.body);
-    console.log(req.files);
-    res.json({ message: "Successfully uploaded files" });
+    console.log(req.file);
+    res.json({ message: "Successfully uploaded files", data: { 
+      'destination': req.file.destination,
+      'filename': req.file.filename 
+    }});
 }
 
-
+// Upload com Axios
 app.post('/upload', async (req, res) => {
   const { imageUrls, imageUris } = req.body;
   console.log("passou aqui");
@@ -110,7 +116,13 @@ app.post('/upload', async (req, res) => {
   res.send('Imagens salvas com sucesso!');
 });
 
+// Testando exibição de posts com GET BY ID
 app.get('/latest-news', (req, res) => {
+  res.sendFile(path.join(publicPath, 'index.html'));
+});
+
+// Testando editores de texto (atual: tinymce)
+app.get('/editor', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 
