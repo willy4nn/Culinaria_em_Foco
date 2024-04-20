@@ -29,6 +29,12 @@
   height: 100%;
 }
 
+.main-main > .text-container > div {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .main-main > .image-container {
   flex: 1;
   height: 100%;

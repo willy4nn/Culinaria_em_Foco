@@ -1,4 +1,8 @@
+/* register.css */
+
+/* ########## REGISTER PAGE ########## */
 .register-container {
+  height: auto;
   display: flex;
   flex-direction: column;
 }

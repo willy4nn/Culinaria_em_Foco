@@ -1,4 +1,6 @@
-/* H1 */
+/* typography.css */
+
+/* ########## TITLE ########## */
 .primary-heading {
   font-family: 'Lobster', sans-serif;
   font-weight: 400;
@@ -8,6 +10,7 @@
   color: var(--c10);
 }
 
+/* ########## BODY REGULAR ########## */
 .paragraph-normal {
   font-family: 'Nunito', sans-serif;
   font-weight: 400;
@@ -16,6 +19,7 @@
   color: var(--c9);
 }
 
+/* ########## BODY MEDIUM ########## */
 .paragraph-medium {
   font-family: 'Nunito', sans-serif;
   font-weight: 500;
@@ -24,6 +28,7 @@
   color: var(--c9);
 }
 
+/* ########## LINK ########## */
 a {
   text-decoration: none;
   font-family: var(--font-body);
