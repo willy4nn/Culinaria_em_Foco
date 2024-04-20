@@ -89,17 +89,35 @@ const loginRepository = {
         const pool = conectToDatabase();
         const newUser = user
         const hashedPassword = await hashPassword(newUser.password);
-        //Aqui é feito a verificação, caso o usuário não exista ele procede com o registro
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+           //Aqui é feito as validações, caso o usuário não exista ele procede com o registro
         try {
-          const test = await pool.query('SELECT * FROM users WHERE username = $1', [newUser.username]);
-            if (test.rowCount > 0) {
+            if (newUser.username.length > 15){
+              const error = { success: false, error: 'Limite de caracteres para username atingido! (max: 15)'};
+              return error;
+            }
+
+            if (!emailRegex.test(newUser.email)){
+              const error = { success: false, error: 'Insira um endereço de email válido!' };
+              return error;
+            }
+
+            const test1 = await pool.query('SELECT * FROM users WHERE username = $1', [newUser.username]);
+            if (test1.rowCount > 0) {
               const error = { success: false, error: 'Usuário já existe'};
               return error;
             }
+
+            const test2 = await pool.query('SELECT * FROM users WHERE email = $1', [newUser.email]);
+            if (test2.rowCount > 0) {
+              const error = { success: false, error: 'Esse email já possui cadastro!'};
+              return error;
+            }
+
               await pool.query('BEGIN')
             
-              await pool.query('INSERT INTO users (name, username, email, password, user_type, premium_active, premium_date, profile_photo) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
-                [newUser.name, newUser.username, newUser.email, hashedPassword, newUser.user_type, newUser.premium_active, newUser.premium_date, newUser.profile_photo])
+              await pool.query('INSERT INTO users (name, username, email, password, user_type, premium_active, profile_photo) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+                [newUser.name, newUser.username, newUser.email, hashedPassword, newUser.user_type, false, newUser.profile_photo])
             
               await pool.query('COMMIT')
             

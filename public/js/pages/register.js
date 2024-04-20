@@ -23,7 +23,8 @@ export default function register() {
     <form class="form">
     <div class="inputs-container">
       <div>
-        <input class="input paragraph-normal
+        <input 
+          class="input paragraph-normal"
           id="name"
           type="text"
           name="name"
@@ -32,7 +33,8 @@ export default function register() {
         />
       </div>
       <div>
-        <input class="input paragraph-normal
+        <input 
+          class="input paragraph-normal"
           id="username"
           type="text"
           name="username"
@@ -41,7 +43,8 @@ export default function register() {
         />
       </div>
       <div>
-        <input class="input paragraph-normal
+        <input 
+          class="input paragraph-normal"
           id="email"
           type="email"
           name="email"
@@ -50,7 +53,8 @@ export default function register() {
         />
       </div>
       <div>
-        <input class="input paragraph-normal
+        <input 
+          class="input paragraph-normal"
           id="password"
           type="password"
           name="password"
@@ -75,46 +79,48 @@ export default function register() {
   registerElement.classList.add('register-container');
   registerElement.innerHTML = registerContentHTML;
 
-  const nameInput = registerElement.querySelector('#name');
-  const usernameInput = registerElement.querySelector('#username');
-  const emailInput = registerElement.querySelector('#email');
-  const passwordInput = registerElement.querySelector('#password');
-
-  const registerButton = registerElement.querySelector('#buttonSignUp');
-  registerButton.addEventListener('click', () => {
-    const name = nameInput.ariaValueMax.toString();
-    const username = usernameInput.ariaValueMax.toString();
-    const email = emailInput.ariaValueMax.toString();
-    const password = passwordInput.ariaValueMax.toString();
-
-    fetch(`http://localhost:3000/api/login/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, username, email, password }),
-    })
-      .then((response) => {
-        // Esta linha verifica se a resposta do servidor é bem-sucedida
-        if (!response.ok) {
-          throw new Error('Falha no login');
-        }
-        // Esta linha retorna os dados da resposta em formato JSON
-        window.dispatchEvent(createCustomEvent('/home'));
-        return response.json();
-      })
-      .then((data) => {
-        // Esta linha registra os dados recebidos do servidor no console (você pode substituir isso por sua própria lógica para lidar com a resposta)
-        console.log(data);
-      })
-      .catch((error) => {
-        // Esta linha captura qualquer erro que ocorra durante o processo de login
-        console.error('Erro:', error);
-      });
-  });
-
   const signinButton = registerElement.querySelector('.signin-button');
   setNavigation(signinButton, '/login');
+ 
+  const buttonSignUp = registerElement.querySelector("#buttonSignUp")
+  const btnName = registerElement.querySelector("#name");
+  const btnUsername = registerElement.querySelector("#username");
+  const btnEmail = registerElement.querySelector("#email");
+  const btnPassword = registerElement.querySelector("#password");
+
+  buttonSignUp.addEventListener("click", (event)=>{
+    event.preventDefault();
+
+    const payload = {
+      name: btnName.value, 
+      username: btnUsername.value, 
+      email: btnEmail.value, 
+      password: btnPassword.value
+    }
+
+    fetch("http://localhost:3000/api/login/register" , {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ ...payload })
+    })
+    .then((response) => {
+      if (!response.ok){
+        return response.json().then(error => {
+          throw new Error(`Não foi possível realizar o cadastro! ${error.message}`);
+      })
+    }
+      window.dispatchEvent(createCustomEvent('/login'));
+      return response.json();
+    })
+    .then((data) =>{
+      console.log(data)
+    })
+    .catch((err) =>{
+      console.error(err)
+    });
+  })
 
   // Retorna o elemento principal
   return registerElement;
