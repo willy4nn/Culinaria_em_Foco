@@ -75,7 +75,7 @@ addUser: async (req, res) => {
     newUser.user_type = "user";
   }
 
-    //Aqui é feito o registro do usuário no banco de dados com a senha hasheada
+    //Aqui é feito o registro do usuário no banco de dados com a senha hasheada 
     const result = await loginRepository.addUser(newUser)
 
     if(!result.success){

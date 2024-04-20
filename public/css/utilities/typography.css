@@ -23,3 +23,9 @@
   line-height: 24px;
   color: var(--c9);
 }
+
+a {
+  text-decoration: none;
+  font-family: var(--font-body);
+  cursor: pointer;
+}

@@ -1,0 +1,45 @@
+/* button.css */
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 24px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 500;
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  width: fit-content;
+}
+
+.button:hover {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.button-fill {
+  background: var(--p2);
+  border: 1px solid #383e2c;
+  color: var(--c1);
+}
+
+.button-fill:hover {
+  background: #353b28;
+  border: 1px solid #303624;
+}
+
+.button-line {
+  border: 1px solid #383e2c;
+  color: var(--p2);
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.button-line:hover {
+  border: 1px solid #303624;
+  color: #353b28;
+}
