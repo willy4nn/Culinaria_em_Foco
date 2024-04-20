@@ -4,7 +4,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Lobster&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 @import './reset.css';
 @import './utilities/colors.css';
-@import './variables.css';
 @import './utilities/typography.css';
 @import './components/form.css';
 @import './components/button.css';

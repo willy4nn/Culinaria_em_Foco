@@ -33,7 +33,7 @@ export default function register() {
         />
       </div>
       <div>
-        <input 
+        <input
           class="input paragraph-normal"
           id="username"
           type="text"
@@ -43,7 +43,7 @@ export default function register() {
         />
       </div>
       <div>
-        <input 
+        <input
           class="input paragraph-normal"
           id="email"
           type="email"
@@ -53,7 +53,7 @@ export default function register() {
         />
       </div>
       <div>
-        <input 
+        <input
           class="input paragraph-normal"
           id="password"
           type="password"
@@ -91,6 +91,12 @@ export default function register() {
   buttonSignUp.addEventListener("click", (event)=>{
     event.preventDefault();
 
+  const registerButton = registerElement.querySelector('#buttonSignUp');
+  registerButton.addEventListener('click', () => {
+    const name = nameInput.value.toString();
+    const username = usernameInput.value.toString();
+    const email = emailInput.value.toString();
+    const password = passwordInput.value.toString();
     const payload = {
       name: btnName.value, 
       username: btnUsername.value, 
