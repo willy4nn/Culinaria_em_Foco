@@ -28,7 +28,7 @@ export default function home() {
   // Cria o elemento principal
   const homeElement = document.createElement('div');
   homeElement.innerHTML = homeContentHTML;
-
+  
   const logoutButton = homeElement.querySelector('.logout');
   logoutButton.addEventListener('click', () => {
     fetch(`http://localhost:3000/api/login/logout`, {

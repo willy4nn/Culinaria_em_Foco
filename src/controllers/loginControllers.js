@@ -71,10 +71,6 @@ logout: (req, res) => {
 //Aqui é feita a criação do usuário
 addUser: async (req, res) => {
   const newUser = req.body;
-  if (!newUser.user_type) {
-    newUser.user_type = "user";
-  }
-
     //Aqui é feito o registro do usuário no banco de dados com a senha hasheada
     const result = await loginRepository.addUser(newUser)
 

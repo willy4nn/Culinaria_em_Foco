@@ -56,6 +56,9 @@ app.use((req, res, next) => {
   next();
 });
 
+// Middleware que verifica se usuario está logado
+const permissionVerify = require("./middlewares/permissionVerify.js")
+
 const routes = require('./routes');
 
 // Rota para lidar com todas as outras solicitações
@@ -63,12 +66,11 @@ app.get('/login', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 
-
 app.get('/register', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 
-app.get('/home', (req, res) => {
+app.get('/home', permissionVerify, (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 

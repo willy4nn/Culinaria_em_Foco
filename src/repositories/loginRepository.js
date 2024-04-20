@@ -19,7 +19,7 @@ const loginRepository = {
                 reject({ error: "Token JWT inválido, faça login novamente" });
               }
               const user = decoded.user;
-              const userToken = { username: user.username, name: user.name, userType: user.userType, sessionToken: sessionToken };
+              const userToken = { username: user.username, name: user.name, userType: user.userType, premiumActive: user.premiumActive, sessionToken: sessionToken };
               resolve(userToken);
             }
           });
@@ -73,7 +73,8 @@ const loginRepository = {
           const userToken = {
             username: user.username,
             name: user.name,
-            userType: user.user_type
+            userType: user.user_type,
+            premiumActive: user.premium_active
           }
           //Aqui é feito o processo de assinatura do token
             const sessionToken = await jwt.sign({ user: userToken }, config.SECRET_KEY);
@@ -87,7 +88,7 @@ const loginRepository = {
 
     addUser: async (user) => {
         const pool = conectToDatabase();
-        const newUser = user
+        const newUser = user;
         const hashedPassword = await hashPassword(newUser.password);
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
            //Aqui é feito as validações, caso o usuário não exista ele procede com o registro
@@ -117,7 +118,7 @@ const loginRepository = {
               await pool.query('BEGIN')
             
               await pool.query('INSERT INTO users (name, username, email, password, user_type, premium_active, profile_photo) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-                [newUser.name, newUser.username, newUser.email, hashedPassword, newUser.user_type, false, newUser.profile_photo])
+                [newUser.name, newUser.username, newUser.email, hashedPassword, "user", false, newUser.profile_photo])
             
               await pool.query('COMMIT')
             
