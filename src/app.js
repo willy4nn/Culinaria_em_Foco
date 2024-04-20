@@ -126,6 +126,10 @@ app.get('/editor', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 
+app.get('/profile', (req, res) => {
+  res.sendFile(path.join(publicPath, 'index.html'));
+});
+
 app.use('/api', routes);
 
 app.listen(port, ip, () => {
