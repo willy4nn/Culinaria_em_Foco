@@ -1,9 +1,9 @@
 import createCustomEvent from '../eventModule.js';
-import importFile from '../multer/index.js';
+import { importHTMLContentFiles, importLocalFile } from '../multer/index.js';
 
 // Exporta a função que retorna a página de login
 export default function createPost() {
-  // HTML do elemento de login
+  
   const createPostContentHTML = `
     <header class="header">
       <div class="logo">
@@ -14,9 +14,9 @@ export default function createPost() {
         <a class="button button-fill">Sign Up</a>
       </div>
     </header>
-    <main class="login-main"> 
-      <h1 class="title">Login</h1>
-      <div class="box-login">
+    <main class=""> 
+      <h1 class="title">Create Post</h1>
+      <div class="">
         <form class="form">
 
           <div class="input-container">
@@ -90,7 +90,8 @@ export default function createPost() {
 
 
           <div class="input-container">
-            <input id="banner" type="text" name="banner" placeholder="Banner Temporário"/>
+            <label for='files'>Select banner</label>
+            <input id='banner' type="file" name="files">
           </div>
           <div class="input-container">
             <input id="image" type="text" name="image" placeholder="Image Temporário"/>
@@ -99,21 +100,6 @@ export default function createPost() {
           <button id="button-post">Post</button>
         </form>
       </div>
-
-      <div class="container">
-        <h1>File Upload</h1>
-        <form id='form'>
-            <div class="input-group">
-                <label for='name'>Your name</label>
-                <input name='name' id='name' placeholder="Enter your name" />
-            </div>
-            <div class="input-group">
-                <label for='files'>Select files</label>
-                <input id='files' type="file" name="files" multiple>
-            </div>
-            <button class="submit-btn" type='submit'>Upload</button>
-        </form>
-    </div>
 
     </main>
     <footer class="footer">
@@ -157,7 +143,7 @@ export default function createPost() {
       event.preventDefault();
 
       // Trata o conteúdo princial da postagem e salva as imagens no storage
-      const content = importFile(editor.root.innerHTML)
+      const content = importHTMLContentFiles(editor.root.innerHTML)
 
       // Efetua a postagem
       submitPost(true, content);
@@ -167,7 +153,7 @@ export default function createPost() {
       event.preventDefault();
 
       // Trata o conteúdo princial da postagem e salva as imagens no storage
-      const content = importFile(editor.root.innerHTML)
+      const content = importHTMLContentFiles(editor.root.innerHTML)
 
       // Salva a postagem como rascunho
       submitPost(false, content);
@@ -175,15 +161,16 @@ export default function createPost() {
 
   });
 
-  const form = createPostElement.querySelector('#form');
-  form.addEventListener("submit", importFile);
-
-  function submitPost(posted_draft, editorContent) {
+  async function submitPost(posted_draft, editorContent) {
     const title = titleInput.value.toString();
     const category = categoryInput.value.toString().toLowerCase();
     const content = editorContent.toString();
-    const banner = bannerInput.value.toString();
+    // Armazena a imagem no back e retorna a uri
+    const banner = await importLocalFile(bannerInput.files[0])
     const image = imageInput.value.toString();
+
+    console.log("bn", bannerInput);
+    console.log("bn", bannerInput.files);
 
     const data = { title, category, content, banner, image, posted_draft };
     console.log(data);
