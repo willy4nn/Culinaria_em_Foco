@@ -23,7 +23,8 @@ export default function register() {
     <form class="form">
     <div class="inputs-container">
       <div>
-        <input class="input paragraph-normal
+        <input
+          class="input paragraph-normal"
           id="name"
           type="text"
           name="name"
@@ -32,7 +33,8 @@ export default function register() {
         />
       </div>
       <div>
-        <input class="input paragraph-normal
+        <input
+          class="input paragraph-normal"
           id="username"
           type="text"
           name="username"
@@ -41,7 +43,8 @@ export default function register() {
         />
       </div>
       <div>
-        <input class="input paragraph-normal
+        <input
+          class="input paragraph-normal"
           id="email"
           type="email"
           name="email"
@@ -50,7 +53,8 @@ export default function register() {
         />
       </div>
       <div>
-        <input class="input paragraph-normal
+        <input
+          class="input paragraph-normal"
           id="password"
           type="password"
           name="password"
@@ -82,10 +86,10 @@ export default function register() {
 
   const registerButton = registerElement.querySelector('#buttonSignUp');
   registerButton.addEventListener('click', () => {
-    const name = nameInput.ariaValueMax.toString();
-    const username = usernameInput.ariaValueMax.toString();
-    const email = emailInput.ariaValueMax.toString();
-    const password = passwordInput.ariaValueMax.toString();
+    const name = nameInput.value.toString();
+    const username = usernameInput.value.toString();
+    const email = emailInput.value.toString();
+    const password = passwordInput.value.toString();
 
     fetch(`http://localhost:3000/api/login/register`, {
       method: 'POST',
