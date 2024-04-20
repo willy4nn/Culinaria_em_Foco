@@ -2,6 +2,7 @@
 
 // Importa a função createCustomEvent do módulo de eventos
 import createCustomEvent from '../eventModule.js';
+import setNavigation from '../setNavigation.js';
 
 // Exporta a função principal que retorna a página principal
 export default function register() {
@@ -13,24 +14,37 @@ export default function register() {
     <span class="paragraph-medium">Chef's Corner</span>
   </div>
   <div class="buttons">
-    <a class="button button-fill">Register</a>
+    <a class="button button-fill signin-button">Sign In </a>
   </div>
 </header>
 <main class="main main-register">
   <h1 class="primary-heading">Register</h1>
   <div>
-    <form>
+    <form class="form">
+    <div class="inputs-container">
       <div>
-        <input
+        <input 
+          class="input paragraph-normal"
           id="name"
           type="text"
           name="name"
+          placeholder="User Name"
+          required
+        />
+      </div>
+      <div>
+        <input
+          class="input paragraph-normal"
+          id="username"
+          type="text"
+          name="username"
           placeholder="Full Name"
           required
         />
       </div>
       <div>
         <input
+          class="input paragraph-normal"
           id="email"
           type="email"
           name="email"
@@ -40,15 +54,7 @@ export default function register() {
       </div>
       <div>
         <input
-          id="username"
-          type="text"
-          name="username"
-          placeholder="username"
-          required
-        />
-      </div>
-      <div>
-        <input
+          class="input paragraph-normal"
           id="password"
           type="password"
           name="password"
@@ -56,7 +62,8 @@ export default function register() {
           required
         />
       </div>
-      <button id="buttonSignUp">Register</button>
+    </div>
+      <button class="button button-fill" id="buttonSignUp">Register</button>
     </form>
   </div>
   <a class="signin-link paragraph-medium">Already have an account? Sign in</a>
@@ -72,45 +79,50 @@ export default function register() {
   registerElement.classList.add('register-container');
   registerElement.innerHTML = registerContentHTML;
 
-  const buttonSignUp = registerElement.querySelector("#buttonSignUp")
-  const btnName = registerElement.querySelector("#name");
-  const btnUsername = registerElement.querySelector("#username");
-  const btnEmail = registerElement.querySelector("#email");
-  const btnPassword = registerElement.querySelector("#password");
+  const signinButton = registerElement.querySelector('.signin-button');
+  setNavigation(signinButton, '/login');
 
-  buttonSignUp.addEventListener("click", (event)=>{
+  const buttonSignUp = registerElement.querySelector('#buttonSignUp');
+  const btnName = registerElement.querySelector('#name');
+  const btnUsername = registerElement.querySelector('#username');
+  const btnEmail = registerElement.querySelector('#email');
+  const btnPassword = registerElement.querySelector('#password');
+
+  buttonSignUp.addEventListener('click', (event) => {
     event.preventDefault();
 
     const payload = {
-      name: btnName.value, 
-      username: btnUsername.value, 
-      email: btnEmail.value, 
-      password: btnPassword.value
-    }
+      name: btnName.value,
+      username: btnUsername.value,
+      email: btnEmail.value,
+      password: btnPassword.value,
+    };
 
-    fetch("http://localhost:3000/api/login/register" , {
-      method: "POST",
+    fetch('http://localhost:3000/api/login/register', {
+      method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ ...payload })
+      body: JSON.stringify({ ...payload }),
     })
-    .then((response) => {
-      if (!response.ok){
-        return response.json().then(error => {
-          throw new Error(`Não foi possível realizar o cadastro! ${error.message}`);
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((error) => {
+            throw new Error(
+              `Não foi possível realizar o cadastro! ${error.message}`
+            );
+          });
+        }
+        window.dispatchEvent(createCustomEvent('/login'));
+        return response.json();
       })
-    }
-      window.dispatchEvent(createCustomEvent('/login'));
-      return response.json();
-    })
-    .then((data) =>{
-      console.log(data)
-    })
-    .catch((err) =>{
-      console.error(err)
-    });
-  })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  });
 
   // Retorna o elemento principal
   return registerElement;

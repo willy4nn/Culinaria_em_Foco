@@ -1,6 +1,7 @@
 // login.js
 
 import createCustomEvent from '../eventModule.js';
+import setNavigation from '../setNavigation.js';
 
 // Exporta a função 'login' para que possa ser utilizada por outras partes do código
 export default function login() {
@@ -12,21 +13,23 @@ export default function login() {
     <span class="paragraph-medium">Chef's Corner</span>
   </div>
   <div class="buttons">
-    <a class="button button-fill">Register</a>
+    <a class="button button-fill signup-button">Sign Up</a>
   </div>
 </header>
 <main class="main main-login">
   <h1 class="primary-heading">Login</h1>
   <div>
     <form class="form">
-      <div>
-        <input id="email" type="text" name="email" placeholder="Email Address" />
-      </div>
-      <div>
-        <input id="password" type="password" name="password" placeholder="Password"/>
+      <div class="inputs-container">
+        <div>
+          <input class="input paragraph-normal" id="email" type="text" name="email" placeholder="Email Address" />
+        </div>
+        <div>
+          <input class="input paragraph-normal" id="password" type="password" name="password" placeholder="Password"/>
+        </div>
       </div>
       <a class="paragraph-normal">Forgot you password?</a>
-      <button id="buttonSignIn">Sign In</button>
+      <button class="button button-fill" id="buttonSignIn">Sign In</button>
     </form>
   </div>
   <p class="signup-link paragraph-medium">
@@ -91,6 +94,9 @@ export default function login() {
         console.error('Erro:', error);
       });
   });
+
+  const signupButton = loginElement.querySelector('.signup-button');
+  setNavigation(signupButton, '/register');
 
   // Esta linha retorna o loginElement que contém todo o layout da página de login
   return loginElement;
