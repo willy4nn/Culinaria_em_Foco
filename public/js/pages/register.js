@@ -81,52 +81,48 @@ export default function register() {
 
   const signinButton = registerElement.querySelector('.signin-button');
   setNavigation(signinButton, '/login');
- 
-  const buttonSignUp = registerElement.querySelector("#buttonSignUp")
-  const btnName = registerElement.querySelector("#name");
-  const btnUsername = registerElement.querySelector("#username");
-  const btnEmail = registerElement.querySelector("#email");
-  const btnPassword = registerElement.querySelector("#password");
 
-  buttonSignUp.addEventListener("click", (event)=>{
+  const buttonSignUp = registerElement.querySelector('#buttonSignUp');
+  const btnName = registerElement.querySelector('#name');
+  const btnUsername = registerElement.querySelector('#username');
+  const btnEmail = registerElement.querySelector('#email');
+  const btnPassword = registerElement.querySelector('#password');
+
+  buttonSignUp.addEventListener('click', (event) => {
     event.preventDefault();
 
-  const registerButton = registerElement.querySelector('#buttonSignUp');
-  registerButton.addEventListener('click', () => {
-    const name = nameInput.value.toString();
-    const username = usernameInput.value.toString();
-    const email = emailInput.value.toString();
-    const password = passwordInput.value.toString();
     const payload = {
-      name: btnName.value, 
-      username: btnUsername.value, 
-      email: btnEmail.value, 
-      password: btnPassword.value
-    }
+      name: btnName.value,
+      username: btnUsername.value,
+      email: btnEmail.value,
+      password: btnPassword.value,
+    };
 
-    fetch("http://localhost:3000/api/login/register" , {
-      method: "POST",
+    fetch('http://localhost:3000/api/login/register', {
+      method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ ...payload })
+      body: JSON.stringify({ ...payload }),
     })
-    .then((response) => {
-      if (!response.ok){
-        return response.json().then(error => {
-          throw new Error(`Não foi possível realizar o cadastro! ${error.message}`);
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((error) => {
+            throw new Error(
+              `Não foi possível realizar o cadastro! ${error.message}`
+            );
+          });
+        }
+        window.dispatchEvent(createCustomEvent('/login'));
+        return response.json();
       })
-    }
-      window.dispatchEvent(createCustomEvent('/login'));
-      return response.json();
-    })
-    .then((data) =>{
-      console.log(data)
-    })
-    .catch((err) =>{
-      console.error(err)
-    });
-  })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  });
 
   // Retorna o elemento principal
   return registerElement;
