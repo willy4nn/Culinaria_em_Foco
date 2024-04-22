@@ -52,6 +52,33 @@ const postsController = {
         }
     },
 
+    // GET ALL BY CATEGORY
+    getPostsByCategory: async (req, res) => {
+        const category = req.params.category;
+
+        try {
+            const response = await postsRepository.getPostsByCategory(category);
+
+            res.status(200).json({ data: response, status: 200 });
+        } catch (error) {
+            res.status(error.code || 500).json({ error, status: error.code || 500 });
+        }
+    },
+
+    // GET ALL ORDER BY LIKES (LIMIT = MAX RESULTS)
+    getPostsOrderByLike: async (req, res) => {
+        const maxResults = req.query.limit;
+        console.log("mm",maxResults);
+
+        try {
+            const response = await postsRepository.getPostsOrderByLike(maxResults);
+
+            res.status(200).json({ data: response, status: 200 });
+        } catch (error) {
+            res.status(error.code || 500).json({ error, status: error.code || 500 });
+        }
+    },
+
     // UPDATE
     updatePost: async (req, res) => {
         const id = req.params.id;
