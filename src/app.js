@@ -79,6 +79,18 @@ app.get('/post', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 
+app.get('/post/:id', (req, res) => {
+  res.sendFile(path.join(publicPath, 'index.html'));
+});
+
+/* // Rota para servir arquivos CSS
+app.get('/css/style.css', (req, res) => {
+  // Define o tipo MIME como text/css
+  res.setHeader('Content-Type', 'text/css');
+  // Envia o arquivo CSS
+  res.sendFile(path.join(publicPath, 'css', 'style.css'));
+});
+ */
 
 // Upload com Multer
 app.post("/upload_files", upload.single("files"), uploadFiles);
@@ -129,8 +141,10 @@ app.get('/editor', (req, res) => {
 });
 
 app.get('/profile', (req, res) => {
+  console.log("teste", __dirname);
   res.sendFile(path.join(publicPath, 'index.html'));
 });
+
 
 app.use('/api', routes);
 

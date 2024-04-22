@@ -74,7 +74,7 @@ export default function profile() {
 
   getUserData().then(profileData => {
     console.log("prof", profileData);
-    profilePhoto.src = "https://styles.redditmedia.com/t5_48d08q/styles/profileIcon_d2d3lpc7x5v61.png?width=128&height=128&frame=1&auto=webp&crop=128:128,smart&s=b2c1c9ce9bfaf0242379c844ab186b3960865987";
+    profilePhoto.src = "../../uploads/profile_photo/default_profile_normal.png";
     profileUsername.innerText = profileData.username || "none";
     profileName.innerText = profileData.name || "none";
 
