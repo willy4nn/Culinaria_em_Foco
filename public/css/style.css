@@ -13,4 +13,5 @@
 @import './pages/main.css';
 @import './pages/login.css';
 @import './pages/register.css';
+@import './pages/post.css';
 @import './pages/getPost.css';
