@@ -89,10 +89,9 @@ const postsRepository = {
     // GET ALL ORDER BY LIKES (LIMIT = MAX RESULTS)
     getPostsOrderByLike: async function (maxResults) {
         const pool = await connectToDatabase();
-        console.log("mm",maxResults);
 
-        // Se omitido, retorna todas as ocorrências
-        const limit = maxResults || 'ALL';
+        // Se limit for omitido, retorna todas as ocorrências
+        const limit = maxResults === "" ? null : maxResults;
         const query = "SELECT * FROM posts ORDER BY likes_quantity DESC LIMIT $1";
 
         try {
