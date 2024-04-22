@@ -78,6 +78,7 @@ export default function getPost(postId) {
 
         commentTextarea.value = "";
   
+        //Alterar para inserir somente o novo comentário ao invés de da um fetch em todos.
         console.log("create comment data", data);
         createComment(data)
           .then(() => {
