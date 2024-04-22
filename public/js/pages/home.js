@@ -141,8 +141,6 @@ export default function home() {
     });
   }
 
-
-
   const logoutButton = homeElement.querySelector('.logout');
   logoutButton.addEventListener('click', () => {
     fetch(`http://localhost:3000/api/login/logout`, {

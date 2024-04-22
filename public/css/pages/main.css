@@ -1,52 +1,49 @@
-.initial-main {
-  width: 100%;
-  min-height: calc(100vh - 7rem - 144px); /* Definindo altura mínima */
-  padding: 0px 80px;
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 32px;
-  align-items: center;
-}
+/* main.css */
 
-.main-content-text {
-  grid-column: 1 / span 6;
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  column-gap: 32px;
-  height: 100%;
-  align-content: center;
-  align-items: start;
-}
-
-.main-content-image {
-  grid-column: span 6;
-  height: 30rem;
-  border-radius: 24px;
-  overflow: hidden;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.main-content-text h1 {
-  grid-column: 1 / -1;
-}
-
-.main-content-text p {
-  margin-top: 40px;
-  grid-column: 1 / span 6;
-}
-
-.main-content-text .buttons {
+/* ########## MAIN PAGE ########## */
+.main-container {
+  height: 100vh;
+  max-height: 100vh;
   display: flex;
-  max-width: fit-content;
-  margin-top: 24px;
-  gap: 16px;
-  grid-row: 3;
-  grid-column: 1 / span 4;
+  flex-direction: column;
 }
 
-.main-content-image img {
+.main-main {
+  min-height: 30rem;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  width: 100%;
+  padding: 2rem 5rem;
+  gap: 2rem;
+  overflow: hidden;
+}
+
+.main-main > .text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  flex: 1;
+
+  height: 100%;
+}
+
+.main-main > .text-container > div {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.main-main > .image-container {
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 1.5rem;
+}
+
+.main-main .image-container > img {
   object-fit: cover;
-  display: block;
   width: 100%;
   height: 100%;
 }
