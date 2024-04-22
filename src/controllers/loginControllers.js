@@ -58,7 +58,7 @@ autenticate: async (req, res) => {
     if(!result.success){
       return res.status(400).json({ message: result.error })
     }
-      res.cookie('session_id', result.sessionToken, { maxAge: 900000, httpOnly: true });
+      res.cookie('session_id', result.sessionToken, { maxAge: 1800000, httpOnly: true });
       res.status(200).json({ message: result.message });
 },
 

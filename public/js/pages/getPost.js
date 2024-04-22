@@ -63,6 +63,39 @@ export default function getPost(postId) {
   const buttonComment = getPostElement.querySelector('#comment-button');
   const commentsList = getPostElement.querySelector('#comments-list');
 
+
+  // Carrega os dados do usuário logado.
+  getLogin()
+    .then(data => {
+      const userData = data;
+
+      buttonComment.addEventListener('click', function(e) {
+        const data = {
+          posts_id: postId,
+          users_id: userData.id,
+          content: commentTextarea.value.trim().toString(),
+        }
+
+        commentTextarea.value = "";
+  
+        console.log("create comment data", data);
+        createComment(data)
+          .then(() => {
+            getCommentsByPostId(postId)
+            .then(data => {   
+              renderCommentsByPostId(data);
+            })
+            .catch(error => {
+              console.error('Erro ao buscar post:', error);
+            });
+          })
+      });
+    })
+    .catch(error => {
+      console.error('Erro ao carregar dados do usuário:', error);
+    });
+
+
   // Faz requisição de consulta de post por ID
   getPostById(postId)
   .then(data => {
@@ -81,41 +114,16 @@ export default function getPost(postId) {
 // Faz requisição de consulta de comments por post ID
   getCommentsByPostId(postId)
   .then(data => {
-    data.forEach(comment => {
-      const div = document.createElement('div');
-      const headerDiv = document.createElement('div');
-
-      const profilePhoto = document.createElement('img');
-      const name = document.createElement('p');
-      const createdAt = document.createElement('p');
-      const content = document.createElement('content');
-
-      div.classList.add('comment');
-      headerDiv.classList.add('comment-header');
-      profilePhoto.classList.add('profile-photo');
-      name.classList.add('user-name');
-      createdAt.classList.add('created-at');
-      content.classList.add('comment-content');
-
-      profilePhoto.src = comment.profile_photo || '../../uploads/profile_photo/default_profile_normal.png'
-      name.innerText = comment.name ;
-      //createdAt.innerText = comment.created_at;
-      createdAt.innerText = '·  4 min' ;
-      content.innerHTML = comment.content;
-
-      headerDiv.append(profilePhoto, name, createdAt);
-      div.append(headerDiv, content);
-      commentsList.appendChild(div);
-    });
     
+    renderCommentsByPostId(data);
   })
   .catch(error => {
     console.error('Erro ao buscar post:', error);
   });
   
 
-  buttonGet.addEventListener('click', async () => {
 
+  buttonGet.addEventListener('click', async () => {
     // Faz requisição de consulta de post por ID
     getPostById(inputId.value)
     .then(data => {
@@ -160,16 +168,38 @@ export default function getPost(postId) {
     commentTextarea.style.height = commentTextarea.scrollHeight + 15 + 'px'; // Ajusta a altura conforme o conteúdo
   });
 
-  buttonComment.addEventListener('click', function(e) {
-    const data = {
-      posts_id: "1",
-      users_id: "1",
-      content: commentTextarea.value.trim().toString(),
-    }
+  function renderCommentsByPostId(data) {
+    commentsList.innerHTML = "";
 
-    console.log(data);
-    createComment(data);
-  });
+    data.forEach(comment => {
+      const div = document.createElement('div');
+      const headerDiv = document.createElement('div');
+
+      const profilePhoto = document.createElement('img');
+      const name = document.createElement('p');
+      const createdAt = document.createElement('p');
+      const content = document.createElement('content');
+
+      div.classList.add('comment');
+      headerDiv.classList.add('comment-header');
+      profilePhoto.classList.add('profile-photo');
+      name.classList.add('user-name');
+      createdAt.classList.add('created-at');
+      content.classList.add('comment-content');
+
+      profilePhoto.src = comment.profile_photo || '../../uploads/profile_photo/default_profile_normal.png'
+      name.innerText = comment.name ;
+      //createdAt.innerText = comment.created_at;
+      createdAt.innerText = '·  4 min' ;
+      content.innerHTML = comment.content;
+
+      headerDiv.append(profilePhoto, name, createdAt);
+      div.append(headerDiv, content);
+      commentsList.appendChild(div);
+    });
+  }
+
+  
 
   return getPostElement;
 }
@@ -214,8 +244,8 @@ async function getCommentsByPostId(id) {
   });
 }
 
-function createComment(data) {
-  fetch('http://localhost:3000/api/comments/', {
+async function createComment(data) {
+  return fetch('http://localhost:3000/api/comments/', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -231,7 +261,28 @@ function createComment(data) {
       return response.json();
   })
   .then((data) => {
-      console.log("get post :", data);
+    console.log("get post :", data);
+      return data;
+  })
+  .catch((error) => {
+      //displayError(error.error);
+      console.error('Erro:', error.error);
+  });
+}
+
+async function getLogin() {
+  return fetch('http://localhost:3000/api/login/user')
+  .then((response) => {
+      if (response.status !== 200) {
+          return response.json().then(errorResponse => {
+              throw errorResponse;
+          });
+      }
+      return response.json();
+  })
+  .then((data) => {
+      console.log("get user :", data);
+      return data;
   })
   .catch((error) => {
       //displayError(error.error);
@@ -240,5 +291,28 @@ function createComment(data) {
 }
 
 
+/* fetchUserData();
 
+  // Carrega os dados do usuário logado.
+  async function fetchUserData() {
 
+    const userData = await getLogin()
+    .then(data => {
+      return data;
+    })
+    .catch(error => {
+      console.error('Erro ao buscar post:', error);
+    });
+
+    buttonComment.addEventListener('click', async function(e) {
+      console.log("us", userData);
+      const data = {
+        posts_id: postId,
+        users_id: await userData.id,
+        content: commentTextarea.value.trim().toString(),
+      }
+
+      console.log("create comment data", data); return;
+      createComment(data);
+    });
+  } */

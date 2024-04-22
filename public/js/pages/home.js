@@ -43,8 +43,8 @@ export default function home() {
           <div>
           <div id="latest-content">
             <div id="left-news"></div>
-            <div id="middle-news">teste</div>
-            <div id="right-news">teste</div>
+            <div id="middle-news">Middle News</div>
+            <div id="right-news">Right News</div>
           </div>
         </div>
 
@@ -123,6 +123,11 @@ export default function home() {
         div.append(title, banner);
         leftNews.appendChild(div);
 
+        // Acessar a página completa do post
+        div.addEventListener('click', () => {
+          window.dispatchEvent(createCustomEvent(`/post/${item.id}`));
+        });
+
       } else {
         console.log("highlight", item);
         const div = document.createElement('div');
@@ -136,6 +141,11 @@ export default function home() {
 
         div.append(title, banner);
         featuredContent.appendChild(div);
+
+        // Acessar a página completa do post
+        div.addEventListener('click', () => {
+          window.dispatchEvent(createCustomEvent(`/post/${item.id}`));
+        });
       }
 
     });

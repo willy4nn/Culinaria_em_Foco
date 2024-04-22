@@ -19,7 +19,7 @@ const loginRepository = {
                 reject({ error: "Token JWT inválido, faça login novamente" });
               }
               const user = decoded.user;
-              const userToken = { username: user.username, name: user.name, userType: user.userType, premiumActive: user.premiumActive, sessionToken: sessionToken };
+              const userToken = { id: user.id, username: user.username, name: user.name, userType: user.userType, premiumActive: user.premiumActive, sessionToken: sessionToken };
               resolve(userToken);
             }
           });
@@ -71,6 +71,7 @@ const loginRepository = {
 
           //Dados do token a ser gerado
           const userToken = {
+            id: user.id,
             username: user.username,
             name: user.name,
             userType: user.user_type,
