@@ -1,5 +1,4 @@
 const connectToDatabase = require("../database/postgres.js");
-const { selectDatas } = require("./postsRepository.js");
 
 const commentsRepository = {
     
@@ -16,6 +15,24 @@ const commentsRepository = {
             
         } catch (error) {
             console.error("Erro ao inserir dados: ", error);
+            throw error;
+        }
+    },
+
+    // GET all comments by post ID and JOIN with users name and profile_photo
+    getCommentsByPostId: async function (posts_id) {
+        const client = await connectToDatabase();
+
+        const query = "SELECT posts_comments.*, users.name, users.profile_photo FROM posts_comments JOIN users ON posts_comments.users_id = users_id WHERE posts_comments.posts_id = $1";
+
+        try {
+            const result = await client.query(query, [posts_id]);
+            console.log("Registros encontrados: ");
+            console.table(result.rows);
+
+            return result.rows;
+        } catch (error) {
+            console.error("Erro ao selecionar dados: ", error);
             throw error;
         }
     },

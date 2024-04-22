@@ -5,13 +5,39 @@ const commentsController = {
     // CREATE
     createComment: async (req, res) => {
         const { posts_id, users_id, content } = req.body;
+        console.log(posts_id, users_id, content);
 
         try {
-            const response = await commentsRepository.insertData(
+            const response = await commentsRepository.createComment(
                 posts_id,
                 users_id,
                 content,
             );
+
+            res.status(200).json({ data: response, status: 200 });
+        } catch (error) {
+            res.status(error.code || 500).json({ error, status: error.code || 500 });
+        }
+    },
+
+    
+
+    // GET ALL COMMENTS BY POST ID AND JOIN WITH USERS NAME
+    getCommentsByPostId: async (req, res) => {
+        const posts_id = req.query.posts_id;
+
+        try {
+            const response = await commentsRepository.getCommentsByPostId(posts_id);
+
+            res.status(200).json({ data: response, status: 200 });
+        } catch (error) {
+            res.status(error.code || 500).json({ error, status: error.code || 500 });
+        }
+    },
+    // GET ALL
+    getComments: async (req, res) => {
+        try {
+            const response = await commentsRepository.getComments();
 
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
@@ -25,17 +51,6 @@ const commentsController = {
 
         try {
             const response = await commentsRepository.getComment(id);
-
-            res.status(200).json({ data: response, status: 200 });
-        } catch (error) {
-            res.status(error.code || 500).json({ error, status: error.code || 500 });
-        }
-    },
-
-    // GET ALL
-    getComments: async (req, res) => {
-        try {
-            const response = await commentsRepository.getComments();
 
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
