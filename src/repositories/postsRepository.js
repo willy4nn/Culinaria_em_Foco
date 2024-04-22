@@ -68,6 +68,45 @@ const postsRepository = {
         }
     },
 
+    // GET ALL BY CATEGORY
+    getPostsByCategory: async function (category) {
+        const pool = await connectToDatabase();
+
+        const query = "SELECT * FROM posts WHERE category = $1";
+
+        try {
+            const result = await pool.query(query, [category]);
+            console.log("Registros encontrados: ");
+            console.table(result.rows);
+
+            return result.rows;
+        } catch (error) {
+            console.error("Erro ao selecionar dados: ", error);
+            throw error;
+        }
+    },
+
+    // GET ALL ORDER BY LIKES (LIMIT = MAX RESULTS)
+    getPostsOrderByLike: async function (maxResults) {
+        const pool = await connectToDatabase();
+        console.log("mm",maxResults);
+
+        // Se omitido, retorna todas as ocorrências
+        const limit = maxResults || 'ALL';
+        const query = "SELECT * FROM posts ORDER BY likes_quantity DESC LIMIT $1";
+
+        try {
+            const result = await pool.query(query, [limit]);
+            console.log("Registros encontrados: ");
+            console.table(result.rows);
+
+            return result.rows;
+        } catch (error) {
+            console.error("Erro ao selecionar dados: ", error);
+            throw error;
+        }
+    },
+
     // UPDATE
     updatePost: async function (id, title, category, content, banner, image, posted_draft, status, updated_by) {
         const pool = await connectToDatabase();
