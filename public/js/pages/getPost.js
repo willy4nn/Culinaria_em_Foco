@@ -269,22 +269,25 @@ export default function getPost(postId) {
       const profilePhoto = document.createElement('img');
       const name = document.createElement('p');
       const createdAt = document.createElement('p');
+      const separatorDot = document.createElement('span');
       const content = document.createElement('div');
+
 
       div.classList.add('comment');
       headerDiv.classList.add('comment-header');
       profilePhoto.classList.add('profile-photo');
       name.classList.add('user-name');
       createdAt.classList.add('created-at');
+      separatorDot.classList.add('separator-dot');
       content.classList.add('comment-content');
 
       profilePhoto.src = comment.profile_photo || '../../uploads/profile_photo/default_profile_normal.png'
       name.innerText = comment.name ;
-      //createdAt.innerText = comment.created_at;
-      createdAt.innerText = '·  4 min' ;
+      createdAt.innerText = getTimeAgo(comment.created_at);
+      separatorDot.innerText = '·';
       content.innerHTML = comment.content;
 
-      headerDiv.append(profilePhoto, name, createdAt);
+      headerDiv.append(profilePhoto, name, separatorDot, createdAt);
       div.append(headerDiv, content);
       commentsList.appendChild(div);
     });
@@ -407,4 +410,20 @@ async function getIsLiked(posts_id, users_id) {
       //displayError(error.error);
       console.error('Erro:', error.error);
   });
+}
+
+function getTimeAgo(postDate) {
+  const currentDate = new Date();
+  const postDateObj = new Date(postDate);
+
+  const timeDifference = currentDate.getTime() - postDateObj.getTime();
+  const seconds = Math.floor(timeDifference / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+
+  if (days > 0) return days + (days === 1 ? ' day ago' : ' days ago');
+  else if (hours > 0) return hours + (hours === 1 ? ' hour ago' : ' hours ago');
+  else if (minutes > 0) return minutes + (minutes === 1 ? ' minute ago' : ' minutes ago');
+  else return 'Just now';
 }
