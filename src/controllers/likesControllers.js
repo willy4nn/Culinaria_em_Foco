@@ -22,7 +22,7 @@ const likesController = {
 
     // PUT (delete)
     unlikePost: async (req, res) => {
-        const posts_id = req.params.id;
+        const posts_isd = req.params.id;
         const users_id = req.body.users_id;
 
         try {
@@ -83,10 +83,7 @@ const likesController = {
         const { posts_comments_id, users_id } = req.body;
 
         try {
-            const response = await likesRepository.likeComment(
-                posts_comments_id,
-                users_id
-            );
+            const response = await likesRepository.likeComment(posts_comments_id, users_id);
 
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
@@ -94,12 +91,13 @@ const likesController = {
         }
     },
     
-    // DELETE
+    // PUT (delete)
     unlikeComment: async (req, res) => {
-        const id = req.params.id;
+        const posts_comments_id = req.params.id;
+        const users_id = req.body.users_id;
 
         try {
-            const response = await likesRepository.unlikeComment(id);
+            const response = await likesRepository.unlikeComment(posts_comments_id, users_id);
 
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
@@ -138,10 +136,7 @@ const likesController = {
         const { comments_replies_id, users_id } = req.body;
 
         try {
-            const response = await likesRepository.likeReply(
-                comments_replies_id,
-                users_id
-            );
+            const response = await likesRepository.likeReply(comments_replies_id, users_id);
 
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
@@ -149,12 +144,13 @@ const likesController = {
         }
     },
     
-    // DELETE
+    // PUT (delete)
     unlikeReply: async (req, res) => {
-        const id = req.params.id;
+        const comments_replies_id = req.params.id;
+        const users_id = req.body.users_id;
 
         try {
-            const response = await likesRepository.unlikeReply(id);
+            const response = await likesRepository.unlikeReply(comments_replies_id, users_id);
 
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {

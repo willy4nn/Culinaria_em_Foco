@@ -28,12 +28,12 @@ const likesRepository = {
 
         try {
             const result = await client.query(queryPosts, [posts_id]);
-            console.log("Dados inseridos com sucesso!");
+            console.log("Dados atualizados com sucesso!");
             //return result.rows;
             response.push(result.rows);
 
         } catch (error) {
-            console.error("Erro ao inserir dados: ", error);
+            console.error("Erro ao atualizar dados: ", error);
             throw error;
         }
 
@@ -58,9 +58,9 @@ const likesRepository = {
 
         try {
             await client.query(queryPosts, [posts_id]);
-            console.log("Dados excluídos com sucesso!");
+            console.log("Dados atualizados com sucesso!");
         } catch (error) {
-            console.error("Erro ao excluir dados: ", error);
+            console.error("Erro ao atualizar dados: ", error);
             throw error;
         }
     },
@@ -126,30 +126,54 @@ const likesRepository = {
         const client = await connectToDatabase();
 
         const query = `INSERT INTO comments_likes (posts_comments_id, users_id) VALUES ($1, $2) RETURNING *`;
+        const response = [];
 
         try {
             const result = await client.query(query, [posts_comments_id, users_id]);
             console.log("Dados inseridos com sucesso!");
-            return result.rows;
-
+            //return result.rows;
+            response.push(result.rows);
         } catch (error) {
             console.error("Erro ao inserir dados: ", error);
             throw error;
         }
+
+        const queryPostsComments = "UPDATE posts_comments SET likes_quantity = likes_quantity + 1 WHERE id = $1";
+        
+        try {
+            const result = await client.query(queryPostsComments, [posts_comments_id]);
+            console.log("Dados atualizados com sucesso!");
+            //return result.rows;
+            response.push(result.rows);
+        } catch (error) {
+            console.error("Erro ao atualizar dados: ", error);
+            throw error;
+        }
+
+        return response;
     },
 
-    // DELETE
-    unlikeComment: async function (id) {
+    // PUT (delete)
+    unlikeComment: async function (posts_comments_id, users_id) {
         const client = await connectToDatabase();
 
-        const query = "DELETE FROM comments_likes WHERE id = $1";
+        const query = "DELETE FROM comments_likes WHERE posts_comments_id = $1 AND users_id = $2";
         console.log("query", query);
 
         try {
-            await client.query(query, [id]);
+            await client.query(query, [posts_comments_id, users_id]);
             console.log("Dados excluídos com sucesso!");
         } catch (error) {
             console.error("Erro ao excluir dados: ", error);
+            throw error;
+        }
+
+        const queryPostsComments = "UPDATE posts_comments SET likes_quantity = likes_quantity - 1 WHERE id = $1";
+        try {
+            const result = await client.query(queryPostsComments, [posts_comments_id]);
+            console.log("Dados atualizados com sucesso!");
+        } catch (error) {
+            console.error("Erro ao atualizar dados: ", error);
             throw error;
         }
     },
@@ -197,30 +221,57 @@ const likesRepository = {
         const client = await connectToDatabase();
 
         const query = `INSERT INTO replies_likes (comments_replies_id, users_id) VALUES ($1, $2) RETURNING *`;
+        const response = [];
 
         try {
             const result = await client.query(query, [comments_replies_id, users_id]);
             console.log("Dados inseridos com sucesso!");
-            return result.rows;
+            //return result.rows;
+            response.push(result.rows);
 
         } catch (error) {
             console.error("Erro ao inserir dados: ", error);
             throw error;
         }
+
+        const queryRepliesComments = "UPDATE comments_replies SET likes_quantity = likes_quantity + 1 WHERE id = $1";
+
+        try {
+            const result = await client.query(queryRepliesComments, [comments_replies_id]);
+            console.log("Dados atualizados com sucesso!");
+            //return result.rows;
+            response.push(result.rows);
+
+        } catch (error) {
+            console.error("Erro ao atualizar dados: ", error);
+            throw error;
+        }
+
+        return response;
     },
 
-    // DELETE
-    unlikeReply: async function (id) {
+    // PUT (delete)
+    unlikeReply: async function (comments_replies_id, users_id) {
         const client = await connectToDatabase();
 
-        const query = "DELETE FROM replies_likes WHERE id = $1";
+        const query = "DELETE FROM replies_likes WHERE comments_replies_id = $1 AND users_id = $2";
         console.log("query", query);
 
         try {
-            await client.query(query, [id]);
+            await client.query(query, [comments_replies_id, users_id]);
             console.log("Dados excluídos com sucesso!");
         } catch (error) {
             console.error("Erro ao excluir dados: ", error);
+            throw error;
+        }
+        
+        const queryRepliesComments = "UPDATE comments_replies SET likes_quantity = likes_quantity - 1 WHERE id = $1";
+    
+        try {
+            await client.query(queryRepliesComments, [comments_replies_id]);
+            console.log("Dados atualizados com sucesso!");
+        } catch (error) {
+            console.error("Erro ao atualizar dados: ", error);
             throw error;
         }
     },
@@ -261,9 +312,6 @@ const likesRepository = {
         }
     },
 
-
-
-    
 };
 
 module.exports = likesRepository;
