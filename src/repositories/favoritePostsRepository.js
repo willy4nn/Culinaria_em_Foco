@@ -6,7 +6,7 @@ const favoritePostsRepository = {
 
     // CREATE
     createFavoritePost: async function (users_id, posts_id) {
-        const pool = await connectToDatabase();
+        const pool = await connectToDatabase.connect();
 
         const query = `INSERT INTO favorite_posts (users_id, posts_id) VALUES ($1, $2) RETURNING *`;
 
@@ -21,12 +21,14 @@ const favoritePostsRepository = {
         } catch (error) {
             console.error("Erro ao inserir dados: ", error);
             throw error;
+        } finally {
+          (await pool).release
         }
     },
 
     // GET BY ID
     getFavoritePost: async function (id) {
-        const pool = await connectToDatabase();
+        const pool = await connectToDatabase.connect();
 
         const query = "SELECT * FROM favorite_posts WHERE id = $1";
 
@@ -39,12 +41,14 @@ const favoritePostsRepository = {
         } catch (error) {
             console.error("Erro ao selecionar dados: ", error);
             throw error;
+        } finally {
+          (await pool).release
         }
     },
 
     // GET ALL
     getFavoritePosts: async function () {
-        const pool = await connectToDatabase();
+        const pool = await connectToDatabase.connect();
 
         const query = "SELECT * FROM favorite_posts";
 
@@ -57,6 +61,8 @@ const favoritePostsRepository = {
         } catch (error) {
             console.error("Erro ao selecionar dados: ", error);
             throw error;
+        } finally {
+          (await pool).release
         }
     },
 
@@ -64,7 +70,7 @@ const favoritePostsRepository = {
 
     // DELETE
     deleteFavoritePost: async function (id) {
-        const pool = await connectToDatabase();
+        const pool = await connectToDatabase.connect();
 
         const query = "DELETE FROM favorite_posts WHERE id = $1";
 
@@ -74,6 +80,8 @@ const favoritePostsRepository = {
         } catch (error) {
             console.error("Erro ao excluir dados: ", error);
             throw error;
+        } finally {
+          (await pool).release
         }
     },
 };
