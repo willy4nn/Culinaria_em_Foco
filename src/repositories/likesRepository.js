@@ -11,27 +11,53 @@ const likesRepository = {
         const client = await connectToDatabase();
 
         const query = `INSERT INTO posts_likes (posts_id, users_id) VALUES ($1, $2) RETURNING *`;
+        const response = [];
 
         try {
             const result = await client.query(query, [posts_id, users_id]);
             console.log("Dados inseridos com sucesso!");
-            return result.rows;
+            //return result.rows;
+            response.push(result.rows);
 
         } catch (error) {
             console.error("Erro ao inserir dados: ", error);
             throw error;
         }
-    },
 
-    // DELETE
-    unlikePost: async function (id) {
-        const client = await connectToDatabase();
-
-        const query = "DELETE FROM posts_likes WHERE id = $1";
-        console.log("query", query);
+        const queryPosts = "UPDATE posts SET likes_quantity = likes_quantity + 1 WHERE id = $1";
 
         try {
-            await client.query(query, [id]);
+            const result = await client.query(queryPosts, [posts_id]);
+            console.log("Dados inseridos com sucesso!");
+            //return result.rows;
+            response.push(result.rows);
+
+        } catch (error) {
+            console.error("Erro ao inserir dados: ", error);
+            throw error;
+        }
+
+        return response;
+    },
+
+    // PUT (delete)
+    unlikePost: async function (posts_id, users_id) {
+        const client = await connectToDatabase();
+
+        const query = "DELETE FROM posts_likes WHERE posts_id = $1 AND users_id = $2";
+
+        try {
+            await client.query(query, [posts_id, users_id]);
+            console.log("Dados excluídos com sucesso!");
+        } catch (error) {
+            console.error("Erro ao excluir dados: ", error);
+            throw error;
+        }
+
+        const queryPosts = "UPDATE posts SET likes_quantity = likes_quantity - 1 WHERE id = $1";
+
+        try {
+            await client.query(queryPosts, [posts_id]);
             console.log("Dados excluídos com sucesso!");
         } catch (error) {
             console.error("Erro ao excluir dados: ", error);
@@ -65,6 +91,24 @@ const likesRepository = {
 
         try {
             const result = await client.query(query);
+            console.log("Registros encontrados: ");
+            console.table(result.rows);
+
+            return result.rows;
+        } catch (error) {
+            console.error("Erro ao selecionar dados: ", error);
+            throw error;
+        }
+    },
+
+    // GET BY POST ID AND USER ID
+    getIsLiked: async function (posts_id, users_id) {
+        const client = await connectToDatabase();
+
+        const query = "SELECT * FROM posts_likes WHERE posts_id = $1 AND users_id = $2";
+
+        try {
+            const result = await client.query(query, [posts_id, users_id]);
             console.log("Registros encontrados: ");
             console.table(result.rows);
 

@@ -2,6 +2,7 @@
 
 // Importa a função createCustomEvent do módulo de eventos
 import createCustomEvent from '../eventModule.js';
+import setNavigation from '../setNavigation.js';
 
 // Exporta a função principal que retorna a página principal
 export default function home() {
@@ -124,9 +125,11 @@ export default function home() {
         leftNews.appendChild(div);
 
         // Acessar a página completa do post
-        div.addEventListener('click', () => {
+        setNavigation(div, `/post/${item.id}`);
+        /* div.addEventListener('click', () => {
           window.dispatchEvent(createCustomEvent(`/post/${item.id}`));
-        });
+        }); */
+        
 
       } else {
         console.log("highlight", item);
@@ -143,9 +146,11 @@ export default function home() {
         featuredContent.appendChild(div);
 
         // Acessar a página completa do post
-        div.addEventListener('click', () => {
+        setNavigation(div, `/post/${item.id}`);
+
+        /* div.addEventListener('click', () => {
           window.dispatchEvent(createCustomEvent(`/post/${item.id}`));
-        });
+        }); */
       }
 
     });
