@@ -66,8 +66,63 @@ export default function getPost(postId) {
 
   // Carrega os dados do usuário logado.
   getLogin()
-    .then(data => {
-      const userData = data;
+  .then(userData => {
+    return { userData: userData, postPromise: getPostById(postId) };
+  })
+  .then(({ userData, postPromise }) => {
+    return postPromise.then(post => ({ userData, post }));
+  })
+  .then(({ userData, post }) => {
+    console.log("useeee", userData);
+    return getIsLiked(postId, userData.id)
+  .then(isliked => ({ userData, post, isliked }));
+  })
+  .then(({ userData, post, isliked }) => {
+
+      console.log("xx", userData, post, isliked);
+
+      const title = document.createElement('h1');
+      const content = document.createElement('div');
+      title.innerText = post.title;
+      content.innerHTML = post.content;
+      newsContainer.append(title, content);
+
+      renderLikeAndFavorite(post, isliked);
+
+      buttonComment.addEventListener('click', function(e) {
+        const data = {
+          posts_id: postId,
+          users_id: userData.id,
+          content: commentTextarea.value.trim().toString(),
+        }
+
+        commentTextarea.value = "";
+  
+        //Alterar para inserir somente o novo comentário ao invés de da um fetch em todos.
+        console.log("create comment data", data);
+        createComment(data)
+          .then(() => {
+            getCommentsByPostId(postId)
+            .then(data => {   
+              renderCommentsByPostId(data);
+            })
+            .catch(error => {
+              console.error('Erro ao buscar post:', error);
+            });
+          })
+      });
+    })
+    .catch(error => {
+      console.error('Erro ao carregar dados página:', error);
+    });
+
+      /* getIsLiked(postId, userData.id)
+      .then(data => {
+        renderLikeAndFavorite(data);
+      })
+      .catch(error => {
+        console.error('Erro ao verificar se o post é curtido:', error);
+      });
 
       buttonComment.addEventListener('click', function(e) {
         const data = {
@@ -94,23 +149,26 @@ export default function getPost(postId) {
     })
     .catch(error => {
       console.error('Erro ao carregar dados do usuário:', error);
-    });
+    }); */
 
 
   // Faz requisição de consulta de post por ID
-  getPostById(postId)
+ /*  getPostById(postId)
   .then(data => {
     const title = document.createElement('h1');
-    const content = document.createElement('content');
+    const content = document.createElement('div');
 
     title.innerText = data.title;
     content.innerHTML = data.content;
 
-  newsContainer.append(title, content);
+    
+    newsContainer.append(title, content);
+
+
   })
   .catch(error => {
     console.error('Erro ao buscar post:', error);
-  });
+  }); */
 
 // Faz requisição de consulta de comments por post ID
   getCommentsByPostId(postId)
@@ -121,6 +179,38 @@ export default function getPost(postId) {
   .catch(error => {
     console.error('Erro ao buscar post:', error);
   });
+
+  function renderLikeAndFavorite(post, isliked){
+    console.log("rendlikefav:", post);
+    const interactionDiv = document.createElement('div');
+    const likesQuantity = document.createElement('span');
+    const likeButton = document.createElement('button');
+    const likeIcon = document.createElement('span');
+    const favoriteButton = document.createElement('button');
+    const favoriteIcon = document.createElement('span');
+    
+    interactionDiv.classList.add('interaction-container');
+    likesQuantity.classList.add('likes-quantity');
+    likeButton.classList.add('button-transparent');
+    likeButton.classList.add('button-transparent');
+    favoriteButton.classList.add('button-transparent');
+    /* likeButton.classList.add('like-button');
+    favoriteButton.classList.add('favorite-button'); */
+    likeIcon.classList.add('material-symbols-outlined');
+    favoriteIcon.classList.add('material-symbols-outlined');
+
+    if (isliked[0]) likeIcon.classList.add('liked');
+
+    likesQuantity.innerText = `${post.likes_quantity} curtidas`;
+    likeIcon.innerText = 'favorite';
+    favoriteIcon.innerText = 'bookmark_add'; //bookmark_add bookmark_remove
+
+    likeButton.appendChild(likeIcon);
+    favoriteButton.appendChild(favoriteIcon);
+
+    interactionDiv.append(likesQuantity, likeButton, favoriteButton);
+    newsContainer.append(interactionDiv);
+  }
   
 
 
@@ -129,7 +219,7 @@ export default function getPost(postId) {
     getPostById(inputId.value)
     .then(data => {
       const title = document.createElement('h1');
-      const content = document.createElement('content');
+      const content = document.createElement('div');
 
       title.innerText = data.title;
       content.innerHTML = data.content;
@@ -160,7 +250,7 @@ export default function getPost(postId) {
     commentTextarea.placeholder = 'Add a comment';
   });
 
-  commentTextarea.addEventListener('input', function() {
+    commentTextarea.addEventListener('input', function() {
     /* commentTextarea.rows = commentTextarea.scrollHeight / 15 + 1;
     console.log(commentTextarea.scrollHeight)
     console.log(commentTextarea.rows); */
@@ -179,7 +269,7 @@ export default function getPost(postId) {
       const profilePhoto = document.createElement('img');
       const name = document.createElement('p');
       const createdAt = document.createElement('p');
-      const content = document.createElement('content');
+      const content = document.createElement('div');
 
       div.classList.add('comment');
       headerDiv.classList.add('comment-header');
@@ -291,29 +381,30 @@ async function getLogin() {
   });
 }
 
-
-/* fetchUserData();
-
-  // Carrega os dados do usuário logado.
-  async function fetchUserData() {
-
-    const userData = await getLogin()
-    .then(data => {
-      return data;
-    })
-    .catch(error => {
-      console.error('Erro ao buscar post:', error);
-    });
-
-    buttonComment.addEventListener('click', async function(e) {
-      console.log("us", userData);
-      const data = {
-        posts_id: postId,
-        users_id: await userData.id,
-        content: commentTextarea.value.trim().toString(),
+async function getIsLiked(posts_id, users_id) {
+  
+  const queryParams = new URLSearchParams({ posts_id, users_id }).toString();
+  console.log("query", queryParams);
+  return fetch(`http://localhost:3000/api/likes/posts/isliked?${queryParams}`, {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+    }
+  })
+  .then((response) => {
+      if (response.status !== 200) {
+          return response.json().then(errorResponse => {
+              throw errorResponse;
+          });
       }
-
-      console.log("create comment data", data); return;
-      createComment(data);
-    });
-  } */
+      return response.json();
+  })
+  .then((data) => {
+      console.log("get isliked :", data);
+      return data.data;
+  })
+  .catch((error) => {
+      //displayError(error.error);
+      console.error('Erro:', error.error);
+  });
+}

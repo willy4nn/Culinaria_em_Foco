@@ -20,12 +20,13 @@ const likesController = {
         }
     },
 
-    // DELETE
+    // PUT (delete)
     unlikePost: async (req, res) => {
-        const id = req.params.id;
+        const posts_id = req.params.id;
+        const users_id = req.body.users_id;
 
         try {
-            const response = await likesRepository.unlikePost(id);
+            const response = await likesRepository.unlikePost(posts_id, users_id);
 
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
@@ -51,6 +52,23 @@ const likesController = {
         try {
             const response = await likesRepository.getPostLikes();
             console.log("res", response);
+            res.status(200).json({ data: response, status: 200 });
+        } catch (error) {
+            res.status(error.code || 500).json({ error, status: error.code || 500 });
+        }
+    },
+
+    // GET BY POST ID AND USER ID
+    getIsLiked: async (req, res) => {
+        const { posts_id, users_id } = req.query;
+        console.log("po", posts_id);
+        console.log("us", users_id);
+
+        try {
+            const response = await likesRepository.getIsLiked(posts_id, users_id);
+
+            console.log("resp", response);
+
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
             res.status(error.code || 500).json({ error, status: error.code || 500 });
