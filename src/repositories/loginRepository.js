@@ -1,6 +1,6 @@
 const hashPassword = require('../utils/hashPassword');
 const comparePassword = require('../utils/comparePassword');
-const conectToDatabase = require('../database/postgres');
+const connectToDatabase = require('../database/postgres');
 
 
 //Configurações default de ambiente
@@ -27,7 +27,7 @@ const loginRepository = {
     },
 
     getUser: async function(username) {
-      const pool = conectToDatabase();
+      const pool = await connectToDatabase.connect();
 
       try {
         const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
@@ -36,22 +36,24 @@ const loginRepository = {
         console.error("Não foi possível resgatar dados do usuário", error);
         throw error;
       } finally {
-        
+        (await pool).release
       }
     },
 
     getUsers: async () => {
-        const pool = conectToDatabase();
+        const pool = await connectToDatabase.connect();
         try {
             const result = await pool.query('SELECT * FROM users')
             return result;
         } catch (error) {
             throw error;
+        } finally {
+          (await pool).release
         }
     },
 
     autenticate: async (email, simplePassword) => {
-      const pool = conectToDatabase();
+      const pool = await connectToDatabase.connect()
         try {
           //Primeiro verifica se usuário existe
             const result = await pool.query('SELECT * FROM users WHERE email = $1', [email])
@@ -84,11 +86,13 @@ const loginRepository = {
 
           } catch (error) {
             console.error({ error: 'Falha durante processo de assinatura do token' });
+          } finally {
+            (await pool).release
           }
     },
 
     addUser: async (user) => {
-        const pool = conectToDatabase();
+        const pool = await connectToDatabase.connect();
         const newUser = user;
         const hashedPassword = await hashPassword(newUser.password);
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -130,11 +134,13 @@ const loginRepository = {
               console.error("Não foi possível registrar usuário", err);
               const error = { success: false, error: "Não foi possível registrar usuário"};
               return error
+        } finally {
+          (await pool).release
         }
     },
 
     updateUser: async (actualUser, userUpdate) => {
-      const pool = conectToDatabase();
+      const pool = await connectToDatabase.connect();
       const username = actualUser;
       const updatedUser = userUpdate;
       //Caso o usuário troque a senha, ela é hasheada novamente
@@ -168,11 +174,13 @@ const loginRepository = {
             console.error("Não foi possível atualizar o usuário", err);
             const error = { success: false, error: "Não foi possível atualizar o usuário"};
             return error
+        } finally {
+          (await pool).release
         }
     },
 
     deleteUser: async (username) => {
-      const pool = conectToDatabase();
+      const pool = await connectToDatabase.connect();
       //Tenta encontrar dados do usuário através do username, caso encontre o deleta permanentemente
         const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
         if (result.rowCount === 0) {
@@ -187,7 +195,9 @@ const loginRepository = {
           console.error("Erro ao excluir usuário", err);
           const error = { success: false, error: "Erro ao excluir usuário"};
           return error;
-        } 
+        } finally {
+          (await pool).release
+        }
     },
 }
 

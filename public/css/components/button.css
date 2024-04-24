@@ -1,6 +1,11 @@
 /* button.css */
 
 /* ########## BUTTON ########## */
+.buttons {
+  display: flex;
+  gap: 1rem;
+}
+
 .button {
   display: flex;
   justify-content: center;
