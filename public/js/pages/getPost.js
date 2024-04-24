@@ -86,7 +86,8 @@ export default function getPost(postId) {
   const commentsList = getPostElement.querySelector('#comments-list');
 
 
-  // Carrega os dados do usuário logado.
+  // Carrega os dados do usuário logado
+  // Todas as requisições que dependam do ID do usuário serão feitas aqui dentro
   getLogin()
   .then(userData => {
     return { userData: userData, postPromise: getPostById(postId) };

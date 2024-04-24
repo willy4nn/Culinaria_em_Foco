@@ -145,8 +145,7 @@ export default function createPost() {
   const quillScriptElement = document.createElement('script');
 
   // Defina o atributo src com o URL do script externo
-  axiosScriptElement.src =
-    'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js';
+  axiosScriptElement.src = 'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js';
   quillScriptElement.src = 'https://cdn.quilljs.com/1.0.0/quill.js';
   quillScriptElement.id = 'quill-script';
 
@@ -154,35 +153,89 @@ export default function createPost() {
   createPostElement.appendChild(axiosScriptElement);
   createPostElement.appendChild(quillScriptElement);
 
-  // Carrega o editor de texto
-  quillScriptElement.addEventListener('load', function () {
-    var editor = new Quill('#editor', {
-      modules: { toolbar: '#toolbar' },
-      theme: 'snow',
-    });
 
-    buttonPost.addEventListener('click', (event) => {
-      event.preventDefault();
+  // Carrega os dados do usuário logado
+  // Todas as requisições que dependam do ID do usuário ou do Editor serão feitas aqui dentro
+  // Apenas teste utilizei uma abordagem diferente do getPost.js para efetuar um carregamento paralelo
+  Promise.all([getLogin(), new Promise((resolve, reject) => {
+    quillScriptElement.addEventListener('load', resolve);
+  })])
+  .then(([userData, _]) => {
+    // _ é uma convensão de nomenclatura para uma promisse ignorada (não será utilizada)
+      console.log("Carregou:", userData);
 
-      // Trata o conteúdo princial da postagem e salva as imagens no storage
-      const content = importHTMLContentFiles(editor.root.innerHTML);
+      // Carrega o editor de texto
+      const editor = new Quill('#editor', {
+          modules: { toolbar: '#toolbar' },
+          theme: 'snow',
+      });
 
-      // Efetua a postagem
-      submitPost(true, content);
-    });
+      buttonPost.addEventListener('click', (event) => {
+        event.preventDefault();
 
-    buttonSave.addEventListener('click', (event) => {
-      event.preventDefault();
+        // Trata o conteúdo princial da postagem e salva as imagens no storage
+        const content = importHTMLContentFiles(editor.root.innerHTML);
 
-      // Trata o conteúdo princial da postagem e salva as imagens no storage
-      const content = importHTMLContentFiles(editor.root.innerHTML);
+        // Efetua a postagem
+        submitPost(true, content, userData.id);
+      });
 
-      // Salva a postagem como rascunho
-      submitPost(false, content);
-    });
+      buttonSave.addEventListener('click', (event) => {
+        event.preventDefault();
+
+        // Trata o conteúdo princial da postagem e salva as imagens no storage
+        const content = importHTMLContentFiles(editor.root.innerHTML);
+
+        // Salva a postagem como rascunho
+        submitPost(false, content, userData.id);
+      });
+  })
+  .catch(error => {
+      console.error("Erro:", error);
   });
+  
+  
+  
+  
+  
+  /* getLogin()
+  .then(userData => {
 
-  async function submitPost(posted_draft, editorContent) {
+    console.log("Carregou:", userData);
+
+    // Carrega o editor de texto
+    quillScriptElement.addEventListener('load', function () {
+      const editor = new Quill('#editor', {
+        modules: { toolbar: '#toolbar' },
+        theme: 'snow',
+      });
+
+      buttonPost.addEventListener('click', (event) => {
+        event.preventDefault();
+
+        // Trata o conteúdo princial da postagem e salva as imagens no storage
+        const content = importHTMLContentFiles(editor.root.innerHTML);
+
+        // Efetua a postagem
+        submitPost(true, content);
+      });
+
+      buttonSave.addEventListener('click', (event) => {
+        event.preventDefault();
+
+        // Trata o conteúdo princial da postagem e salva as imagens no storage
+        const content = importHTMLContentFiles(editor.root.innerHTML);
+
+        // Salva a postagem como rascunho
+        submitPost(false, content);
+      });
+    });
+
+  }) */
+
+  
+
+  async function submitPost(posted_draft, editorContent, users_id) {
     const title = titleInput.value.toString();
     let category;
     categoryInputs.forEach((input) => {
@@ -192,7 +245,7 @@ export default function createPost() {
     });
     category = category ? category.toLowerCase() : ''; // Fixando a categoria vazia se não houver seleção
     const content = editorContent.toString();
-    // Armazena a imagem no back e retorna a uri
+    // Se tiver file armazena a imagem no back e retorna a uri, se não retorna vazio
     const banner = await importLocalFile(bannerInput.files[0]);
     const image = imageInput.value.toString();
 
@@ -225,4 +278,24 @@ export default function createPost() {
   }
 
   return createPostElement;
+}
+
+async function getLogin() {
+  return fetch('http://localhost:3000/api/login/user')
+  .then((response) => {
+      if (response.status !== 200) {
+          return response.json().then(errorResponse => {
+              throw errorResponse;
+          });
+      }
+      return response.json();
+  })
+  .then((data) => {
+      console.log("get user :", data);
+      return data;
+  })
+  .catch((error) => {
+      //displayError(error.error);
+      console.error('Erro:', error.error);
+  });
 }

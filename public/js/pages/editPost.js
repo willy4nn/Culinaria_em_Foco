@@ -193,9 +193,8 @@ export default function editPost(postId) {
     const banner = bannerURI;
     const image = imageInput.value.toString();
     const posted_draft = true;
-    const updated_by = '1' //TODO - alterar
 
-    const data = { title, category, content, banner, image, posted_draft, updated_by };
+    const data = { title, category, content, banner, image, posted_draft };
     console.log(data);
 
     fetch(`http://localhost:3000/api/posts/` + postId, {

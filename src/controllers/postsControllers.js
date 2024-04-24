@@ -5,8 +5,8 @@ const postsController = {
     // CREATE
     createPost: async (req, res) => {
         const { title, category, content, banner, image, posted_draft } = req.body;
-        const created_by = 1; //req.user.id
-        const updated_by = 1; //req.user.id
+        const created_by = req.user.id;
+        const updated_by = req.user.id;
         const status = 'active';
 
         try {
@@ -82,7 +82,8 @@ const postsController = {
     // UPDATE
     updatePost: async (req, res) => {
         const id = req.params.id;
-        const { title, category, content, banner, image, posted_draft, updated_by } = req.body;
+        const { title, category, content, banner, image, posted_draft } = req.body;
+        const updated_by = req.user.id;
         const status = 'active';
         
         try {
