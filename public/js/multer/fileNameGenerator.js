@@ -6,7 +6,9 @@ function setFileName(htmlString){
     var decodedHtmlString = elem.value; */
 
     // Expressão regular para encontrar todas as ocorrências de src em tags img
-    const pattern = /<img src="([^"]+)">/g;
+    //const pattern = /<img src="([^"]+)">/g;
+    // Expressão regular para encontrar todas as ocorrências de src em tags img e ignorar /uploads/posts_media
+    const pattern = /<img src="(?!\/uploads\/posts_media\/)([^"]+)">/g;
 
     // Contador para gerar os ids
     let counter = 1;
@@ -48,7 +50,7 @@ function setFileName(htmlString){
         counter++;
 
         // Path de armazenamento das imagens
-        const folderPath = "../uploads/posts_media/";
+        const folderPath = "/uploads/posts_media/";
 
         // Retorna o novo nome junto ao path
         return `<img src="${folderPath}${newId}">`;

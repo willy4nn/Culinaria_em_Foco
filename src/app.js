@@ -75,13 +75,22 @@ app.get('/home', permissionVerify, (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 
+
 app.get('/post', (req, res) => {
+  console.log("1");
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 
 app.get('/post/:id', (req, res) => {
+  console.log("3");
   res.sendFile(path.join(publicPath, 'index.html'));
 });
+
+app.get('/post/edit/:id', (req, res) => {
+  console.log("2");
+  res.sendFile(path.join(publicPath, 'index.html'));
+});
+
 
 /* // Rota para servir arquivos CSS
 app.get('/css/style.css', (req, res) => {
@@ -127,7 +136,7 @@ app.post('/upload', async (req, res) => {
     }
   }
 
-  res.send('Imagens salvas com sucesso!');
+  res.status(200).json({ message: 'Imagens salvas com sucesso!' });
 });
 
 // Testando exibição de posts com GET BY ID
