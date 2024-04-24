@@ -6,67 +6,22 @@ const likesRepository = {
 
     /** POSTS **/
 
-    // CREATE
-    likePost: async function (posts_id, users_id) {
+    // CREATE / DELETE
+    likeUnlikePost: async function (posts_id, users_id) {
         const pool = await connectToDatabase.connect();
 
-        const query = `INSERT INTO posts_likes (posts_id, users_id) VALUES ($1, $2) RETURNING *`;
-        const response = [];
+        // QUERY utilizando a FUNCTION like_unlike, mais detalhes no notion.
+        const query = "SELECT like_unlike($1, $2);";
 
         try {
             const result = await pool.query(query, [posts_id, users_id]);
             console.log("Dados inseridos com sucesso!");
             //return result.rows;
-            response.push(result.rows);
+            return(result.rows);
+  
 
         } catch (error) {
-            console.error("Erro ao inserir dados: ", error);
-            throw error;
-        } finally {
-          (await pool).release
-        }
-
-        const queryPosts = "UPDATE posts SET likes_quantity = likes_quantity + 1 WHERE id = $1";
-
-        try {
-            const result = await pool.query(queryPosts, [posts_id]);
-            console.log("Dados atualizados com sucesso!");
-            //return result.rows;
-            response.push(result.rows);
-
-        } catch (error) {
-            console.error("Erro ao atualizar dados: ", error);
-            throw error;
-        } finally {
-          (await pool).release
-        }
-
-        return response;
-    },
-
-    // PUT (delete)
-    unlikePost: async function (posts_id, users_id) {
-        const pool = await connectToDatabase.connect();
-
-        const query = "DELETE FROM posts_likes WHERE posts_id = $1 AND users_id = $2";
-
-        try {
-            await pool.query(query, [posts_id, users_id]);
-            console.log("Dados excluídos com sucesso!");
-        } catch (error) {
-            console.error("Erro ao excluir dados: ", error);
-            throw error;
-        } finally {
-          (await pool).release
-        }
-
-        const queryPosts = "UPDATE posts SET likes_quantity = likes_quantity - 1 WHERE id = $1";
-
-        try {
-            await pool.query(queryPosts, [posts_id]);
-            console.log("Dados atualizados com sucesso!");
-        } catch (error) {
-            console.error("Erro ao atualizar dados: ", error);
+            console.error("Erro ao fetuar like ou unline: ", error);
             throw error;
         } finally {
           (await pool).release

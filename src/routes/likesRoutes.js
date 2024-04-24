@@ -5,8 +5,7 @@ const { likesController } = require("../controllers/likesControllers.js");
 router.get("/posts/isliked", likesController.getIsLiked);
 router.get("/posts", likesController.getPostLikes);
 router.get("/posts/:id", likesController.getPostLike);
-router.post("/posts", likesController.likePost);
-router.put("/posts/:id", likesController.unlikePost); //delete
+router.post("/posts", likesController.likeUnlikePost);
 
 router.get("/comments", likesController.getCommentlikes);
 router.get("/comments/:id", likesController.getCommentLike);

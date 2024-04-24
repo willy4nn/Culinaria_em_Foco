@@ -4,29 +4,15 @@ const likesController = {
 
     /** POSTS **/
 
-    // CREATE
-    likePost: async (req, res) => {
+    // CREATE / DELETE
+    likeUnlikePost: async (req, res) => {
         const { posts_id, users_id } = req.body;
 
         try {
-            const response = await likesRepository.likePost(
+            const response = await likesRepository.likeUnlikePost(
                 posts_id,
                 users_id
             );
-
-            res.status(200).json({ data: response, status: 200 });
-        } catch (error) {
-            res.status(error.code || 500).json({ error, status: error.code || 500 });
-        }
-    },
-
-    // PUT (delete)
-    unlikePost: async (req, res) => {
-        const posts_isd = req.params.id;
-        const users_id = req.body.users_id;
-
-        try {
-            const response = await likesRepository.unlikePost(posts_id, users_id);
 
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {

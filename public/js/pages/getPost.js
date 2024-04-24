@@ -23,6 +23,19 @@ export default function getPost(postId) {
         </br>
 
         <div id="news-container">
+          <div id="news-body"></div>
+          <div id="news-interaction-buttons">
+
+          <span id="likes-quantity" class="likes-quantity"></span>
+          <button id="like-button" class="button-transparent">
+            <span id="like-icon" class="material-symbols-outlined">favorite</span>
+          </button>
+          <button id="favorite-button" class="button-transparent">
+            <span id="favorite-icon" class="material-symbols-outlined">bookmark_add</span>
+          </button>
+
+
+          </div>
         </div>
 
         <div id="comments-container">
@@ -54,7 +67,16 @@ export default function getPost(postId) {
 
   const buttonGet = getPostElement.querySelector('#button-get');
   const inputId = getPostElement.querySelector('#input-id');
+
   const newsContainer = getPostElement.querySelector('#news-container');
+  const newsBody = getPostElement.querySelector('#news-body');
+
+  const newsInteractionButtons = getPostElement.querySelector('#news-interaction-buttons');
+  const likesQuantity = getPostElement.querySelector('#likes-quantity');
+  const buttonLike = getPostElement.querySelector('#like-button');
+  const buttonFavorite = getPostElement.querySelector('#like-favorite');
+  const likeIcon = getPostElement.querySelector('#like-icon');
+  const favoriteIcon = getPostElement.querySelector('#favorite-icon');
 
   const commentEditor = getPostElement.querySelector('#comment-editor');
   const commentTextarea = getPostElement.querySelector('#comment-textarea');
@@ -80,13 +102,31 @@ export default function getPost(postId) {
 
       console.log("xx", userData, post, isliked);
 
+      
+
       const title = document.createElement('h1');
       const content = document.createElement('div');
       title.innerText = post.title;
       content.innerHTML = post.content;
-      newsContainer.append(title, content);
+      newsBody.append(title, content);
 
       renderLikeAndFavorite(post, isliked);
+
+      let liked = isliked[0] ? true : false;
+
+      buttonLike.addEventListener('click', async () => {
+        const newQuantity = await likePost(postId, userData.id);
+        likesQuantity.innerText = `${newQuantity} curtidas`;
+
+        if (liked) {
+          likeIcon.classList.remove('liked');
+          liked = false;
+        }
+        else {
+          likeIcon.classList.add('liked');
+          liked = true;
+        }
+      });
 
       buttonComment.addEventListener('click', function(e) {
         const data = {
@@ -110,64 +150,13 @@ export default function getPost(postId) {
             });
           })
       });
+
     })
     .catch(error => {
       console.error('Erro ao carregar dados página:', error);
     });
 
-      /* getIsLiked(postId, userData.id)
-      .then(data => {
-        renderLikeAndFavorite(data);
-      })
-      .catch(error => {
-        console.error('Erro ao verificar se o post é curtido:', error);
-      });
-
-      buttonComment.addEventListener('click', function(e) {
-        const data = {
-          posts_id: postId,
-          users_id: userData.id,
-          content: commentTextarea.value.trim().toString(),
-        }
-
-        commentTextarea.value = "";
-  
-        //Alterar para inserir somente o novo comentário ao invés de da um fetch em todos.
-        console.log("create comment data", data);
-        createComment(data)
-          .then(() => {
-            getCommentsByPostId(postId)
-            .then(data => {   
-              renderCommentsByPostId(data);
-            })
-            .catch(error => {
-              console.error('Erro ao buscar post:', error);
-            });
-          })
-      });
-    })
-    .catch(error => {
-      console.error('Erro ao carregar dados do usuário:', error);
-    }); */
-
-
-  // Faz requisição de consulta de post por ID
- /*  getPostById(postId)
-  .then(data => {
-    const title = document.createElement('h1');
-    const content = document.createElement('div');
-
-    title.innerText = data.title;
-    content.innerHTML = data.content;
-
-    
-    newsContainer.append(title, content);
-
-
-  })
-  .catch(error => {
-    console.error('Erro ao buscar post:', error);
-  }); */
+   
 
 // Faz requisição de consulta de comments por post ID
   getCommentsByPostId(postId)
@@ -181,34 +170,10 @@ export default function getPost(postId) {
 
   function renderLikeAndFavorite(post, isliked){
     console.log("rendlikefav:", post);
-    const interactionDiv = document.createElement('div');
-    const likesQuantity = document.createElement('span');
-    const likeButton = document.createElement('button');
-    const likeIcon = document.createElement('span');
-    const favoriteButton = document.createElement('button');
-    const favoriteIcon = document.createElement('span');
-    
-    interactionDiv.classList.add('interaction-container');
-    likesQuantity.classList.add('likes-quantity');
-    likeButton.classList.add('button-transparent');
-    likeButton.classList.add('button-transparent');
-    favoriteButton.classList.add('button-transparent');
-    /* likeButton.classList.add('like-button');
-    favoriteButton.classList.add('favorite-button'); */
-    likeIcon.classList.add('material-symbols-outlined');
-    favoriteIcon.classList.add('material-symbols-outlined');
 
     if (isliked[0]) likeIcon.classList.add('liked');
 
     likesQuantity.innerText = `${post.likes_quantity} curtidas`;
-    likeIcon.innerText = 'favorite';
-    favoriteIcon.innerText = 'bookmark_add'; //bookmark_add bookmark_remove
-
-    likeButton.appendChild(likeIcon);
-    favoriteButton.appendChild(favoriteIcon);
-
-    interactionDiv.append(likesQuantity, likeButton, favoriteButton);
-    newsContainer.append(interactionDiv);
   }
   
 
@@ -404,6 +369,34 @@ async function getIsLiked(posts_id, users_id) {
   .then((data) => {
       console.log("get isliked :", data);
       return data.data;
+  })
+  .catch((error) => {
+      //displayError(error.error);
+      console.error('Erro:', error.error);
+  });
+}
+
+async function likePost(posts_id, users_id){
+  const data = { posts_id, users_id };
+
+  return fetch('http://localhost:3000/api/likes/posts', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+  .then((response) => {
+      if (response.status !== 200) {
+          return response.json().then(errorResponse => {
+              throw errorResponse;
+          });
+      }
+      return response.json();
+  })
+  .then((data) => {
+    console.log("like post :", data);
+      return data.data[0].like_unlike;
   })
   .catch((error) => {
       //displayError(error.error);

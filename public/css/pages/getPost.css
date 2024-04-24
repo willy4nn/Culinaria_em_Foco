@@ -17,7 +17,7 @@ main {
     padding: 8px 0 24px 0;
 }
 
-.interaction-container {
+#news-interaction-buttons {
     display: flex;
     justify-content: end;
     padding: 4px 0;
@@ -49,7 +49,8 @@ main {
 
 .button-transparent:hover {
     transition: background-color 0.3s ease, color 0.3s ease;
-    color: #999999;
+    /* color: #999999; */
+    filter: opacity(0.5);
 }
 
 /* font-weight: 500;
