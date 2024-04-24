@@ -73,7 +73,6 @@ export default function getPost(postId) {
     return postPromise.then(post => ({ userData, post }));
   })
   .then(({ userData, post }) => {
-    console.log("useeee", userData);
     return getIsLiked(postId, userData.id)
   .then(isliked => ({ userData, post, isliked }));
   })

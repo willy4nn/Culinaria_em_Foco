@@ -82,8 +82,9 @@ const postsController = {
     // UPDATE
     updatePost: async (req, res) => {
         const id = req.params.id;
-        const { title, category, content, banner, image, posted_draft, status, updated_by } = req.body;
-
+        const { title, category, content, banner, image, posted_draft, updated_by } = req.body;
+        const status = 'active';
+        
         try {
             const response = await postsRepository.updatePost(
                 id, title, category, content, banner, image, posted_draft, status, updated_by
