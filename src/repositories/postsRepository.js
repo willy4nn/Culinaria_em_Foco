@@ -116,6 +116,26 @@ const postsRepository = {
         }
     },
 
+    // GET ALL BY USER ID
+    getPostsByUserId: async function (created_by) {
+        const pool = await connectToDatabase.connect();
+
+        const query = "SELECT * FROM posts WHERE created_by = $1";
+
+        try {
+            const result = await pool.query(query, [created_by]);
+            console.log("Registros encontrados: ");
+            console.table(result.rows);
+
+            return result.rows;
+        } catch (error) {
+            console.error("Erro ao selecionar dados: ", error);
+            throw error;
+        } finally {
+          (await pool).release
+        }
+    },
+
     // UPDATE
     updatePost: async function (id, title, category, content, banner, image, posted_draft, status, updated_by) {
         const pool = await connectToDatabase.connect();

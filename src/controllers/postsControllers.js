@@ -79,6 +79,19 @@ const postsController = {
         }
     },
 
+    // GET ALL BY CATEGORY
+    getPostsByUserId: async (req, res) => {
+        const created_by = req.user.id;
+
+        try {
+            const response = await postsRepository.getPostsByUserId(created_by);
+
+            res.status(200).json({ data: response, status: 200 });
+        } catch (error) {
+            res.status(error.code || 500).json({ error, status: error.code || 500 });
+        }
+    },
+
     // UPDATE
     updatePost: async (req, res) => {
         const id = req.params.id;
