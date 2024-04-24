@@ -1,14 +1,8 @@
-const conectToDatabase = require('../database/postgres');
-const hashPassword = require('../utils/hashPassword');
-const comparePassword = require('../utils/comparePassword');
 const loginRepository = require('../repositories/loginRepository')
 
 //Configurações default de ambiente
 const { config } = require('../config/configFile');
 const jwt = require('jsonwebtoken');
-
-//Função que resgata o array de usertype
-const { query } = require('express');
 
 const loginController = {
 
