@@ -149,6 +149,10 @@ app.get('/editor', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 
+app.get('/dashboard', (req, res) => {
+  res.sendFile(path.join(publicPath, 'index.html'));
+});
+
 app.get('/profile', (req, res) => {
   console.log("teste", __dirname);
   res.sendFile(path.join(publicPath, 'index.html'));

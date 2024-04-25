@@ -7,6 +7,7 @@ import createPost from './pages/post.js';
 import getPost from './pages/getPost.js';
 import editor from './pages/editor.js';
 import editPost from './pages/editPost.js';
+import dashboard from './pages/dashboard.js';
 
 const router = {
   '/': function () {
@@ -35,6 +36,9 @@ const router = {
   },
   '/editor': function () {
     return editor();
+  },
+  '/dashboard': function () {
+    return dashboard();
   },
   '/profile': function () {
     return profile();
