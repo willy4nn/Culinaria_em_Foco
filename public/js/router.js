@@ -8,6 +8,7 @@ import getPost from './pages/getPost.js';
 import editor from './pages/editor.js';
 import editPost from './pages/editPost.js';
 import dashboard from './pages/dashboard.js';
+import favorite from './pages/favorite.js';
 
 const router = {
   '/': function () {
@@ -39,6 +40,9 @@ const router = {
   },
   '/dashboard': function () {
     return dashboard();
+  },
+  '/favorite': function () {
+    return favorite();
   },
   '/profile': function () {
     return profile();

@@ -42,6 +42,19 @@ const favoritePostsController = {
         }
     },
 
+    // GET ALL POSTS FAVORITED BY A USER
+    getPostsFavorited: async (req, res) => {
+        const users_id = req.user.id;
+
+        try {
+            const response = await favoritePostsRepository.getPostsFavorited(users_id);
+
+            res.status(200).json({ data: response, status: 200 });
+        } catch (error) {
+            res.status(error.code || 500).json({ error, status: error.code || 500 });
+        }
+    },
+
     // NO UPDATE
     
     // DELETE
