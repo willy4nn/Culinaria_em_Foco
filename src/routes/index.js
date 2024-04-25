@@ -13,6 +13,6 @@ router.use("/posts", postsRoutes);
 router.use("/likes", likesRoutes);
 router.use("/comments", commentsRoutes);
 router.use("/replies", repliesRoutes);
-router.use("/favorite_posts", favoritePostsRoutes);
+router.use("/favorite", favoritePostsRoutes);
 
 module.exports = router;
