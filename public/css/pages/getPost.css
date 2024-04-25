@@ -32,6 +32,14 @@ main {
         'opsz' 24
 }
 
+.favorited {
+    font-variation-settings:
+        'FILL' 1,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+}
+
 
 .likes-quantity {
     align-self: center;

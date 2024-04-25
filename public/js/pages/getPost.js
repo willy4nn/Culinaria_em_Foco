@@ -74,7 +74,7 @@ export default function getPost(postId) {
   const newsInteractionButtons = getPostElement.querySelector('#news-interaction-buttons');
   const likesQuantity = getPostElement.querySelector('#likes-quantity');
   const buttonLike = getPostElement.querySelector('#like-button');
-  const buttonFavorite = getPostElement.querySelector('#like-favorite');
+  const buttonFavorite = getPostElement.querySelector('#favorite-button');
   const likeIcon = getPostElement.querySelector('#like-icon');
   const favoriteIcon = getPostElement.querySelector('#favorite-icon');
 
@@ -100,10 +100,12 @@ export default function getPost(postId) {
   .then(isliked => ({ userData, post, isliked }));
   })
   .then(({ userData, post, isliked }) => {
+    return getIsFavorited(postId, userData.id)
+      .then(isfavorited => ({ userData, post, isliked, isfavorited }));
+  })
+  .then(({ userData, post, isliked, isfavorited }) => {
 
-      console.log("xx", userData, post, isliked);
-
-      
+      console.log("xx", userData, post, isliked, isfavorited);
 
       const title = document.createElement('h1');
       const content = document.createElement('div');
@@ -111,9 +113,12 @@ export default function getPost(postId) {
       content.innerHTML = post.content;
       newsBody.append(title, content);
 
-      renderLikeAndFavorite(post, isliked);
+      renderLikeAndFavorite(post, isliked, isfavorited);
 
       let liked = isliked[0] ? true : false;
+      let favorited = isfavorited[0] ? true : false;
+
+      console.log("true or false", liked, favorited);
 
       buttonLike.addEventListener('click', async () => {
         const newQuantity = await likePost(postId, userData.id);
@@ -126,6 +131,20 @@ export default function getPost(postId) {
         else {
           likeIcon.classList.add('liked');
           liked = true;
+        }
+      });
+
+      buttonFavorite.addEventListener('click', async () => {
+        const newFavorited = await favoritePost(postId);
+        console.log("newfavorited", newFavorited);
+
+        if (newFavorited) {
+          favoriteIcon.classList.add('favorited');
+          favoriteIcon.innerText = 'bookmark_added';
+        }
+        else {
+          favoriteIcon.classList.remove('favorited');
+          favoriteIcon.innerText = 'bookmark_add';
         }
       });
 
@@ -158,7 +177,6 @@ export default function getPost(postId) {
     });
 
    
-
 // Faz requisição de consulta de comments por post ID
   getCommentsByPostId(postId)
   .then(data => {
@@ -169,12 +187,17 @@ export default function getPost(postId) {
     console.error('Erro ao buscar post:', error);
   });
 
-  function renderLikeAndFavorite(post, isliked){
+  function renderLikeAndFavorite(post, isliked, isfavorited){
     console.log("rendlikefav:", post);
 
     if (isliked[0]) likeIcon.classList.add('liked');
-
     likesQuantity.innerText = `${post.likes_quantity} curtidas`;
+    
+    if (isfavorited[0]) {
+      favoriteIcon.innerText = 'bookmark_added';
+      favoriteIcon.classList.add('favorited');
+    }
+    
   }
   
 
@@ -377,6 +400,34 @@ async function getIsLiked(posts_id, users_id) {
   });
 }
 
+async function getIsFavorited(posts_id) {
+  
+  const queryParams = new URLSearchParams({ posts_id }).toString();
+  console.log("query fav", queryParams);
+  return fetch(`http://localhost:3000/api/favorite/search?${queryParams}`, {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+    }
+  })
+  .then((response) => {
+      if (response.status !== 200) {
+          return response.json().then(errorResponse => {
+              throw errorResponse;
+          });
+      }
+      return response.json();
+  })
+  .then((data) => {
+      console.log("get isfavorited :", data);
+      return data.data;
+  })
+  .catch((error) => {
+      //displayError(error.error);
+      console.error('Erro:', error.error);
+  });
+}
+
 async function likePost(posts_id, users_id){
   const data = { posts_id, users_id };
 
@@ -398,6 +449,34 @@ async function likePost(posts_id, users_id){
   .then((data) => {
     console.log("like post :", data);
       return data.data[0].like_unlike;
+  })
+  .catch((error) => {
+      //displayError(error.error);
+      console.error('Erro:', error.error);
+  });
+}
+
+async function favoritePost(posts_id){
+  const data = { posts_id };
+
+  return fetch('http://localhost:3000/api/favorite', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+  .then((response) => {
+      if (response.status !== 200) {
+          return response.json().then(errorResponse => {
+              throw errorResponse;
+          });
+      }
+      return response.json();
+  })
+  .then((data) => {
+    console.log("favorite post :", data);
+      return data.data[0].favorite_unfavorite;
   })
   .catch((error) => {
       //displayError(error.error);

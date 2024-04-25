@@ -4,13 +4,11 @@ const favoritePostsController = {
 
     // CREATE
     createFavoritePost: async (req, res) => {
-        const { users_id, posts_id } = req.body;
+        const posts_id = req.body.posts_id;
+        const users_id = req.user.id;
   
         try {
-            const response = await favoritePostsRepository.createFavoritePost(
-                users_id,
-                posts_id 
-            );
+            const response = await favoritePostsRepository.createFavoritePost(posts_id, users_id);
 
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
@@ -35,6 +33,33 @@ const favoritePostsController = {
     getFavoritePosts: async (req, res) => {
         try {
             const response = await favoritePostsRepository.getFavoritePosts();
+
+            res.status(200).json({ data: response, status: 200 });
+        } catch (error) {
+            res.status(error.code || 500).json({ error, status: error.code || 500 });
+        }
+    },
+
+    // GET BY POST AND USER ID
+    getIsFavorited: async (req, res) => {
+        const posts_id = req.query.posts_id;
+        const users_id = req.user.id;
+
+        try {
+            const response = await favoritePostsRepository.getIsFavorited(posts_id, users_id);
+
+            res.status(200).json({ data: response, status: 200 });
+        } catch (error) {
+            res.status(error.code || 500).json({ error, status: error.code || 500 });
+        }
+    },
+
+    // GET ALL POSTS FAVORITED BY A USER
+    getPostsFavorited: async (req, res) => {
+        const users_id = req.user.id;
+
+        try {
+            const response = await favoritePostsRepository.getPostsFavorited(users_id);
 
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
