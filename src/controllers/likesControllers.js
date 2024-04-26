@@ -45,13 +45,13 @@ const likesController = {
     },
 
     // GET BY POST ID AND USER ID
-    getIsLiked: async (req, res) => {
+    getPostsIsLiked: async (req, res) => {
         const { posts_id, users_id } = req.query;
         console.log("po", posts_id);
         console.log("us", users_id);
 
         try {
-            const response = await likesRepository.getIsLiked(posts_id, users_id);
+            const response = await likesRepository.getPostsIsLiked(posts_id, users_id);
 
             console.log("resp", response);
 
@@ -64,12 +64,13 @@ const likesController = {
 
     /** COMMENTS  **/
 
-    // CREATE
-    likeComment: async (req, res) => {
-        const { posts_comments_id, users_id } = req.body;
+    // CREATE / DELETE
+    likeUnlikeComment: async (req, res) => {
+        const posts_comments_id = req.body.posts_comments_id;
+        const users_id = req.user.id;
 
         try {
-            const response = await likesRepository.likeComment(posts_comments_id, users_id);
+            const response = await likesRepository.likeUnlikeComment(posts_comments_id, users_id);
 
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
@@ -77,20 +78,6 @@ const likesController = {
         }
     },
     
-    // PUT (delete)
-    unlikeComment: async (req, res) => {
-        const posts_comments_id = req.params.id;
-        const users_id = req.body.users_id;
-
-        try {
-            const response = await likesRepository.unlikeComment(posts_comments_id, users_id);
-
-            res.status(200).json({ data: response, status: 200 });
-        } catch (error) {
-            res.status(error.code || 500).json({ error, status: error.code || 500 });
-        }
-    },
-
     // GET BY ID
     getCommentLike: async (req, res) => {
         const id = req.params.id;
@@ -115,28 +102,31 @@ const likesController = {
         }
     },
 
-    /** REPLIES  **/
-
-    // CREATE
-    likeReply: async (req, res) => {
-        const { comments_replies_id, users_id } = req.body;
+    // GET BY COMMENT ID AND USER ID
+    getCommentsIsLiked: async (req, res) => {
+        const comments_id = req.query.comments_id;
+        const users_id = req.user.id;
 
         try {
-            const response = await likesRepository.likeReply(comments_replies_id, users_id);
+            const response = await likesRepository.getCommentsIsLiked(comments_id, users_id);
+
+            console.log("resp", response);
 
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
             res.status(error.code || 500).json({ error, status: error.code || 500 });
         }
     },
-    
-    // PUT (delete)
-    unlikeReply: async (req, res) => {
-        const comments_replies_id = req.params.id;
-        const users_id = req.body.users_id;
+
+    /** REPLIES  **/
+
+    // CREATE / DELETE
+    likeUnlikeReply: async (req, res) => {
+        const comments_replies_id = req.body.comments_replies_id;
+        const users_id = req.user.id
 
         try {
-            const response = await likesRepository.unlikeReply(comments_replies_id, users_id);
+            const response = await likesRepository.likeUnlikeReply(comments_replies_id, users_id);
 
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
@@ -162,6 +152,22 @@ const likesController = {
         try {
             const response = await likesRepository.getRepliesLikes();
             console.log("res", response);
+            res.status(200).json({ data: response, status: 200 });
+        } catch (error) {
+            res.status(error.code || 500).json({ error, status: error.code || 500 });
+        }
+    },
+
+    // GET BY REPLY ID AND USER ID
+    getRepliesIsLiked: async (req, res) => {
+        const replies_id = req.query.replies_id;
+        const users_id = req.user.id;
+
+        try {
+            const response = await likesRepository.getRepliesIsLiked(replies_id, users_id);
+
+            console.log("resp", response);
+
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
             res.status(error.code || 500).json({ error, status: error.code || 500 });

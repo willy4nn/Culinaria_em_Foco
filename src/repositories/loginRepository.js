@@ -19,7 +19,7 @@ const loginRepository = {
                 reject({ error: "Token JWT inválido, faça login novamente" });
               }
               const user = decoded.user;
-              const userToken = { id: user.id, username: user.username, name: user.name, userType: user.userType, premiumActive: user.premiumActive, sessionToken: sessionToken };
+              const userToken = { id: user.id, username: user.username, name: user.name, userType: user.userType, profile_photo: user.profile_photo, premiumActive: user.premiumActive, sessionToken: sessionToken };
               resolve(userToken);
             }
           });
@@ -77,7 +77,8 @@ const loginRepository = {
             username: user.username,
             name: user.name,
             userType: user.user_type,
-            premiumActive: user.premium_active
+            premiumActive: user.premium_active,
+            profile_photo: user.profile_photo
           }
           //Aqui é feito o processo de assinatura do token
             const sessionToken = await jwt.sign({ user: userToken }, config.SECRET_KEY);

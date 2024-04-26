@@ -4,6 +4,14 @@ main {
     font-family: 'Nunito', sans-serif;
 }
 
+.loading-icon {
+    position: relative;
+    left: 45%;
+    max-width: 25px;
+    max-height: 25px;
+    margin: 12px
+}
+
 #container {
     display: flex;
     flex-direction: column;
@@ -140,9 +148,43 @@ box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 
 .comment-header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    padding: 4px 0 8px 0;
+    padding: 4px 8px 8px 0;
 }
+
+.comment-left-header {
+    display: flex;
+    align-items: center;
+}
+
+.comment-right-header {
+    display: flex;
+    align-items: center;
+}
+
+.comment-like {
+    font-size: 16px !important;
+    /* color: #737373; */
+}
+
+.open-reply-button {
+    font-size: 14px;
+    font-weight: 600;
+    color: #000000;
+    padding: 0 14px 2px 14px;
+}
+
+.comment-like:hover {
+    color: rgb(0, 0, 0);
+}
+
+.open-reply-button:hover {
+    color: #737373;
+}
+
+
+
 
 .comment-content {
     padding-bottom: 8px;
@@ -171,6 +213,54 @@ box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     color: #888888;
     font-weight: 600;
 }
+
+/* REPLY */
+
+.reply-container {
+    padding: 0 8px;
+}
+
+.reply-profile-photo {
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    margin-top: 4px;
+}
+
+.reply-content-container {
+    display: flex;
+}
+
+.reply-buttons-container {
+    display: flex;
+    justify-content: end;
+    padding-top: 8px;
+}
+
+.reply-button {
+    padding: 8px 12px;
+}
+
+.reply-textarea {
+    width: 100%;
+    max-height: 400px;
+    border: 0px;
+    border-bottom: 1px solid;
+    outline: 0px;
+    background-color: transparent;
+    margin-left: 8px;
+    resize: none;
+    align-content: center;
+}
+
+.reply-textarea:focus {
+    border-bottom: 2px solid;
+}
+
+.reply {
+    margin-left: 48px;
+}
+
 
 
 /* SCROLLBAR CUSTOM */

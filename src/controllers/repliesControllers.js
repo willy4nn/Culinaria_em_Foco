@@ -4,14 +4,25 @@ const repliesController = {
 
     // CREATE
     createReply: async (req, res) => {
-        const { posts_comments_id, users_id, content } = req.body;
+        const { posts_comments_id, content } = req.body;
+        const users_id = req.user.id;
 
         try {
-            const response = await repliesRepository.createReply(
-                posts_comments_id,
-                users_id,
-                content,
-            );
+            const response = await repliesRepository.createReply(posts_comments_id, users_id, content);
+
+            res.status(200).json({ data: response, status: 200 });
+        } catch (error) {
+            res.status(error.code || 500).json({ error, status: error.code || 500 });
+        }
+    },
+
+    // GET ALL replies BY comment ID and JOIN with users name and profile_photo
+    getRepliesByCommentId: async (req, res) => {
+        const comments_id = req.query.comments_id;
+        console.log("replie by comment", comments_id);
+
+        try {
+            const response = await repliesRepository.getRepliesByCommentId(comments_id);
 
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {

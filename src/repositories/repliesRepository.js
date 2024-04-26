@@ -20,6 +20,27 @@ const repliesRepository = {
         }
     },
 
+    // GET all replies by comment ID and JOIN with users name and profile_photo
+    getRepliesByCommentId: async function (posts_comments_id) {
+        const pool = await connectToDatabase.connect();
+        console.log("é aqui mesmo")
+
+        const query = "SELECT comments_replies.*, users.name, users.profile_photo FROM comments_replies JOIN users ON comments_replies.users_id = users.id WHERE comments_replies.posts_comments_id = $1";
+
+        try {
+            const result = await pool.query(query, [posts_comments_id]);
+            console.log("Registros encontrados: ");
+            console.table(result.rows);
+
+            return result.rows;
+        } catch (error) {
+            console.error("Erro ao selecionar dados: ", error);
+            throw error;
+        } finally {
+          (await pool).release
+        }
+    },
+
     // GET ALL
     getReplies: async function () {
         const pool = await connectToDatabase.connect();
