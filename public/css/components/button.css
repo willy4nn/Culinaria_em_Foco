@@ -33,7 +33,7 @@
 
 .button-fill:hover {
   background: #353b28;
-  border: 1px solid #303624;
+  /* border: 1px solid #303624; */
 }
 
 .button-line {

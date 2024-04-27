@@ -43,7 +43,7 @@ const postsRepository = {
         try {
             const result = await pool.query(query, [id]);
             console.log("Registros encontrados: ");
-            console.table(result.rows);
+            //console.table(result.rows);
 
             return result.rows;
         } catch (error) {
@@ -63,7 +63,7 @@ const postsRepository = {
         try {
             const result = await pool.query(query);
             console.log("Registros encontrados: ");
-            console.table(result.rows);
+            //console.table(result.rows);
 
             return result.rows;
         } catch (error) {
@@ -83,7 +83,7 @@ const postsRepository = {
         try {
             const result = await pool.query(query, [category]);
             console.log("Registros encontrados: ");
-            console.table(result.rows);
+            //console.table(result.rows);
 
             return result.rows;
         } catch (error) {
@@ -105,7 +105,7 @@ const postsRepository = {
         try {
             const result = await pool.query(query, [limit]);
             console.log("Registros encontrados: ");
-            console.table(result.rows);
+            //console.table(result.rows);
 
             return result.rows;
         } catch (error) {
@@ -125,7 +125,7 @@ const postsRepository = {
         try {
             const result = await pool.query(query, [created_by]);
             console.log("Registros encontrados: ");
-            console.table(result.rows);
+            //console.table(result.rows);
 
             return result.rows;
         } catch (error) {
