@@ -1,9 +1,5 @@
 const loginRepository = require('../repositories/loginRepository')
 
-//Configurações default de ambiente
-const { config } = require('../config/configFile');
-const jwt = require('jsonwebtoken');
-
 const loginController = {
 
 //Aqui o sistema pega os dado do cookie e verifica se o usuário está logado 
@@ -60,7 +56,6 @@ logout: (req, res) => {
   res.clearCookie('session_id');
   res.json({message: "Token excluido com sucesso!"});
 },
-
 
 //Aqui é feita a criação do usuário
 addUser: async (req, res) => {
