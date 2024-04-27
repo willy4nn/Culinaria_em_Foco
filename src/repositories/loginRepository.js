@@ -33,7 +33,7 @@ const loginRepository = {
 
     getUser: async function(username) {
       try {
-        const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+        const result = await pool.query(`SELECT * FROM users WHERE ${isNaN(username) ? "username" : "id"} = $1`, [username]);
         return result;
       } catch (error) {
         console.error("Não foi possível resgatar dados do usuário", error);
@@ -98,13 +98,33 @@ const loginRepository = {
       
       // Aqui são feitas as validações, caso o usuário não exista ele procede com o registro
       try {
+        if(newUser.username === null || newUser.username === "") {
+          const error = { success: false, error: 'Campo Apelido não pode estar vazio! Por favor, digite um Apelido'};
+          return error;
+        }
+
         if (newUser.username.length > 15) {
-          const error = { success: false, error: 'Limite de caracteres para username atingido! (max: 15)'};
+          const error = { success: false, error: 'Limite de caracteres para Apelido atingido! (max: 15)'};
+          return error;
+        }
+
+        if (!isNaN(newUser.username)) {
+          const error = { success: false, error: 'Por favor, insira pelo menos uma Letra no Apelido!'};
+          return error;
+        }
+
+        if(newUser.name === null || newUser.name === "") {
+          const error = { success: false, error: 'Campo Nome Completo não pode estar vazio! Por favor, digite Seu Nome'};
           return error;
         }
     
         if (!emailRegex.test(newUser.email)) {
           const error = { success: false, error: 'Insira um endereço de email válido!' };
+          return error;
+        }
+
+        if (newUser.password.length < 8) {
+          const error = { success: false, error: 'A senha precisa ter pelo menos 8 caracteres'};
           return error;
         }
     
@@ -142,14 +162,15 @@ const loginRepository = {
     updateUser: async (actualUser, userUpdate) => {
       const username = actualUser;
       const updatedUser = userUpdate;
-
+    
     //Caso o usuário troque a senha, ela é hasheada novamente
     if (updatedUser.password){
       const hashedPassword = await hashPassword(updatedUser.password);
       updatedUser.password = hashedPassword;
     }
     //Tenta encontrar o usuário através do req.params
-    const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+    //Caso a busca precise ser feita pelo id, basta apenas inseri-lo diretamente a rota normalmente
+    const result = await pool.query(`SELECT * FROM users WHERE ${isNaN(username) ? "username" : "id"} = $1`, [username]);
     if (result.rowCount === 0) {
       const error = {success: false, error: "Usuário não encontrado" }
       return error;
@@ -165,7 +186,7 @@ const loginRepository = {
           //Aqui se desenrola o processo de atualização no banco
           await client.query('BEGIN')
 
-          await client.query('UPDATE users SET name = $1, username = $2, email = $3, password = $4, user_type = $5, premium_active = $6, premium_date = $7, profile_photo = $8, created_at = $9 WHERE username = $10', 
+          await client.query(`UPDATE users SET name = $1, username = $2, email = $3, password = $4, user_type = $5, premium_active = $6, premium_date = $7, profile_photo = $8, created_at = $9 WHERE ${isNaN(username) ? "username" : "id"} = $10`, 
           [newUser.name, newUser.username, newUser.email, newUser.password, newUser.user_type, newUser.premium_active, newUser.premium_date, newUser.profile_photo, newUser.created_at, username]);
 
           await client.query('COMMIT')
@@ -185,13 +206,14 @@ const loginRepository = {
     deleteUser: async (username) => {
       
       //Tenta encontrar dados do usuário através do username, caso encontre o deleta permanentemente
-        const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+      //Caso a busca precise ser feita pelo id, basta apenas inseri-lo diretamente a rota normalmente
+        const result = await pool.query(`SELECT * FROM users WHERE ${isNaN(username) ? "username" : "id"} = $1`, [username]);
         if (result.rowCount === 0) {
           const error = {success: false, error: "Usuário não encontrado" }
           return error;
         }
         try {
-          await pool.query('DELETE FROM users WHERE username = $1', [username]);
+          await pool.query(`DELETE FROM users WHERE ${isNaN(username) ? "username" : "id"} = $1`, [username]);
           const success = { success: true, message: "Usuário excluído com sucesso!"};
           return success;
         } catch (err) {
