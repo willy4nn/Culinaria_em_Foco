@@ -170,9 +170,16 @@ const loginRepository = {
     }
     //Tenta encontrar o usuário através do req.params
     //Caso a busca precise ser feita pelo id, basta apenas inseri-lo diretamente a rota normalmente
-    const result = await pool.query(`SELECT * FROM users WHERE ${isNaN(username) ? "username" : "id"} = $1`, [username]);
-    if (result.rowCount === 0) {
+    const test1 = await pool.query(`SELECT * FROM users WHERE ${isNaN(username) ? "username" : "id"} = $1`, [username]);
+    if (test1.rowCount === 0) {
       const error = {success: false, error: "Usuário não encontrado" }
+      return error;
+    }
+
+    //Aqui verifica se username já existe no banco
+    const test2 = await pool.query(`SELECT * FROM users WHERE "username" = $1`, [updatedUser.username]);
+    if (test2.rowCount > 0 && (test1.rows[0].username !== test2.rows[0].username)) {
+      const error = {success: false, error: "Apelido já existe" }
       return error;
     }
 
@@ -180,7 +187,7 @@ const loginRepository = {
     const client = await pool.connect()
         try {
           //Aqui cria um novo objeto com as informações novas
-          const existingUser = result.rows[0];
+          const existingUser = test1.rows[0];
           const newUser = { ...existingUser, ...updatedUser };
           
           //Aqui se desenrola o processo de atualização no banco
