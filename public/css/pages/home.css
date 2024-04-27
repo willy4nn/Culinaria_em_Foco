@@ -31,7 +31,6 @@
     border-top-left-radius: 1.5rem;
     border-top-right-radius: 1.5rem;
     border-bottom-right-radius: 1.5rem;
-
     overflow: hidden;
 }
 
@@ -39,6 +38,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    background: var(--c2);
 }
 
 .featured-news-navigation {
@@ -63,7 +63,7 @@
     border-radius: 1rem;
 }
 
-.item-navigation:checked:after {
+.item-navigation:checked:after {        
     content:'';
     position: absolute;
     top: 0px;
@@ -79,12 +79,40 @@
     flex-direction: column;
     width: fit-content;
     padding: 1rem;
-    border: 1px solid black;
-border-bottom-left-radius: 1.5rem;
-border-bottom-right-radius: 1.5rem;
-background: var(--c2);
+    border-bottom-left-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
+    background: var(--c2);
 }
 
-.featured-news-info-title {
-    
+.featured-news-details {
+    color: var(--c8);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.divider {
+    background: var(--c4);
+    height: 0.5rem;
+    width: 0.5rem;
+    border-radius: 1rem;
+    display: block;
+}
+
+/* Remover o estilo padrão do input radio */
+input[type="radio"].item-navigation {
+    -webkit-appearance: none; /* Para navegadores WebKit como Chrome e Safari */
+    -moz-appearance: none; /* Para navegadores Firefox */
+    appearance: none; /* Para navegadores modernos */
+    /* Adicione qualquer estilo personalizado aqui */
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 50%; /* Para torná-lo redondo */
+    outline: none; /* Remover contorno ao focar */
+}
+
+/* Estilo para quando o input radio estiver marcado */
+input[type="radio"].item-navigation:checked {
+    background-color: #007bff; /* Por exemplo, azul quando estiver marcado */
 }

@@ -1,136 +1,182 @@
-    // Importa a função createCustomEvent do módulo de eventos
-    import createCustomEvent from '../eventModule.js';
-    import setNavigation from '../setNavigation.js';
+// Importa os módulos necessários
+import createCustomEvent from '../eventModule.js';
 
-    // Exporta a função principal que retorna a página principal
-    export default function home() {
-      // HTML do elemento principal
-      const homeContentHTML = `
-        <header class="header header-home">
-          <div class="logo">
-              <img src="./assets/images/croissant-logo.svg" alt="Logo Chef's Corner">
-              <span class="paragraph-medium">Chef's Corner</span>
+// Função principal que renderiza a página inicial
+export default function home() {
+  // HTML do conteúdo da página inicial
+  const homeContentHTML = `
+    <header class="header header-home">
+      <div class="logo">
+          <img src="./assets/images/croissant-logo.svg" alt="Logo Chef's Corner">
+          <span class="paragraph-medium">Chef's Corner</span>
+      </div>
+      <div class="buttons">
+          <a class="paragraph-medium">Contact Us</a>
+          <a class="button button-fill logout">Logout</a>
+      </div>
+    </header>
+    <main class="main main-home">
+      <div class="featured-news-container">
+          <h1 class="primary-heading">Featured News</h1>
+          <div class="featured-news-content">
           </div>
-          <div class="buttons">
-              <a class="paragraph-medium">Contact Us</a>
-              <a class="button button-fill logout">Logout</a>
-          </div>
-        </header>
-        <main class="main main-home">
-          <div class="featured-news-container">
-              <h1 class="primary-heading">Featured News</h1>
-              <div class="featured-news-content">
-              </div>
-          </div>
-        </main>
-        <footer class="footer footer-home">
-            <p class="paragraph-medium">© 2024 Chef's Corner. All rights reserved.</p>
-        </footer>
-      `;
+      </div>
+    </main>
+    <footer class="footer footer-home">
+        <p class="paragraph-medium">© 2024 Chef's Corner. All rights reserved.</p>
+    </footer>
+  `;
 
-      // Cria o elemento principal
-      const homeElement = document.createElement('div');
-      homeElement.classList.add('home-container');
-      homeElement.innerHTML = homeContentHTML;
+  // Cria um elemento div para a página inicial
+  const homeElement = document.createElement('div');
+  homeElement.classList.add('home-container');
+  homeElement.innerHTML = homeContentHTML;
 
-      // Seleciona o conteúdo das notícias em destaque
-      const featuredNewsContent = homeElement.querySelector('.featured-news-content');
+  // Seleciona o contêiner do conteúdo em destaque
+  const featuredNewsContent = homeElement.querySelector('.featured-news-content');
 
-      // Requisição para obter as notícias em destaque
-      fetch('http://localhost:3000/api/posts/like?limit=3')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Erro na requisição: ' + response.statusText); // Mensagem de erro mais descritiva
-          }
-          return response.json();
-        })
-        .then((data) => {
-          featuredNewsContent.appendChild(renderCarousel(data.data));
-        })
-        .catch(error => console.error('Erro:', error)); // Tratamento de erro na requisição
-
-      // Evento de logout
-      const logoutButton = homeElement.querySelector('.logout');
-      logoutButton.addEventListener('click', () => {
-        fetch(`http://localhost:3000/api/login/logout`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error('Falha no logout');
-            }
-            window.dispatchEvent(createCustomEvent('/login'));
-            return response.json();
-          })
-          .then((data) => {
-            console.log(data);
-          })
-          .catch((error) => {
-            console.error('Erro:', error);
-          });
-      });
-
-      // Retorna o elemento principal
-      return homeElement;
-    }
-
-
-    function renderCarousel(posts) {
-      console.log(posts);
-      const carouselElementHTML = `
-          <div class="featured-news-banner">
-            <div class="featured-news-banner-container">
-              <img class="featured-news-banner-image">
-              </div>
-                <div class="featured-news-navigation">
-                  <input class="item-navigation" type="radio" name="cor">
-                  <input class="item-navigation" type="radio" name="cor">
-                  <input class="item-navigation" type="radio" name="cor">
-                </div>
-            </div>
-            <div class="featured-news-info">
-              <div class="featured-news-details">
-                <span class="category"></span>
-                <span class="posted"></span:
-              </div>
-              <p class="featured-news-info-title"></p>
-            </div>
-          </div>
-      `
-      const carouselElement = document.createElement('div');
-      carouselElement.classList.add('carousel-container');
-      carouselElement.innerHTML = carouselElementHTML;
-
-      const bannerImage = carouselElement.querySelector('.featured-news-banner-image');
-
-      const category = carouselElement.querySelector('.category');
-      const posted = carouselElement.querySelector('.posted');
-      const title = carouselElement.querySelector('.featured-news-info-title');
-
-      const elements = {
-        bannerImage,
-        category,
-        posted,
-        title
+  // Busca os posts em destaque da API
+  fetch('http://localhost:3000/api/posts/like?limit=3')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Erro na requisição: ' + response.statusText);
       }
-      
-      const itemsNavigation = carouselElement.querySelectorAll('.item-navigation');
-      itemsNavigation.forEach((item, index) => {
-        item.addEventListener('click', () => {
-          updateFeaturedNews(index, elements);
-        });
+      return response.json();
+    })
+    .then((data) => {
+      featuredNewsContent.appendChild(renderCarousel(data.data));
+    })
+    .catch(error => console.error('Erro:', error));
+
+  // Adiciona um ouvinte de eventos para o botão de logout
+  const logoutButton = homeElement.querySelector('.logout');
+  logoutButton.addEventListener('click', () => {
+    fetch(`http://localhost:3000/api/login/logout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Falha no logout');
+        }
+        window.dispatchEvent(createCustomEvent('/login'));
+        return response.json();
       })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error('Erro:', error);
+      });
+  });
 
-      function updateFeaturedNews(index, elements) {
-        console.log(posts);
-        elements.bannerImage.src = posts[index].banner;
-        elements.category.innerHTML = posts[index].category;
-        elements.posted.innerHTML = posts[index].updated_at;
-        elements.title.innerHTML = posts[index].title;
-      }
+  // Retorna o elemento da página inicial
+  return homeElement;
+}
 
-      return carouselElement;
+// Função para renderizar o carrossel de posts em destaque
+function renderCarousel(posts) {
+  // HTML do carrossel
+  const carouselElementHTML = `
+    <div class="featured-news-banner">
+      <div class="featured-news-banner-container">
+        <img class="featured-news-banner-image">
+        </div>
+         <div class="featured-news-navigation">
+            <input class="item-navigation" type="radio" name="cor">
+            <input class="item-navigation" type="radio" name="cor">
+            <input class="item-navigation" type="radio" name="cor">
+          </div>
+      </div>
+      <div class="featured-news-info">
+        <div class="featured-news-details">
+          <span class="category"></span>
+          <div class="divider"></div>
+          <span class="posted"></span>
+        </div>
+        <p class="featured-news-info-title paragraph-medium"></p>
+      </div>
+    </div>
+  `;
+  const carouselElement = document.createElement('div');
+  carouselElement.classList.add('carousel-container');
+  carouselElement.innerHTML = carouselElementHTML;
+
+  // Seleciona os elementos do carrossel
+  const bannerImage = carouselElement.querySelector('.featured-news-banner-image');
+  const category = carouselElement.querySelector('.category');
+  const posted = carouselElement.querySelector('.posted');
+  const title = carouselElement.querySelector('.featured-news-info-title');
+
+  const elements = {
+    bannerImage,
+    category,
+    posted,
+    title
+  };
+
+  let indexPost = 0;
+  let timer;
+  updateFeaturedNews(indexPost, elements);
+
+  // Adiciona ouvintes de eventos para a navegação do carrossel
+  const itemsNavigation = carouselElement.querySelectorAll('.item-navigation');
+  itemsNavigation.forEach((item, index) => {
+    item.addEventListener('click', () => {
+      clearInterval(timer);
+      indexPost = index;
+      updateFeaturedNews(indexPost, elements);
+      timer = setInterval(() => {
+        updateFeaturedNews(indexPost, elements);
+        console.log('Teste');
+      }, 60000);
+    });
+  });
+
+  itemsNavigation[0].checked = true;
+
+
+  // Atualiza automaticamente o carrossel a cada minuto
+  timer = setInterval(() => {
+    updateIndexPost();
+    updateFeaturedNews(indexPost, elements);
+  }, 60000);
+
+  // Função para atualizar o conteúdo em destaque
+  function updateFeaturedNews(index, elements) {
+    elements.category.innerHTML = posts[index].category;
+    elements.posted.innerHTML = getTimeAgo(posts[index].updated_at);
+    elements.title.innerHTML = posts[index].title;
+    updateIndexPost();
+  }
+
+  // Função para atualizar o índice do post exibido
+  function updateIndexPost() {
+    if (indexPost >= 2) {
+      indexPost = 0;
+    } else {
+      indexPost++;
     }
+  }
+
+  return carouselElement;
+}
+
+// Função para obter o tempo desde a postagem
+function getTimeAgo(postDate) {
+  const currentDate = new Date();
+  const postDateObj = new Date(postDate);
+
+  const timeDifference = currentDate.getTime() - postDateObj.getTime();
+  const seconds = Math.floor(timeDifference / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+
+  if (days > 0) return days + (days === 1 ? ' day ago' : ' days ago');
+  else if (hours > 0) return hours + (hours === 1 ? ' hour ago' : ' hours ago');
+  else if (minutes > 0) return minutes + (minutes === 1 ? ' minute ago' : ' minutes ago');
+  else return 'Just now';
+}
