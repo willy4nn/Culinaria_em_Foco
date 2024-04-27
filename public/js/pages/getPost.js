@@ -276,7 +276,9 @@ export default function getPost(postId) {
       const content = document.createElement('div');
 
       const likeIcon = document.createElement('span');
-      const openReplyButton = document.createElement('span');
+      const openReplyTextarea = document.createElement('span');
+      const showRepliesButton = document.createElement('span');
+      const showArrowIcon = document.createElement('span');
 
       div.classList.add('comment');
       headerDiv.classList.add('comment-header');
@@ -292,7 +294,9 @@ export default function getPost(postId) {
       likeIcon.classList.add('material-symbols-outlined', 'comment-like');
       if (commentIsLiked) likeIcon.classList.add('liked');
       if (commentIsLiked) console.log("colorido");
-      openReplyButton.classList.add('open-reply-button');
+      openReplyTextarea.classList.add('open-reply');
+      showRepliesButton.classList.add('open-reply');
+      showArrowIcon.classList.add('material-symbols-outlined', 'arrow-icon');
 
       profilePhoto.src = comment.profile_photo || '../../uploads/profile_photo/default_profile_normal.png';
       name.innerText = comment.name ;
@@ -301,10 +305,12 @@ export default function getPost(postId) {
       content.innerHTML = comment.content;
 
       likeIcon.innerHTML = 'favorite';
-      openReplyButton.innerText = 'Reply';
-
+      openReplyTextarea.innerText = 'Reply';
+      showRepliesButton.innerText = `${comment.replies_quantity} replies`
+      showArrowIcon.innerText = 'arrow_drop_down';
+      showRepliesButton.appendChild(showArrowIcon);
       leftHeaderDiv.append(profilePhoto, name, separatorDot, createdAt);
-      rightHeaderDiv.append(openReplyButton, likeIcon);
+      rightHeaderDiv.append(showRepliesButton, openReplyTextarea, likeIcon);
 
       headerDiv.append(leftHeaderDiv, rightHeaderDiv);
       div.append(headerDiv, content);
@@ -324,9 +330,38 @@ export default function getPost(postId) {
         else likeIcon.classList.remove('liked');
       });
 
+      let shownReply = false;
+      let newReplies = document.createElement('div');
+      div.appendChild(newReplies);
+      // Mostrar respostas
+      showRepliesButton.addEventListener('click', () => {
+        if (newReplies.childNodes.length === 0) {
+          newReplies.appendChild(renderRepliesByCommentId(div, comment.id));
+          shownReply = true;
+          showArrowIcon.innerText = 'arrow_drop_up';
+        } else {
+          if (!shownReply) {
+            //newReplies.innerHTML = '';
+            //newReplies.appendChild(renderRepliesByCommentId(div, comment.id));
+            newReplies.style.display = 'block';
+
+              ////div.appendChild(newReplies);
+            shownReply = true;
+            showArrowIcon.innerText = 'arrow_drop_up';
+          } else {
+            //newReplies.innerHTML = '';
+            newReplies.style.display = 'none';
+
+              ////div.removeChild(newReplies)
+            shownReply = false;
+            showArrowIcon.innerText = 'arrow_drop_down';
+          }
+        }
+      });
+
       let openedReply = false;
       // Responder um comentário (textarea)
-      openReplyButton.addEventListener('click', () => {
+      openReplyTextarea.addEventListener('click', () => {
         if (!openedReply) {
           const replyDiv = document.createElement('div');
           const profilePhoto = document.createElement('img');
@@ -353,7 +388,8 @@ export default function getPost(postId) {
           contentDiv.append(profilePhoto, replyTextarea);
           
           replyDiv.append(contentDiv, buttonsDiv);
-          div.appendChild(replyDiv);
+          //div.appendChild(replyDiv);
+          div.insertBefore(replyDiv, newReplies);
           openedReply = true;
 
           replyTextarea.addEventListener('input', function() {
@@ -367,6 +403,7 @@ export default function getPost(postId) {
           });
 
           buttonReply.addEventListener('click', () => {
+            replyTextarea.disabled = true;
 
             const data = {
               posts_comments_id: comment.id,
@@ -375,21 +412,28 @@ export default function getPost(postId) {
 
             createReply(data)
             .then(() => {
-              getCommentsByPostId(postId)
+              replyTextarea.value = '';
+              replyTextarea.disabled = false;
+              buttonCancel.click();
+              shownReply = false;
+              showArrowIcon.innerText = 'arrow_drop_down';
+              showRepliesButton.click()
+              /* getCommentsByPostId(postId)
               .then(data => {   
                 renderCommentsByPostId(data);
+              }) */
               })
               .catch(error => {
                 console.error('Erro ao buscar post:', error);
               });
-            })
+           /*  }) */
           });
         }
 
       });
 
-      // Renderizar respostas dos comentários
-      renderRepliesByCommentId(div, comment.id)
+      /* // Renderizar respostas dos comentários
+      renderRepliesByCommentId(div, comment.id) */
 
 
       
@@ -398,6 +442,10 @@ export default function getPost(postId) {
 
 
   function renderRepliesByCommentId(repliedCommentDiv, repliedCommentId) {
+    const newReplies = document.createElement('div');
+    const loader = loaderr();
+    repliedCommentDiv.appendChild(loader);
+ 
     getRepliesByCommentId(repliedCommentId)
     .then(data => {
       //commentsList.innerHTML = "";
@@ -416,9 +464,9 @@ export default function getPost(postId) {
         const createdAt = document.createElement('p');
         const separatorDot = document.createElement('span');
         const content = document.createElement('div');
-  
+
         const likeIcon = document.createElement('span');
-        const openReplyButton = document.createElement('span');
+        const openReplyTextarea = document.createElement('span');
   
         div.classList.add('comment', 'reply');
         headerDiv.classList.add('comment-header');
@@ -434,8 +482,8 @@ export default function getPost(postId) {
         likeIcon.classList.add('material-symbols-outlined', 'comment-like');
         if (replyIsLiked) likeIcon.classList.add('liked');
         if (replyIsLiked) console.log("colorido");
-        openReplyButton.classList.add('open-reply-button');
-  
+        openReplyTextarea.classList.add('open-reply');
+
         profilePhoto.src = reply.profile_photo || '../../uploads/profile_photo/default_profile_normal.png';
         name.innerText = reply.name ;
         createdAt.innerText = getTimeAgo(reply.created_at);
@@ -443,16 +491,22 @@ export default function getPost(postId) {
         content.innerHTML = reply.content;
   
         likeIcon.innerHTML = 'favorite';
-        openReplyButton.innerText = 'Reply';
+        openReplyTextarea.innerText = 'Reply';
   
         leftHeaderDiv.append(profilePhoto, name, separatorDot, createdAt);
-        rightHeaderDiv.append(openReplyButton, likeIcon);
+        rightHeaderDiv.append(openReplyTextarea, likeIcon);
   
         headerDiv.append(leftHeaderDiv, rightHeaderDiv);
         div.append(headerDiv, content);
-        repliedCommentDiv.appendChild(div);
+
+        //repliedCommentDiv.removeChild(loader);
+        //repliedCommentDiv.appendChild(div);
+        newReplies.appendChild(div);
       });
+      repliedCommentDiv.removeChild(loader);
     })
+
+    return newReplies;
   }
 
 
@@ -739,7 +793,7 @@ async function getRepliesIsLiked(replies_id) {
   })
   .then((data) => {
       console.log("get replies isliked :", data);
-      return data.data;
+      return data.data[0];
   })
   .catch((error) => {
       //displayError(error.error);
@@ -817,4 +871,10 @@ function loading(div) {
   loading.classList.add('loading-icon'); 
 
   div.appendChild(loading);
+}
+
+function loaderr() {
+  const loader = document.createElement('div');
+  loader.classList.add('loader');
+  return loader;
 }

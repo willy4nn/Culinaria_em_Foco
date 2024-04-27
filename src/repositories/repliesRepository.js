@@ -4,7 +4,7 @@ const repliesRepository = {
     // CREATE
     createReply: async function (posts_comments_id, users_id, content) {
 
-        const query = `INSERT INTO comments_replies (posts_comments_id, users_id, content) VALUES ($1, $2, $3) RETURNING *`;
+        const query = `SELECT create_reply($1, $2, $3);`;
 
         try {
             const result = await pool.query(query, [posts_comments_id, users_id, content]);
