@@ -6,7 +6,7 @@ const commentsRepository = {
     createComment: async function (posts_id, users_id, content) {
         const pool = await connectToDatabase.connect();
 
-        const query = `INSERT INTO posts_comments (posts_id, users_id, content) VALUES ($1, $2, $3) RETURNING *`;
+        const query = `SELECT create_comment($1, $2, 3$);`;
 
         try {
             const result = await pool.query(query, [posts_id, users_id, content]);

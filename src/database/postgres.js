@@ -8,7 +8,7 @@ const { configDatabase } = require("../config/configFile.js");
     database: configDatabase.DATABASE,
     password: configDatabase.PASSWORD,
     port: 5432,
-    max: 20,
+    max: 100,
   });
 
 module.exports = pool;
