@@ -1,5 +1,111 @@
 // Importa os módulos necessários
-import createCustomEvent from '../eventModule.js';
+import getTimeAgo from "../utils/getTimeAgo.js";
+
+function getFeaturedNews() {
+  return fetch('http://localhost:3000/api/posts/like?limit=3')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to fetch featured news');
+      }
+      return response.json();
+    })
+    .catch(error => {
+      console.error('Error fetching featured news:', error);
+      return null;
+    });
+}
+
+function renderFeaturedNewsSection(news) {
+  const featuredNewsSectionHTML = `
+    <div class="featured-news-container">
+      <h1 class="primary-heading">Featured News</h1>
+      <div class="featured-news-content">
+        <div class="carousel-container">
+          <div class="banner-container">
+            <div class="banner">
+              <img class="banner-image">
+            </div>
+            <div class="featured-news-navigation">
+              <input class="item-navigation" type="radio" name="page">
+              <input class="item-navigation" type="radio" name="page">
+              <input class="item-navigation" type="radio" name="page">
+            </div>
+          </div>
+          <div class="featured-news-info">
+            <div class="featured-news-details">
+              <p class="category"></p>
+              <span class="divider"></span>
+              <p class="posted"></p>
+            </div>
+            <p class="featured-news-info-title paragraph-medium"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `
+  const featuredNewsSection = document.createElement('section');
+  featuredNewsSection.innerHTML = featuredNewsSectionHTML;
+
+  const banner = featuredNewsSection.querySelector('.banner-image');
+  const category = featuredNewsSection.querySelector('.category');
+  const posted = featuredNewsSection.querySelector('.posted');
+  const title = featuredNewsSection.querySelector('.featured-news-info-title');
+  let indexPost = 0;
+  let timer;
+
+  const itemsNavigation = featuredNewsSection.querySelectorAll('.item-navigation');
+  itemsNavigation.forEach((item, index) => {
+    item.addEventListener('click', () => {
+      indexPost = index;
+      clearInterval(timer);
+      updateNews();
+      timer = setInterval(() => {
+        updateIndexPost();
+        updateNews();
+        updateIndexNavigation();
+      }, 15000);
+    })
+  })
+
+  function updateNews() {
+    if(!news) {
+      category.textContent = '---';
+      posted.textContent = '---';
+      title.textContent = 'untitled'
+      return;
+    }
+    banner.src = news[indexPost].banner;
+    category.textContent = news[indexPost].category;
+    posted.textContent = getTimeAgo(news[indexPost].updated_at);
+    title.textContent = news[indexPost].title;
+  }
+
+  function updateIndexPost() {
+    if (indexPost >= 2) {
+      indexPost = 0;
+    } else {
+      indexPost++;
+    }
+  }
+
+  function updateIndexNavigation() {
+    itemsNavigation.forEach((item) => {
+      item.checked = false;
+    })
+    itemsNavigation[indexPost].checked = true;
+  }
+
+  updateNews();
+  updateIndexNavigation();
+
+  timer = setInterval(() => {
+    updateIndexPost();
+    updateNews();
+    updateIndexNavigation();
+  }, 15000);
+
+  return featuredNewsSection;
+}
 
 // Função principal que renderiza a página inicial
 export default function home() {
@@ -16,11 +122,7 @@ export default function home() {
       </div>
     </header>
     <main class="main main-home">
-      <div class="featured-news-container">
-          <h1 class="primary-heading">Featured News</h1>
-          <div class="featured-news-content">
-          </div>
-      </div>
+
     </main>
     <footer class="footer footer-home">
         <p class="paragraph-medium">© 2024 Chef's Corner. All rights reserved.</p>
@@ -32,151 +134,20 @@ export default function home() {
   homeElement.classList.add('home-container');
   homeElement.innerHTML = homeContentHTML;
 
-  // Seleciona o contêiner do conteúdo em destaque
-  const featuredNewsContent = homeElement.querySelector('.featured-news-content');
-
-  // Busca os posts em destaque da API
-  fetch('http://localhost:3000/api/posts/like?limit=3')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Erro na requisição: ' + response.statusText);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      featuredNewsContent.appendChild(renderCarousel(data.data));
-    })
-    .catch(error => console.error('Erro:', error));
-
-  // Adiciona um ouvinte de eventos para o botão de logout
-  const logoutButton = homeElement.querySelector('.logout');
-  logoutButton.addEventListener('click', () => {
-    fetch(`http://localhost:3000/api/login/logout`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Falha no logout');
-        }
-        window.dispatchEvent(createCustomEvent('/login'));
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error('Erro:', error);
-      });
+  // Chama a função getFeaturedNews() para obter as notícias em destaque
+  getFeaturedNews().then(news => {
+    // Verifica se há notícias antes de renderizar
+    if (!news) {
+      renderFeaturedNewsSection();
+      return;
+    }
+    // Renderiza a seção de notícias em destaque
+    const featuredNewsSection = renderFeaturedNewsSection(news.data);
+    // Adiciona a seção de notícias em destaque ao elemento principal da página inicial
+    const mainElement = homeElement.querySelector('.main-home');
+    mainElement.appendChild(featuredNewsSection);
   });
 
   // Retorna o elemento da página inicial
   return homeElement;
-}
-
-// Função para renderizar o carrossel de posts em destaque
-function renderCarousel(posts) {
-  // HTML do carrossel
-  const carouselElementHTML = `
-    <div class="featured-news-banner">
-      <div class="featured-news-banner-container">
-        <img class="featured-news-banner-image">
-        </div>
-         <div class="featured-news-navigation">
-            <input class="item-navigation" type="radio" name="cor">
-            <input class="item-navigation" type="radio" name="cor">
-            <input class="item-navigation" type="radio" name="cor">
-          </div>
-      </div>
-      <div class="featured-news-info">
-        <div class="featured-news-details">
-          <span class="category"></span>
-          <div class="divider"></div>
-          <span class="posted"></span>
-        </div>
-        <p class="featured-news-info-title paragraph-medium"></p>
-      </div>
-    </div>
-  `;
-  const carouselElement = document.createElement('div');
-  carouselElement.classList.add('carousel-container');
-  carouselElement.innerHTML = carouselElementHTML;
-
-  // Seleciona os elementos do carrossel
-  const bannerImage = carouselElement.querySelector('.featured-news-banner-image');
-  const category = carouselElement.querySelector('.category');
-  const posted = carouselElement.querySelector('.posted');
-  const title = carouselElement.querySelector('.featured-news-info-title');
-
-  const elements = {
-    bannerImage,
-    category,
-    posted,
-    title
-  };
-
-  let indexPost = 0;
-  let timer;
-  updateFeaturedNews(indexPost, elements);
-
-  // Adiciona ouvintes de eventos para a navegação do carrossel
-  const itemsNavigation = carouselElement.querySelectorAll('.item-navigation');
-  itemsNavigation.forEach((item, index) => {
-    item.addEventListener('click', () => {
-      clearInterval(timer);
-      indexPost = index;
-      updateFeaturedNews(indexPost, elements);
-      timer = setInterval(() => {
-        updateFeaturedNews(indexPost, elements);
-        console.log('Teste');
-      }, 60000);
-    });
-  });
-
-  itemsNavigation[0].checked = true;
-
-
-  // Atualiza automaticamente o carrossel a cada minuto
-  timer = setInterval(() => {
-    updateIndexPost();
-    updateFeaturedNews(indexPost, elements);
-  }, 60000);
-
-  // Função para atualizar o conteúdo em destaque
-  function updateFeaturedNews(index, elements) {
-    elements.category.innerHTML = posts[index].category;
-    elements.posted.innerHTML = getTimeAgo(posts[index].updated_at);
-    elements.title.innerHTML = posts[index].title;
-    updateIndexPost();
-  }
-
-  // Função para atualizar o índice do post exibido
-  function updateIndexPost() {
-    if (indexPost >= 2) {
-      indexPost = 0;
-    } else {
-      indexPost++;
-    }
-  }
-
-  return carouselElement;
-}
-
-// Função para obter o tempo desde a postagem
-function getTimeAgo(postDate) {
-  const currentDate = new Date();
-  const postDateObj = new Date(postDate);
-
-  const timeDifference = currentDate.getTime() - postDateObj.getTime();
-  const seconds = Math.floor(timeDifference / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  const days = Math.floor(hours / 24);
-
-  if (days > 0) return days + (days === 1 ? ' day ago' : ' days ago');
-  else if (hours > 0) return hours + (hours === 1 ? ' hour ago' : ' hours ago');
-  else if (minutes > 0) return minutes + (minutes === 1 ? ' minute ago' : ' minutes ago');
-  else return 'Just now';
 }
