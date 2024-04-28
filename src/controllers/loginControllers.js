@@ -86,9 +86,9 @@ deleteUser: async (req, res) => {
   const username = req.params.username;
   const result = await loginRepository.deleteUser(username)
   if(!result.success){
-    return res.status(500).json({ message: result.error} )
+    return res.status(500).json({ result })
   }
-    res.status(200).json({ message: result.message })
+    res.status(200).json({ result })
   }
 }
 

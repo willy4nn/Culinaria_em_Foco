@@ -149,6 +149,7 @@ function renderCarousel(posts) {
     elements.category.innerHTML = posts[index].category;
     elements.posted.innerHTML = getTimeAgo(posts[index].updated_at);
     elements.title.innerHTML = posts[index].title;
+    elements.bannerImage.src = posts[index].banner;
     updateIndexPost();
   }
 
