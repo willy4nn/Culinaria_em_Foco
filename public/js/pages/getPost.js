@@ -263,6 +263,7 @@ export default function getPost(postId) {
 
       const commentIsLiked = await getCommentsIsLiked(comment.id);
       console.log("commentIsLiked", commentIsLiked);
+      console.log("replies qty", comment.replies_quantity);
 
       const div = document.createElement('div');
       const headerDiv = document.createElement('div');
@@ -306,7 +307,7 @@ export default function getPost(postId) {
 
       likeIcon.innerHTML = 'favorite';
       openReplyTextarea.innerText = 'Reply';
-      showRepliesButton.innerText = `${comment.replies_quantity} replies`
+      showRepliesButton.innerText = `${comment.replies_quantity} replies`;
       showArrowIcon.innerText = 'arrow_drop_down';
       showRepliesButton.appendChild(showArrowIcon);
       leftHeaderDiv.append(profilePhoto, name, separatorDot, createdAt);

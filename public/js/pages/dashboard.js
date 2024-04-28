@@ -1,7 +1,7 @@
 // main.js
 
 // Importa a função createCustomEvent do módulo de eventos
-import dateFormat from '../utils/dateFormat.js';
+import { dateFormat } from '../utils/dateFormat.js';
 import createCustomEvent from '../eventModule.js';
 import setNavigation from '../setNavigation.js';
 

@@ -158,7 +158,10 @@ app.get('/favorite', (req, res) => {
 });
 
 app.get('/profile', (req, res) => {
-  console.log("teste", __dirname);
+  res.sendFile(path.join(publicPath, 'index.html'));
+});
+
+app.get('/admin', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 
