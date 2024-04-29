@@ -64,50 +64,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// Middleware que verifica se usuario está logado
-const permissionVerify = require("./middlewares/permissionVerify.js")
-
-const routes = require('./routes');
-
-// Rota para lidar com todas as outras solicitações
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(publicPath, 'index.html'));
-});
-
-app.get('/register', (req, res) => {
-  res.sendFile(path.join(publicPath, 'index.html'));
-});
-
-app.get('/home', permissionVerify, (req, res) => {
-  res.sendFile(path.join(publicPath, 'index.html'));
-});
-
-
-app.get('/post', (req, res) => {
-  console.log("1");
-  res.sendFile(path.join(publicPath, 'index.html'));
-});
-
-app.get('/post/:id', (req, res) => {
-  console.log("3");
-  res.sendFile(path.join(publicPath, 'index.html'));
-});
-
-app.get('/post/edit/:id', (req, res) => {
-  console.log("2");
-  res.sendFile(path.join(publicPath, 'index.html'));
-});
-
-
-/* // Rota para servir arquivos CSS
-app.get('/css/style.css', (req, res) => {
-  // Define o tipo MIME como text/css
-  res.setHeader('Content-Type', 'text/css');
-  // Envia o arquivo CSS
-  res.sendFile(path.join(publicPath, 'css', 'style.css'));
-});
- */
-
 // Upload com Multer
 app.post("/upload_files", upload.single("files"), uploadFiles);
 
@@ -136,7 +92,6 @@ app.post('/upload', async (req, res) => {
       //const directory = './src/uploads/posts_media';
       const directory = './public/uploads/posts_media';
 
-
       //const ext = path.extname(imageUrls[i]);
       //const filename = path.join(directory, `image_${i}${ext}`);
       const filename = path.join(directory, imageUris[i]);
@@ -145,38 +100,41 @@ app.post('/upload', async (req, res) => {
       console.error('Erro ao fazer download da imagem:', error);
     }
   }
-
   res.status(200).json({ message: 'Imagens salvas com sucesso!' });
 });
 
-// Testando exibição de posts com GET BY ID
-app.get('/latest-news', (req, res) => {
-  res.sendFile(path.join(publicPath, 'index.html'));
-});
+// Middlewares que verificam se usuario está logado e seus derivados cargos
+const permissionVerify = require("./middlewares/permissionVerify.js")
+const adminPermissionVerify = require("./middlewares/adminPermissionVerify.js")
+const editorPermissionVerify = require("./middlewares/editorPermissionVerify.js")
 
-// Testando editores de texto (atual: tinymce)
-app.get('/editor', (req, res) => {
-  res.sendFile(path.join(publicPath, 'index.html'));
-});
-
-app.get('/dashboard', (req, res) => {
-  res.sendFile(path.join(publicPath, 'index.html'));
-});
-
-app.get('/favorite', (req, res) => {
-  res.sendFile(path.join(publicPath, 'index.html'));
-});
-
-app.get('/profile', (req, res) => {
-  res.sendFile(path.join(publicPath, 'index.html'));
-});
-
-app.get('/admin', (req, res) => {
-  res.sendFile(path.join(publicPath, 'index.html'));
-});
-
-
+//Base de rotas da API
+const routes = require('./routes');
 app.use('/api', routes);
+
+//Base de rotas das páginas
+//As que não requer verificação passam primeiro
+app.get('/register', (req, res) => {
+  res.sendFile(path.join(publicPath, 'index.html'));
+});
+
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(publicPath, 'index.html'));
+});
+
+//As que precisam de verificação especial recebem seu middleware específico
+app.get('/admin', adminPermissionVerify, (req, res) => {
+  res.sendFile(path.join(publicPath, 'index.html'));
+});
+
+app.get('/editor', editorPermissionVerify, (req, res) => {
+  res.sendFile(path.join(publicPath, 'index.html'));
+});
+
+//Aqui é onde chama todas as outras rotas que não precisam de verificação especial
+app.get('*', permissionVerify, (req, res) => {
+  res.sendFile(path.join(publicPath, 'index.html'));
+});
 
 app.listen(port, ip, () => {
   console.log(`Servidor rodando em http://${ip}:${port}`);
