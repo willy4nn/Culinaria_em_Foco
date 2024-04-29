@@ -12,10 +12,9 @@ async function permissionVerify (req, res, next){
     await jwt.verify(sessionToken, SECRET_KEY, (err, decoded) => {
         if(err){
             return res.status(403).redirect("/");
-        }else{
+        }
             req.user = decoded.user;
             next();
-        }
     });
 }
 

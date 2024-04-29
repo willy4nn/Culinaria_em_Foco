@@ -1,20 +1,13 @@
 // Importa os módulos necessários
 import createCustomEvent from '../eventModule.js';
+import footer from './elements/footer.js'
+import header from './elements/header.js'
 
 // Função principal que renderiza a página inicial
 export default function home() {
   // HTML do conteúdo da página inicial
   const homeContentHTML = `
-    <header class="header header-home">
-      <div class="logo">
-          <img src="./assets/images/croissant-logo.svg" alt="Logo Chef's Corner">
-          <span class="paragraph-medium">Chef's Corner</span>
-      </div>
-      <div class="buttons">
-          <a class="paragraph-medium">Contact Us</a>
-          <a class="button button-fill logout">Logout</a>
-      </div>
-    </header>
+
     <main class="main main-home">
       <div class="featured-news-container">
           <h1 class="primary-heading">Featured News</h1>
@@ -22,15 +15,17 @@ export default function home() {
           </div>
       </div>
     </main>
-    <footer class="footer footer-home">
-        <p class="paragraph-medium">© 2024 Chef's Corner. All rights reserved.</p>
-    </footer>
   `;
 
   // Cria um elemento div para a página inicial
   const homeElement = document.createElement('div');
   homeElement.classList.add('home-container');
   homeElement.innerHTML = homeContentHTML;
+
+  //Adiciona os elementos footer e header
+  const main = homeElement.querySelector("main") 
+  homeElement.insertBefore(header(), main)
+  homeElement.append(footer())
 
   // Seleciona o contêiner do conteúdo em destaque
   const featuredNewsContent = homeElement.querySelector('.featured-news-content');
@@ -47,30 +42,6 @@ export default function home() {
       featuredNewsContent.appendChild(renderCarousel(data.data));
     })
     .catch(error => console.error('Erro:', error));
-
-  // Adiciona um ouvinte de eventos para o botão de logout
-  const logoutButton = homeElement.querySelector('.logout');
-  logoutButton.addEventListener('click', () => {
-    fetch(`http://localhost:3000/api/login/logout`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Falha no logout');
-        }
-        window.dispatchEvent(createCustomEvent('/login'));
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error('Erro:', error);
-      });
-  });
 
   // Retorna o elemento da página inicial
   return homeElement;

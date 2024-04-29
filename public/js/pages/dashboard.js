@@ -56,7 +56,7 @@ export default function dashboard() {
 
     </main>
     <footer class="footer">
-        <p class="paragraph-medium">© 2024 Chef's Corner. All rights reserved.</p>
+      <p class="paragraph-medium">© 2024 Culinária em Foco. Todos os direitos Reservados.</p>
     </footer>
   `;
 

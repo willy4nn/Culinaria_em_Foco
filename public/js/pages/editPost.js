@@ -103,12 +103,9 @@ export default function editPost(postId) {
 
     </main>
     <footer class="footer">
-      <p>© 2024 Chef's Corner. All rights reserved.</p>
+      <p class="paragraph-medium">© 2024 Culinária em Foco. Todos os direitos Reservados.</p>
     </footer>
 
-    <
-
-    
   `;
 
   const editPostElement = document.createElement('div');
