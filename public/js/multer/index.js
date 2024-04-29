@@ -22,13 +22,13 @@ axios.post('http://localhost:3000/upload', { imageUrls, imageUris })
   return newHtmlString;
 }
 
-async function importLocalFile(file) {
+async function importLocalFile(file, type) {
 
   if (!file) return "";
 
   const formData = new FormData();
-  formData.append("name", "banner");
-  formData.append("files", file);
+  formData.append('type', type);
+  formData.append('files', file);
 
 
   return fetch("http://localhost:3000/upload_files", {

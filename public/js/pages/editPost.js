@@ -1,19 +1,13 @@
 import createCustomEvent from '../eventModule.js';
 import { importHTMLContentFiles, importHTMLContentFilesWithFetch, importLocalFile } from '../multer/index.js';
+import header from './elements/header.js';
+import footer from './elements/footer.js';
+import menuToggle from './elements/menuToggle.js';
 
 // Exporta a função que retorna a página de login
 export default function editPost(postId) {
 
   const editPostContentHTML = `
-    <header class="header">
-      <div class="logo">
-        <img src="../../assets/images/croissant-logo.svg" alt="Logo Chef's Corner" />
-        <span>Chef's Corner</span>
-      </div>
-      <div class="buttons">
-        <a class="button button-fill">Sign Up</a>
-      </div>
-    </header>
     <main class=""> 
 
       <form class="form">
@@ -101,19 +95,17 @@ export default function editPost(postId) {
         <button id="button-save-and-post">Save and Post</button>
       </form>
 
-    </main>
-    <footer class="footer">
-      <p>© 2024 Chef's Corner. All rights reserved.</p>
-    </footer>
-
-    <
-
-    
   `;
 
   const editPostElement = document.createElement('div');
   editPostElement.classList.add('edit-post-element');
   editPostElement.innerHTML = editPostContentHTML;
+
+  //Adiciona os elementos footer e header
+  const main = editPostElement.querySelector("main") 
+  editPostElement.insertBefore(header(), main)
+  editPostElement.append(footer())
+  editPostElement.append(menuToggle())
 
   const titleInput = editPostElement.querySelector('#title');
   const categoryInput = editPostElement.querySelector('#category');

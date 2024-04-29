@@ -9,6 +9,7 @@ import editor from './pages/editor.js';
 import editPost from './pages/editPost.js';
 import dashboard from './pages/dashboard.js';
 import favorite from './pages/favorite.js';
+import admin from './pages/admin.js';
 
 
 const router = {
@@ -47,6 +48,9 @@ const router = {
   },
   '/profile': function () {
     return profile();
+  },
+  '/admin': function () {
+    return admin();
   },
   /* getPage: function (path) {
     // Verifica se a rota possui um parâmetro dinâmico

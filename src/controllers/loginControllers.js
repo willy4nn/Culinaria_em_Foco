@@ -35,6 +35,18 @@ getUsers: async (req, res) => {
     }
 },
 
+// Carrega todos os dados do usuário logado
+getProfile: async (req, res) => {
+  const users_id = req.user.id;  
+  const result = await loginRepository.getProfile(users_id);
+
+  if (result.rowCount === 0) {
+        res.status(404).json({ error: 'Usuário não encontrado' });
+        return
+      }
+    res.status(200).json(result.rows[0]);
+},
+
 //Aqui é feito o processo de login, quando o usuário é autenticado ele recebe um cookie
 autenticate: async (req, res) => {
 
@@ -86,9 +98,9 @@ deleteUser: async (req, res) => {
   const username = req.params.username;
   const result = await loginRepository.deleteUser(username)
   if(!result.success){
-    return res.status(500).json({ message: result.error} )
+    return res.status(500).json({ result })
   }
-    res.status(200).json({ message: result.message })
+    res.status(200).json({ result })
   }
 }
 

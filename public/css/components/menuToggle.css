@@ -1,0 +1,38 @@
+/* MENU TOGGLE */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    width: 0;
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: #1111111a;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+  }
+  
+  .sidebar a {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    transition: 0.3s;
+    margin: 5px
+  }
+  
+  .sidebar a:hover {
+    color: #f1f1f1;
+  }
+  
+  .menu-toggle {
+    cursor: pointer;
+    font-size: 30px;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1;
+  }
+
+  .sidebar.show {
+    width: 180px;
+  }
