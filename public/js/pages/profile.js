@@ -304,7 +304,7 @@ async function updateUser(username, data) {
         if (!response.ok) {
           return response.json().then((error) => {
             throw new Error(
-              `Não foi possível atualiuzar o usuário! ${error.message}`
+              `Não foi possível atualizar o usuário! ${error.message}`
             );
           });
         }
