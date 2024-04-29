@@ -32,4 +32,36 @@ function dateFormatUS(date){
     return(dataFormatada);
 }
 
-export { dateFormat, dateFormatUS };
+function renewDate(subscriptionDate) {
+    const receivedDate = new Date(subscriptionDate);
+  
+    const currentDate = new Date('2024/12/17');
+    console.log(currentDate);
+  
+    const receivedDay = receivedDate.getDate().toString().padStart(2, '0');
+    const receivedMonth = (receivedDate.getMonth() + 1).toString().padStart(2, '0');
+    const receivedYear = receivedDate.getFullYear();
+
+    const currentDay = currentDate.getDate().toString().padStart(2, '0');
+    const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+    const currentYear = currentDate.getFullYear();
+
+    let renewalMonth, renewalYear;
+
+    if (receivedDay >= currentDay) {
+        renewalMonth = currentMonth;
+        renewalYear = currentYear;
+    } else {
+        renewalMonth = (parseInt(currentMonth) + 1).toString().padStart(2, '0');
+        renewalYear = currentYear;
+
+        if (renewalMonth > 12) {
+            renewalMonth = '01'; // Reset the month to January
+            renewalYear++;
+        }
+    }
+
+  return `${receivedDay}/${renewalMonth}/${renewalYear}`;
+}
+
+export { dateFormat, dateFormatUS, renewDate };

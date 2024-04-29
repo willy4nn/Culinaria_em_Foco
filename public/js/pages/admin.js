@@ -176,7 +176,10 @@ export default function admin() {
           });
           
           buttonDelete.addEventListener('click', () => {
-            contentTable.appendChild(displayModal("Tem certeza que deseja excluir este usuário?", async () => {
+            const message = document.createElement('span');
+            message.innerText = "Tem certeza que deseja excluir este usuário?"
+
+            contentTable.appendChild(displayModal(message, async () => {
               deleteUser(item.id)
               .then((data) => {
                 if (data.result.success) contentTable.removeChild(tableRow);

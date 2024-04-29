@@ -246,7 +246,7 @@ export default function createPost() {
     category = category ? category.toLowerCase() : ''; // Fixando a categoria vazia se não houver seleção
     const content = editorContent.toString();
     // Se tiver file armazena a imagem no back e retorna a uri, se não retorna vazio
-    const banner = await importLocalFile(bannerInput.files[0]);
+    const banner = await importLocalFile(bannerInput.files[0], 'banner');
     const image = imageInput.value.toString();
 
     console.log('bn', bannerInput);

@@ -8,6 +8,7 @@ const selfPermissionVerify = require("../middlewares/selfPermissionVerify")
 //Rotas de verificação do login do Usuário
 router.get('/user', permissionVerify, loginController.getLogin);
 router.get('/all', adminPermissionVerify, loginController.getUsers);
+router.get('/profile', permissionVerify, loginController.getProfile);
 router.get('/user/:username', selfPermissionVerify, loginController.getUser);
 router.post('/auth', loginController.autenticate);
 
