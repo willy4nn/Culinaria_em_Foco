@@ -165,14 +165,29 @@ box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     color: #8e8e8e;
 }
 
-.open-reply {
+.open-reply,
+.show-reply {
     display: flex;
     align-items: center;
-    flex-direction: row-reverse;
+    /* flex-direction: row-reverse; */
     font-size: 14px;
     font-weight: 600;
     color: #000000;
     padding: 0 14px 2px 14px;
+}
+
+.open-reply-reply {
+    display: flex;
+    align-items: center;
+    /* flex-direction: row-reverse; */
+    font-size: 14px;
+    font-weight: 600;
+    color: #737373;
+    padding: 0 14px 2px 14px;
+}
+
+.reply-quantity {
+    padding-right: 4px;
 }
 
 .comment-like:hover {
@@ -180,8 +195,14 @@ box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     cursor: pointer;
 }
 
-.open-reply:hover {
+.open-reply:hover,
+.show-reply:hover {
     color: #737373;
+    cursor: pointer;
+}
+
+.open-reply-reply:hover {
+    color: #000000;
     cursor: pointer;
 }
 

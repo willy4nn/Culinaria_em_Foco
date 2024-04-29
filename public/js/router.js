@@ -10,6 +10,7 @@ import editPost from './pages/editPost.js';
 import dashboard from './pages/dashboard.js';
 import favorite from './pages/favorite.js';
 
+
 const router = {
   '/': function () {
     return main();
