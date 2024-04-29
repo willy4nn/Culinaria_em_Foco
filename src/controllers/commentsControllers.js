@@ -4,7 +4,9 @@ const commentsController = {
 
     // CREATE
     createComment: async (req, res) => {
-        const { posts_id, users_id, content } = req.body;
+        const { posts_id, content } = req.body;
+        const users_id = req.user.id;
+
         console.log(posts_id, users_id, content);
 
         try {

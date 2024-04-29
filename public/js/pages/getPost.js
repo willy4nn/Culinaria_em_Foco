@@ -98,11 +98,11 @@ export default function getPost(postId) {
     return postPromise.then(post => ({ userData, post }));
   })
   .then(({ userData, post }) => {
-    return getIsLiked(postId, userData.id)
+    return getIsLiked(postId)
   .then(isliked => ({ userData, post, isliked }));
   })
   .then(({ userData, post, isliked }) => {
-    return getIsFavorited(postId, userData.id)
+    return getIsFavorited(postId)
       .then(isfavorited => ({ userData, post, isliked, isfavorited }));
   })
   .then(({ userData, post, isliked, isfavorited }) => {
@@ -123,7 +123,7 @@ export default function getPost(postId) {
       console.log("true or false", liked, favorited);
 
       buttonLike.addEventListener('click', async () => {
-        const newQuantity = await likePost(postId, userData.id);
+        const newQuantity = await likePost(postId);
         likesQuantity.innerText = `${newQuantity} curtidas`;
 
         if (liked) {
@@ -151,9 +151,10 @@ export default function getPost(postId) {
       });
 
       buttonComment.addEventListener('click', function(e) {
+        if (commentTextarea.value.trim().toString() == '') return;
+
         const data = {
           posts_id: postId,
-          users_id: userData.id,
           content: commentTextarea.value.trim().toString(),
         }
 
@@ -403,6 +404,7 @@ export default function getPost(postId) {
           });
 
           buttonReply.addEventListener('click', () => {
+            if (replyTextarea.value.trim().toString() === '') return;
             replyTextarea.disabled = true;
 
             const data = {
@@ -418,10 +420,10 @@ export default function getPost(postId) {
               shownReply = false;
               showArrowIcon.innerText = 'arrow_drop_down';
               showRepliesButton.click()
-              /* getCommentsByPostId(postId)
+              getCommentsByPostId(postId)
               .then(data => {   
                 renderCommentsByPostId(data);
-              }) */
+              })
               })
               .catch(error => {
                 console.error('Erro ao buscar post:', error);
@@ -516,6 +518,7 @@ export default function getPost(postId) {
 /* POSTS */
 
 async function getPostById(id) {
+  console.log(id);
   return fetch('http://localhost:3000/api/posts/' + id)
   .then((response) => {
       if (response.status !== 200) {
@@ -535,9 +538,9 @@ async function getPostById(id) {
   });
 }
 
-async function getIsLiked(posts_id, users_id) {
+async function getIsLiked(posts_id) {
   
-  const queryParams = new URLSearchParams({ posts_id, users_id }).toString();
+  const queryParams = new URLSearchParams({ posts_id }).toString();
   console.log("query", queryParams);
   return fetch(`http://localhost:3000/api/likes/posts/isliked?${queryParams}`, {
     method: 'GET',
@@ -591,8 +594,8 @@ async function getIsFavorited(posts_id) {
   });
 }
 
-async function likePost(posts_id, users_id){
-  const data = { posts_id, users_id };
+async function likePost(posts_id){
+  const data = { posts_id };
 
   return fetch('http://localhost:3000/api/likes/posts', {
     method: 'POST',
