@@ -3,22 +3,15 @@ import { importLocalFile } from '../multer/index.js';
 import { animationClick } from '../utils/animation.js';
 import { renewDate } from '../utils/dateFormat.js';
 import displayModal from '../utils/modal.js';
+import header from './elements/header.js';
+import footer from './elements/footer.js';
+import menuToggle from './elements/menuToggle.js';
 
 // Exporta a função que retorna a página de login
 export default function profile() {
   // HTML do elemento de login
   const profileContentHTML = `
-    
 
-    <header class="header">
-      <div class="logo">
-        <img src="./assets/images/croissant-logo.svg" alt="Logo Chef's Corner" />
-        <span>Chef's Corner</span>
-      </div>
-      <div class="buttons">
-        <a class="button button-fill">Sign Up</a>
-      </div>
-    </header>
     <main class=""> 
 
       <div id="profile-container">
@@ -90,14 +83,18 @@ export default function profile() {
       </div>
 
     </main>
-    <footer class="footer">
-      <p>© 2024 Chef's Corner. All rights reserved.</p>
-    </footer>
+
   `;
 
   const profileElement = document.createElement('div');
   profileElement.classList.add('profile-element');
   profileElement.innerHTML = profileContentHTML;
+
+  //Adiciona os elementos footer e header
+  const main = profileElement.querySelector("main") 
+  profileElement.insertBefore(header(), main)
+  profileElement.append(footer())
+  profileElement.append(menuToggle())
 
   const profileContent = profileElement.querySelector('#profile-content');
   const profilePhoto = profileElement.querySelector('#profile-photo');

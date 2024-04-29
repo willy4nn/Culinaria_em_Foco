@@ -4,21 +4,15 @@
 import { dateFormat } from '../utils/dateFormat.js';
 import createCustomEvent from '../eventModule.js';
 import setNavigation from '../setNavigation.js';
+import header from './elements/header.js';
+import footer from './elements/footer.js';
+import menuToggle from './elements/menuToggle.js';
 
 // Exporta a função principal que retorna a página principal
 export default function dashboard() {
   // HTML do elemento principal
   const dashboardContentHTML = `
-    <header class="header">
-      <div class="logo">
-        <img src="./assets/images/croissant-logo.svg" alt="Logo Chef's Corner">
-        <span class="paragraph-medium">Chef's Corner</span>
-      </div>
-      <div class="buttons">
-        <a class="paragraph-medium">Contact Us</a>
-        <a class="button button-fill logout">Logout</a>
-      </div>
-    </header>
+
     <main>
       
       <div id="container-dashboard">
@@ -55,14 +49,18 @@ export default function dashboard() {
       </div>
 
     </main>
-    <footer class="footer">
-      <p class="paragraph-medium">© 2024 Culinária em Foco. Todos os direitos Reservados.</p>
-    </footer>
+
   `;
 
   // Cria o elemento principal
   const dashboardElement = document.createElement('div');
   dashboardElement.innerHTML = dashboardContentHTML;
+
+  //Adiciona os elementos footer e header
+  const main = dashboardElement.querySelector("main") 
+  dashboardElement.insertBefore(header(), main)
+  dashboardElement.append(footer())
+  dashboardElement.append(menuToggle())  
 
   const containerDashbaord = dashboardElement.querySelector('#container-dashboard');
   const contentTable = dashboardElement.querySelector('#content-table');

@@ -2,6 +2,7 @@
 
 import createCustomEvent from '../eventModule.js';
 import setNavigation from '../setNavigation.js';
+import footer from './elements/footer.js';
 
 // Exporta a função 'login' para que possa ser utilizada por outras partes do código
 export default function login() {
@@ -9,11 +10,11 @@ export default function login() {
   const loginContentHTML = `
 <header class="header header-login">
   <div class="logo">
-    <img src="./assets/images/croissant-logo.svg" alt="Logo Chef's Corner" />
-    <span class="paragraph-medium">Chef's Corner</span>
+    <img class= "logo-image" src="./assets/images/croissant-logo.svg" alt="Logo Chef's Corner" />
+    <span class="paragraph-medium">Culinária em Foco</span>
   </div>
   <div class="buttons">
-    <a class="button button-fill signup-button">Sign Up</a>
+    <a class="button button-fill signup-button">Registrar</a>
   </div>
 </header>
 <main class="main main-login">
@@ -33,12 +34,9 @@ export default function login() {
     </form>
   </div>
   <p class="signup-link paragraph-medium">
-    <a>Don’t have a account? Sign up</a>
+    <a>Não possui uma Conta? Cadastre-se</a>
   </p>
 </main>
-<footer class="footer footer-login">
-  <p class="paragraph-medium">© 2024 Chef's Corner. All rights reserved.</p>
-</footer>
   `;
 
   // Esta linha cria um novo elemento HTML do tipo 'div'
@@ -49,6 +47,11 @@ export default function login() {
 
   // Esta linha define o innerHTML do elemento div para o loginContentHTML (que contém o layout da página de login)
   loginElement.innerHTML = loginContentHTML;
+
+  //Adiciona o elemento footer
+  const main = loginElement.querySelector("main") 
+
+  loginElement.append(footer())
 
   // Esta linha seleciona o elemento com o id 'email' do loginElement (que é o campo de entrada de email)
   const emailInput = loginElement.querySelector('#email');

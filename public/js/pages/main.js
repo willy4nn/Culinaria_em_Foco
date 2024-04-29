@@ -9,7 +9,7 @@ export default function main() {
   const mainContentHTML = `
     <header class="header header-main">
   <div class="logo">
-    <img src="./assets/images/croissant-logo.svg" alt="Logo Chef's Corner">
+    <img class= "logo-image" src="./assets/images/croissant-logo.svg" alt="Logo Chef's Corner">
     <span class="paragraph-medium">Chef's Corner</span>
   </div>
   <div class="buttons">

@@ -1,3 +1,5 @@
+import setNavigation from "../../setNavigation.js";
+
 export default function header() {
   const header = document.createElement('header');
   header.classList.add('header');
@@ -6,6 +8,7 @@ export default function header() {
   divLogo.classList.add('logo');
   
   const divLogoImg = document.createElement('img');
+  divLogoImg.classList.add('logo-image')
   divLogoImg.src= "./assets/images/croissant-logo.svg";
   divLogoImg.alt= "Logo Culinária em Foco";
   divLogo.appendChild(divLogoImg);
@@ -15,50 +18,17 @@ export default function header() {
   divLogoSpan.textContent = 'Culinária em Foco';
   divLogo.appendChild(divLogoSpan);
 
-  const divButtons = document.createElement('div');
-  divButtons.classList.add('buttons');
+  setNavigation(divLogoImg, "/home")
 
-  const buttonContact = document.createElement('a');
-  buttonContact.classList.add('paragraph-medium');
-  buttonContact.textContent = 'Contato';
+  // const divButtons = document.createElement('div');
+  // divButtons.classList.add('buttons');
 
-  const buttonLogout = document.createElement('a');
-  buttonLogout.classList.add("button");
-  buttonLogout.classList.add("button-fill");
-  buttonLogout.classList.add("logout");
-  buttonLogout.textContent = 'Logout';
-
-  if(document.location.pathname === "/home"){
-    divButtons.appendChild(buttonLogout);
-  }
-
-  console.log(document.location.href)
-
-  // Adiciona um ouvinte de eventos para o botão de logout
-  buttonLogout.addEventListener('click', () => {
-    fetch(`http://localhost:3000/api/login/logout`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Falha no logout');
-        }
-        window.location.assign("/")
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error('Erro:', error);
-      });
-  });
+  // const buttonContact = document.createElement('a');
+  // buttonContact.classList.add('paragraph-medium');
+  // buttonContact.textContent = 'Contato';
 
   header.appendChild(divLogo);
-  header.appendChild(divButtons);
+  //header.appendChild(divButtons);
 
   return header;
 }

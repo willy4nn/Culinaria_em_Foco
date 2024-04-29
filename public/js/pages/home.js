@@ -2,6 +2,7 @@
 import createCustomEvent from '../eventModule.js';
 import footer from './elements/footer.js'
 import header from './elements/header.js'
+import menuToggle from './elements/menuToggle.js';
 
 // Função principal que renderiza a página inicial
 export default function home() {
@@ -26,6 +27,7 @@ export default function home() {
   const main = homeElement.querySelector("main") 
   homeElement.insertBefore(header(), main)
   homeElement.append(footer())
+  homeElement.append(menuToggle())
 
   // Seleciona o contêiner do conteúdo em destaque
   const featuredNewsContent = homeElement.querySelector('.featured-news-content');
