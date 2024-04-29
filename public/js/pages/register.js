@@ -3,6 +3,8 @@
 // Importa a função createCustomEvent do módulo de eventos
 import createCustomEvent from '../eventModule.js';
 import setNavigation from '../setNavigation.js';
+import header from './elements/header.js';
+import footer from './elements/footer.js';
 
 // Exporta a função principal que retorna a página principal
 export default function register() {
@@ -78,9 +80,6 @@ export default function register() {
   </div>
   <a class="signin-link paragraph-medium">Já possui uma conta? Entre!</a>
 </main>
-<footer class="footer footer-register">
-  <p class="paragraph-medium">© 2024 Chef's Corner. All rights reserved.</p>
-</footer>
 
   `;
 
@@ -88,6 +87,10 @@ export default function register() {
   const registerElement = document.createElement('div');
   registerElement.classList.add('register-container');
   registerElement.innerHTML = registerContentHTML;
+
+  //Adiciona os elementos footer e header
+  const main = registerElement.querySelector("main") 
+  registerElement.append(footer())
 
   const signinButton = registerElement.querySelector('.signin-button');
   const signinLink = registerElement.querySelector('.signin-link');

@@ -5,21 +5,15 @@ import { dateFormat } from '../utils/dateFormat.js';
 import createCustomEvent from '../eventModule.js';
 import setNavigation from '../setNavigation.js';
 import displayModal from '../utils/modal.js';
+import header from './elements/header.js';
+import footer from './elements/footer.js';
+import menuToggle from './elements/menuToggle.js';
 
 // Exporta a função principal que retorna a página principal
 export default function admin() {
   // HTML do elemento principal
   const adminContentHTML = `
-    <header class="header">
-      <div class="logo">
-        <img src="./assets/images/croissant-logo.svg" alt="Logo Chef's Corner">
-        <span class="paragraph-medium">Chef's Corner</span>
-      </div>
-      <div class="buttons">
-        <a class="paragraph-medium">Contact Us</a>
-        <a class="button button-fill logout">Logout</a>
-      </div>
-    </header>
+
     <main>
       
       <div id="container-admin">
@@ -55,11 +49,7 @@ export default function admin() {
         </div>
 
       </div>
-
     </main>
-    <footer class="footer">
-        <p class="paragraph-medium">© 2024 Chef's Corner. All rights reserved.</p>
-    </footer>
   `;
 
   // Cria o elemento principal
@@ -68,6 +58,12 @@ export default function admin() {
 
   const containerAdmin = adminElement.querySelector('#container-admin');
   const contentTable = adminElement.querySelector('#content-table');
+
+  //Adiciona os elementos footer e header
+  const main = adminElement.querySelector("main") 
+  adminElement.insertBefore(header(), main)
+  adminElement.append(footer())
+  adminElement.append(menuToggle())
 
   getUsers();
 

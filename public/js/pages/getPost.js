@@ -1,18 +1,13 @@
 import createCustomEvent from '../eventModule.js';
+import header from './elements/header.js';
+import footer from './elements/footer.js';
+import menuToggle from './elements/menuToggle.js';
 
 // Exporta a função que retorna a página de login
 export default function getPost(postId) {
   // HTML do elemento de login
   const getPostContentHTML = `
-    <header class="header">
-      <div class="logo">
-        <img src="/assets/images/croissant-logo.svg" alt="Logo Chef's Corner" />
-        <span>Chef's Corner</span>
-      </div>
-      <div class="buttons">
-        <a class="button button-fill">Sign Up</a>
-      </div>
-    </header>
+
     <main class=""> 
 
       <div id="container">
@@ -56,14 +51,18 @@ export default function getPost(postId) {
       </div>
 
     </main>
-    <footer class="footer">
-      <p>© 2024 Chef's Corner. All rights reserved.</p>
-    </footer>
+
   `;
 
   const getPostElement = document.createElement('div');
   getPostElement.classList.add('create-post-element');
   getPostElement.innerHTML = getPostContentHTML;
+
+  //Adiciona os elementos footer e header
+  const main = getPostElement.querySelector("main") 
+  getPostElement.insertBefore(header(), main)
+  getPostElement.append(footer())
+  getPostElement.append(menuToggle())
 
   const buttonGet = getPostElement.querySelector('#button-get');
   const inputId = getPostElement.querySelector('#input-id');

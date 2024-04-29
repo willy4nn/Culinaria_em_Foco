@@ -1,18 +1,13 @@
 import createCustomEvent from '../eventModule.js';
+import header from './elements/header.js';
+import footer from './elements/footer.js';
+import menuToggle from './elements/menuToggle.js';
 
 // Exporta a função que retorna a página de login
 export default function editor() {
 
   const editorContentHTML = `
-    <header class="header">
-      <div class="logo">
-        <img src="./assets/images/croissant-logo.svg" alt="Logo Chef's Corner" />
-        <span>Chef's Corner</span>
-      </div>
-      <div class="buttons">
-        <a class="button button-fill">Sign Up</a>
-      </div>
-    </header>
+
     <main class=""> 
 
       <h1 class="title">Editor</h1>
@@ -26,16 +21,18 @@ export default function editor() {
       </div>
 
     </main>
-    <footer class="footer">
-      <p>© 2024 Chef's Corner. All rights reserved.</p>
-    </footer>
-
     
   `;
 
   const editorElement = document.createElement('div');
   editorElement.classList.add('create-post-element');
   editorElement.innerHTML = editorContentHTML;
+
+  //Adiciona os elementos footer e header
+  const main = editorElement.querySelector("main") 
+  editorElement.insertBefore(header(), main)
+  editorElement.append(footer())
+  editorElement.append(menuToggle())
   // Crie um elemento script
   const axiosScriptElement = document.createElement('script');
   const quillScriptElement = document.createElement('script');

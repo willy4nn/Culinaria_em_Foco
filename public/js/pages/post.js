@@ -1,19 +1,14 @@
 import createCustomEvent from '../eventModule.js';
 import { importHTMLContentFiles, importLocalFile } from '../multer/index.js';
+import header from './elements/header.js';
+import footer from './elements/footer.js';
+import menuToggle from './elements/menuToggle.js';
 
 // Exporta a função que retorna a página de login
 export default function createPost() {
   const createPostContentHTML = `
-    <header class="header">
-      <div class="logo">
-        <img src="./assets/images/croissant-logo.svg" alt="Logo Chef's Corner" />
-        <span>Chef's Corner</span>
-      </div>
-      <div class="buttons">
-        <a class="button button-fill">Sign Up</a>
-      </div>
-    </header>
-    <!-- ########## MAIN ########## -->
+
+  <!-- ########## MAIN ########## -->
 <main class="main main-create-post"> 
   <!-- Título da página -->
   <h1 class="primary-heading">Create Post</h1>
@@ -121,14 +116,18 @@ export default function createPost() {
     </div>
   </form>
 </main>
-    <footer class="footer">
-      <p>© 2024 Chef's Corner. All rights reserved.</p>
-    </footer>
+
   `;
 
   const createPostElement = document.createElement('div');
   createPostElement.classList.add('create-post-container');
   createPostElement.innerHTML = createPostContentHTML;
+
+  //Adiciona os elementos footer e header
+  const main = createPostElement.querySelector("main") 
+  createPostElement.insertBefore(header(), main)
+  createPostElement.append(footer())
+  createPostElement.append(menuToggle())  
 
   const titleInput = createPostElement.querySelector('#title');
   const categoryInputs = createPostElement.querySelectorAll(
