@@ -1,4 +1,4 @@
-function displayModal(message, callback) {
+function displayModal(content, callback) {
     const modal = document.createElement("div");
     const div = document.createElement('div');
     const buttonsdiv = document.createElement('div');
@@ -10,12 +10,15 @@ function displayModal(message, callback) {
     modal.classList.add("modal");
     div.classList.add("modal-content");
     description.classList.add("modal-description");
-
+    buttonCancel.classList.add("modal-button");
+    buttonConfirm.classList.add("modal-button");
+    
     modal.style.display = 'flex';
 
     buttonCancel.innerText = 'Cancelar';
     buttonConfirm.innerText = 'Confirmar';
-    description.innerText = message;
+    //description.innerText = content;
+    description.appendChild(content);
     
     buttonsdiv.append(buttonCancel, buttonConfirm);
     div.append(description,buttonsdiv);
@@ -24,13 +27,13 @@ function displayModal(message, callback) {
     buttonConfirm.addEventListener("click", () => {
         callback(); 
         modal.style.display = "none";
+        modal.remove();
     })
        
     buttonCancel.addEventListener("click", function (e) {
         modal.style.display = "none";
+        modal.remove();
     });
-
-    console.log("cb", callback);
 
     return modal;
 }

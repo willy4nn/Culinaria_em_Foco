@@ -21,7 +21,14 @@ const multer = require("multer");
 }); */
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './public/uploads/posts_banner')
+    console.log("aqui:", req.body.type);
+    try {
+      if (req.body.type === 'banner') cb(null, './public/uploads/posts_banner');
+      else if (req.body.type === 'photo')cb(null, './public/uploads/profile_photo');
+      else throw Error('Tipo de upload inválido (banner | photo)');
+    } catch (error) {
+      console.error('Erro :', error)
+    }
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
@@ -108,6 +115,9 @@ function uploadFiles(req, res) {
     console.log("upload");
     console.log(req.body);
     console.log(req.file);
+    console.log(req.file.destination);
+    console.log(req.file.filename);
+    console.log(req.file.filename);
     res.json({ message: "Successfully uploaded files", data: { 
       'destination': req.file.destination,
       'filename': req.file.filename 

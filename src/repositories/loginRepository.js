@@ -51,6 +51,17 @@ const loginRepository = {
           
     },
 
+    // Carrega todos os dados do usuário logado
+    getProfile: async (users_id) => {
+      try {
+        const result = await pool.query('SELECT * FROM users WHERE id = $1', [users_id])
+        return result;
+      } catch (error) {
+        throw error;
+      } 
+        
+  },
+
     autenticate: async (email, simplePassword) => {
         try {
           //Primeiro verifica se usuário existe
