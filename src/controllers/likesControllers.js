@@ -6,7 +6,7 @@ const likesController = {
 
     // CREATE / DELETE
     likeUnlikePost: async (req, res) => {
-        const posts_id = req.body;
+        const posts_id = req.body.posts_id;
         const users_id = req.user.id
 
         try {

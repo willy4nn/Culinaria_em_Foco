@@ -1,7 +1,11 @@
+import { getTimeAgo, loaderr, loading } from '../components/animation2.js';
+import { loadComment } from '../components/comment.js';
+import { loadPost } from '../components/post.js';
 import createCustomEvent from '../eventModule.js';
 
+let userLogged;
 // Exporta a função que retorna a página de login
-export default function testePost(postId) {
+export default function refactoringGetPost(postId) {
   const getPostContentHTML = `
   <header class="header">
   <div class="logo">
@@ -90,20 +94,21 @@ export default function testePost(postId) {
 
   const { buttonGet, inputId, newsContainer, newsBody, newsInteractionButtons, likesQuantity, buttonLike, buttonFavorite, likeIcon, favoriteIcon, commentEditor, commentTextarea, buttonsContainer, buttonCancel, buttonComment, commentsList } = elementsMapped;
 
-  let userLogged;
+  
+//TODO, pegar os isliked e o isfavorited já na query
 
-  async function loadData() {
-    try {
-      userLogged = await getLogin();
-      const [userData, post] = await Promise.all([userLogged, getPostById(postId)]);
-      const [isliked, isfavorited] = await Promise.all([getIsLiked(postId), getIsFavorited(postId)]);
-      return { userData, post, isliked, isfavorited };
-    } catch (error) {
-      console.error('Erro ao carregar dados página:', error);
-    }
-  }
+  loadUser();
+  loadPost(postId).then(renderPost);
+  loadComment(postId)
+  .then((data) => {
+    data.forEach(comment => commentsList.appendChild(comment)); 
+  });
 
-  async function renderPost({ userData, post, isliked, isfavorited }) {
+  function loadUser() {
+    getLogin().then(userData => { userLogged = userData })
+  };
+
+  async function renderPost({ post, isliked, isfavorited }) {
     const title = document.createElement('h1');
     const content = document.createElement('div');
     title.innerText = post.title;
@@ -138,15 +143,6 @@ export default function testePost(postId) {
     });
   }
 
-  async function renderComments() {
-    try {
-      loading(commentsList);
-      const comments = await getCommentsByPostId(postId);
-      renderCommentsByPostId(comments);
-    } catch (error) {
-      console.error('Erro ao buscar comentários:', error);
-    }
-  }
 
   function renderLikeAndFavorite(post, isliked, isfavorited) {
     if (isliked[0]) likeIcon.classList.add('liked');
@@ -157,20 +153,6 @@ export default function testePost(postId) {
     }
   }
 
-  function renderCommentsByPostId(comments) {
-    commentsList.innerHTML = "";
-    comments.forEach(renderComment);
-  }
-
-  async function renderComment(comment) {
-    const commentElement = document.createElement('div');
-    commentElement.classList.add('comment');
-    // Renderizar o restante do comentário e sua lógica de interação aqui...
-    commentsList.appendChild(commentElement);
-  }
-
-  // Iniciar carregamento de dados ao carregar a página
-  loadData().then(renderPost).then(renderComments);
 
   // Event listener para buscar post por ID
   buttonGet.addEventListener('click', async () => {
@@ -212,7 +194,13 @@ export default function testePost(postId) {
   });
 
   return getPostElement;
+  
 }
+
+export { userLogged };
+
+
+
 
 /* POSTS */
 
@@ -230,62 +218,6 @@ async function getPostById(id) {
   .then((data) => {
       console.log("get post :", data);
       return data.data[0];
-  })
-  .catch((error) => {
-      //displayError(error.error);
-      console.error('Erro:', error.error);
-  });
-}
-
-async function getIsLiked(posts_id) {
-  
-  const queryParams = new URLSearchParams({ posts_id }).toString();
-  console.log("query", queryParams);
-  return fetch(`http://localhost:3000/api/likes/posts/isliked?${queryParams}`, {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json',
-    }
-  })
-  .then((response) => {
-      if (response.status !== 200) {
-          return response.json().then(errorResponse => {
-              throw errorResponse;
-          });
-      }
-      return response.json();
-  })
-  .then((data) => {
-      console.log("get isliked :", data);
-      return data.data;
-  })
-  .catch((error) => {
-      //displayError(error.error);
-      console.error('Erro:', error.error);
-  });
-}
-
-async function getIsFavorited(posts_id) {
-  
-  const queryParams = new URLSearchParams({ posts_id }).toString();
-  console.log("query fav", queryParams);
-  return fetch(`http://localhost:3000/api/favorite/search?${queryParams}`, {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json',
-    }
-  })
-  .then((response) => {
-      if (response.status !== 200) {
-          return response.json().then(errorResponse => {
-              throw errorResponse;
-          });
-      }
-      return response.json();
-  })
-  .then((data) => {
-      console.log("get isfavorited :", data);
-      return data.data;
   })
   .catch((error) => {
       //displayError(error.error);
@@ -351,26 +283,6 @@ async function favoritePost(posts_id){
 
 /* COMMENTS */
 
-async function getCommentsByPostId(id) {
-  return fetch('http://localhost:3000/api/comments/search?posts_id=' + id)
-  .then((response) => {
-      if (response.status !== 200) {
-          return response.json().then(errorResponse => {
-              throw errorResponse;
-          });
-      }
-      return response.json();
-  })
-  .then((data) => {
-      console.log("get comments :", data);
-      return data.data;
-  })
-  .catch((error) => {
-      //displayError(error.error);
-      console.error('Erro:', error.error);
-  });
-}
-
 async function createComment(data) {
   return fetch('http://localhost:3000/api/comments/', {
     method: 'POST',
@@ -397,137 +309,7 @@ async function createComment(data) {
   });
 }
 
-async function likeComment(posts_comments_id){
-  const data = { posts_comments_id };
-
-  return fetch('http://localhost:3000/api/likes/comments', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  })
-  .then((response) => {
-      if (response.status !== 200) {
-          return response.json().then(errorResponse => {
-              throw errorResponse;
-          });
-      }
-      return response.json();
-  })
-  .then((data) => {
-    console.log("like comment :", data);
-      return data.data[0].like_unlike_comments;
-  })
-  .catch((error) => {
-      //displayError(error.error);
-      console.error('Erro:', error.error);
-  });
-}
-
-async function getCommentsIsLiked(comments_id) {
-  
-  const queryParams = new URLSearchParams({ comments_id }).toString();
-  console.log("query", queryParams);
-  return fetch(`http://localhost:3000/api/likes/comments/isliked?${queryParams}`, {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json',
-    }
-  })
-  .then((response) => {
-      if (response.status !== 200) {
-          return response.json().then(errorResponse => {
-              throw errorResponse;
-          });
-      }
-      return response.json();
-  })
-  .then((data) => {
-      console.log("get comments isliked :", data);
-      return data.data[0];
-  })
-  .catch((error) => {
-      //displayError(error.error);
-      console.error('Erro:', error.error);
-  });
-}
-
 /* REPLIES */
-
-async function getRepliesByCommentId(id) {
-  return fetch('http://localhost:3000/api/replies/search?comments_id=' + id)
-  .then((response) => {
-      if (response.status !== 200) {
-          return response.json().then(errorResponse => {
-              throw errorResponse;
-          });
-      }
-      return response.json();
-  })
-  .then((data) => {
-      console.log("get replies :", data);
-      return data.data;
-  })
-  .catch((error) => {
-      //displayError(error.error);
-      console.error('Erro:', error.error);
-  });
-}
-
-async function getRepliesIsLiked(replies_id) {
-  
-  const queryParams = new URLSearchParams({ replies_id }).toString();
-  console.log("query", queryParams);
-  return fetch(`http://localhost:3000/api/likes/replies/isliked?${queryParams}`, {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json',
-    }
-  })
-  .then((response) => {
-      if (response.status !== 200) {
-          return response.json().then(errorResponse => {
-              throw errorResponse;
-          });
-      }
-      return response.json();
-  })
-  .then((data) => {
-      console.log("get replies isliked :", data);
-      return data.data[0];
-  })
-  .catch((error) => {
-      //displayError(error.error);
-      console.error('Erro:', error.error);
-  });
-}
-
-async function createReply(data) {
-  return fetch('http://localhost:3000/api/replies/', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  })
-  .then((response) => {
-      if (response.status !== 200) {
-          return response.json().then(errorResponse => {
-              throw errorResponse;
-          });
-      }
-      return response.json();
-  })
-  .then((data) => {
-    console.log("create reply:", data);
-      return data;
-  })
-  .catch((error) => {
-      //displayError(error.error);
-      console.error('Erro:', error.error);
-  });
-}
 
 /* OTHERS */
 
@@ -551,32 +333,3 @@ async function getLogin() {
   });
 }
 
-function getTimeAgo(postDate) {
-  const currentDate = new Date();
-  const postDateObj = new Date(postDate);
-
-  const timeDifference = currentDate.getTime() - postDateObj.getTime();
-  const seconds = Math.floor(timeDifference / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  const days = Math.floor(hours / 24);
-
-  if (days > 0) return days + (days === 1 ? ' day ago' : ' days ago');
-  else if (hours > 0) return hours + (hours === 1 ? ' hour ago' : ' hours ago');
-  else if (minutes > 0) return minutes + (minutes === 1 ? ' minute ago' : ' minutes ago');
-  else return 'Just now';
-}
-
-function loading(div) {
-  const loading = document.createElement('img');
-  loading.src = '/assets/images/loading-icon.gif';
-  loading.classList.add('loading-icon'); 
-
-  div.appendChild(loading);
-}
-
-function loaderr() {
-  const loader = document.createElement('div');
-  loader.classList.add('loader');
-  return loader;
-}

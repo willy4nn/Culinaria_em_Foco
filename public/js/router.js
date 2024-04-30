@@ -11,6 +11,7 @@ import dashboard from './pages/dashboard.js';
 import favorite from './pages/favorite.js';
 import admin from './pages/admin.js';
 
+
 const router = {
   '/': function () {
     return main();
