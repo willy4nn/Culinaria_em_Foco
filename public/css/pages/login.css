@@ -41,3 +41,8 @@
 .main-login .signup-link:hover {
   color: var(--c9);
 }
+
+.interact-span:hover {
+  cursor: pointer;
+  font-weight: 700;
+}

@@ -14,6 +14,16 @@
   font-family: 'Lobster', sans-serif;
   font-weight: 400;
   font-style: normal;
+  font-size: 3rem;
+  line-height: 5rem;
+  color: var(--c10);
+  padding-left: 30px;
+}
+
+.tertiary-heading {
+  font-family: 'Lobster', sans-serif;
+  font-weight: 400;
+  font-style: normal;
   font-size: 2rem;
   line-height: 3rem;
   color: var(--c10);

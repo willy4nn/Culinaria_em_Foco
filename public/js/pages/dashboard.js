@@ -18,7 +18,7 @@ export default function dashboard() {
       <div id="container-dashboard">
 
         <div id="container-header">
-            <h1>Dashboard</h1>
+            <h1 class="secondary-heading">Dashboard</h1>
         </div>
 
         <div id="dashboard-content">

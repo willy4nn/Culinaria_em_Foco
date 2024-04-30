@@ -78,7 +78,7 @@ export default function register() {
       <button class="button button-fill" id="buttonSignUp">Registrar</button>
     </form>
   </div>
-  <a class="signin-link paragraph-medium">Já possui uma conta? Entre!</a>
+  <a class="signin-link paragraph-medium interact-span">Já possui uma conta? Entre!</a>
 </main>
 
   `;

@@ -19,7 +19,7 @@ export default function admin() {
       <div id="container-admin">
 
         <div id="container-header">
-            <h1>Administrator</h1>
+            <h1 class="secondary-heading">Administrator</h1>
         </div>
 
         <div id="admin-content">
@@ -86,9 +86,12 @@ export default function admin() {
           const tdEdit = document.createElement('td');
           const tdDelete = document.createElement('td');
 
-          const buttonEdit = document.createElement('button');
-          const buttonConfirm = document.createElement('button');
-          const buttonDelete = document.createElement('button');
+          //const buttonEdit = document.createElement('button');
+          //const buttonConfirm = document.createElement('button');
+          //const buttonDelete = document.createElement('button');
+          const buttonEdit = document.createElement('span');
+          const buttonConfirm = document.createElement('span');
+          const buttonDelete = document.createElement('span');
 
           id.innerText = item.id;
           name.innerText = item.name;
@@ -99,12 +102,18 @@ export default function admin() {
           premiumDate.innerText = dateFormat(item.premium_date);
           profilePhotoImg.src = item.profile_photo || '/assets/images/default_profile_normal.png';
           createdAt.innerText = dateFormat(item.created_at);
-          buttonEdit.innerText = 'Edit';
-          buttonConfirm.innerText = 'Confirm';
-          buttonDelete.innerText = 'Delete';
+          //buttonEdit.innerText = 'Edit';
+          //buttonConfirm.innerText = 'Confirm';
+          //buttonDelete.innerText = 'Delete';
+          buttonEdit.innerText = 'edit_square';
+          buttonConfirm.innerText = 'check_circle';
+          buttonDelete.innerText = 'delete_forever';
 
           profilePhotoImg.classList.add('admin-profile-image');
           buttonConfirm.style.display = 'none';
+          buttonEdit.classList.add('material-symbols-outlined');
+          buttonConfirm.classList.add('material-symbols-outlined');
+          buttonDelete.classList.add('material-symbols-outlined');
 
           profilePhoto.appendChild(profilePhotoImg);
           tdEdit.append(buttonEdit, buttonConfirm);
@@ -116,7 +125,29 @@ export default function admin() {
             
           contentTable.appendChild(tableRow);
 
+          let editOpened = false;
           buttonEdit.addEventListener('click', () => {
+
+            // Se já tiver aberto, fecha a edição
+            if (editOpened) {
+              [name, username, email, userType, premiumActive, premiumDate].forEach((element) => {
+                element.classList.remove('editing');
+              });
+              [name, username, email, userType, premiumActive, premiumDate].forEach((element) => {
+                const lastChild = element.lastChild;
+                if (lastChild) {
+                    element.removeChild(lastChild);
+                }
+              });
+              editOpened = false;
+              buttonEdit.innerText = 'edit_square';
+              buttonConfirm.style.display = 'none';
+              return;
+            }
+
+            // Se não tiver aberto, abre e inicia a edição
+            editOpened = true;
+            buttonEdit.innerText = 'cancel';
             buttonConfirm.style.display = 'block';
 
             [name, username, email, userType, premiumActive, premiumDate].forEach((element) => {

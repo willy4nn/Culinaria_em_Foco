@@ -4,6 +4,7 @@ import router from './router.js';
 function renderPage(page) {
   const rootDiv = document.getElementById('root');
   rootDiv.innerHTML = ''; // Limpa qualquer conteúdo anterior
+  page.classList.add('append-div');
   rootDiv.appendChild(page); // Adiciona a página renderizada na div "root"
 }
 

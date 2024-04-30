@@ -10,4 +10,5 @@
   font-family: var(--font-body);
   font-weight: 500;
   line-height: 1rem;
+  flex-shrink: 0;
 }

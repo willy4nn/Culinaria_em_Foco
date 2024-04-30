@@ -34,7 +34,7 @@ export default function login() {
     </form>
   </div>
   <p class="signup-link paragraph-medium">
-    <a>Não possui uma Conta? Cadastre-se</a>
+    <a id="signup-span" class="interact-span">Não possui uma Conta? Cadastre-se</a>
   </p>
 </main>
   `;
@@ -61,6 +61,7 @@ export default function login() {
 
   // Esta linha seleciona o elemento com o id 'buttonSignIn' do loginElement (que é o botão de login)
   const buttonSignIn = loginElement.querySelector('#buttonSignIn');
+  const signUpSpan = loginElement.querySelector('#signup-span');
 
   // Esta função adiciona um ouvinte de evento ao elemento buttonSignIn. Quando o botão é clicado, o código dentro da função será executado
   buttonSignIn.addEventListener('click', (event) => {
@@ -96,6 +97,10 @@ export default function login() {
         // Esta linha captura qualquer erro que ocorra durante o processo de login
         console.error('Erro:', error);
       });
+  });
+
+  signUpSpan.addEventListener('click', () => {
+    window.dispatchEvent(createCustomEvent('/register'));
   });
 
   const signupButton = loginElement.querySelector('.signup-button');
