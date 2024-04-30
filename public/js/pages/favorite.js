@@ -41,7 +41,7 @@ export default function favorite() {
   const favoriteContent = favoriteElement.querySelector('#favorite-content');
 
   
-  fetch(`http://localhost:3000/api/favorite/`, {
+  fetch(`/api/favorite/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -103,7 +103,7 @@ export default function favorite() {
 
   const logoutButton = favoriteElement.querySelector('.logout');
   logoutButton.addEventListener('click', () => {
-    fetch(`http://localhost:3000/api/login/logout`, {
+    fetch(`/api/login/logout`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

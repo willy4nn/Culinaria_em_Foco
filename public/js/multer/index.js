@@ -11,7 +11,7 @@ console.log("newHtmlString::", newHtmlString);
 console.log("imageUrls::", imageUrls);
 console.log("imageUris::", imageUris);
 
-axios.post('http://localhost:3000/upload', { imageUrls, imageUris })
+axios.post('/upload', { imageUrls, imageUris })
   .then(response => {
     console.log("res", response);
   })
@@ -32,7 +32,7 @@ async function importLocalFile(file, type) {
   formData.append('files', file);
 
 
-  return fetch("http://localhost:3000/upload_files", {
+  return fetch("/upload_files", {
       method: 'POST',
       body: formData,
       headers: {
@@ -64,7 +64,7 @@ function importFileURL(url) {
   console.log("imageUrls::", imageUrls);
   console.log("imageUris::", imageUris);
   
-  axios.post('http://localhost:3000/upload', { imageUrls, imageUris })
+  axios.post('/upload', { imageUrls, imageUris })
     .then(response => {
       console.log("res", response);
     })
@@ -88,7 +88,7 @@ function importHTMLContentFilesWithFetch(htmlContent) {
   
   const data =  { imageUrls, imageUris };
 
-  fetch(`http://localhost:3000/upload`, {
+  fetch(`/upload`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

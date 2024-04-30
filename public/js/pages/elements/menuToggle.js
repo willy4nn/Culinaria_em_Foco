@@ -54,7 +54,7 @@ export default function menuToggle() {
   buttonLogout.addEventListener('click', (event) => {
     event.preventDefault();
 
-    fetch(`http://localhost:3000/api/login/logout`, {
+    fetch(`/api/login/logout`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

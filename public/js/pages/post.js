@@ -271,7 +271,7 @@ export default function createPost() {
     const data = { title, category, content, banner, image, posted_draft };
     console.log(data);
 
-    fetch(`http://localhost:3000/api/posts/`, {
+    fetch(`/api/posts/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -297,7 +297,7 @@ export default function createPost() {
 }
 
 async function getLogin() {
-  return fetch('http://localhost:3000/api/login/user')
+  return fetch('/api/login/user')
   .then((response) => {
       if (response.status !== 200) {
           return response.json().then(errorResponse => {

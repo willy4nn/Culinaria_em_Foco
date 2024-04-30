@@ -187,7 +187,7 @@ export { renderRepliesByCommentId, handleShowReplies };
 /* REPLIES */
 
 async function getRepliesByCommentId(id) {
-    return fetch('http://localhost:3000/api/replies/search?comments_id=' + id)
+    return fetch('/api/replies/search?comments_id=' + id)
     .then((response) => {
         if (response.status !== 200) {
             return response.json().then(errorResponse => {
@@ -210,7 +210,7 @@ async function getRepliesIsLiked(replies_id) {
 
 const queryParams = new URLSearchParams({ replies_id }).toString();
 console.log("query", queryParams);
-return fetch(`http://localhost:3000/api/likes/replies/isliked?${queryParams}`, {
+return fetch(`/api/likes/replies/isliked?${queryParams}`, {
     method: 'GET',
     headers: {
         'Content-Type': 'application/json',
@@ -235,7 +235,7 @@ return fetch(`http://localhost:3000/api/likes/replies/isliked?${queryParams}`, {
 }
 
 async function createReply(data) {
-return fetch('http://localhost:3000/api/replies/', {
+return fetch('/api/replies/', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',

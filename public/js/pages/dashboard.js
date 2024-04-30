@@ -66,7 +66,7 @@ export default function dashboard() {
   const contentTable = dashboardElement.querySelector('#content-table');
 
   
-  fetch(`http://localhost:3000/api/posts/`, {
+  fetch(`/api/posts/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -151,7 +151,7 @@ export default function dashboard() {
 
   const logoutButton = dashboardElement.querySelector('.logout');
   logoutButton.addEventListener('click', () => {
-    fetch(`http://localhost:3000/api/login/logout`, {
+    fetch(`/api/login/logout`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

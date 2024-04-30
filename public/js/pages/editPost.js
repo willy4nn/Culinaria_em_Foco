@@ -189,7 +189,7 @@ export default function editPost(postId) {
     const data = { title, category, content, banner, image, posted_draft };
     console.log(data);
 
-    fetch(`http://localhost:3000/api/posts/` + postId, {
+    fetch(`/api/posts/` + postId, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -242,7 +242,7 @@ export default function editPost(postId) {
 
 async function getPostById(id) {
   console.log("aqui o id", id);
-  return fetch('http://localhost:3000/api/posts/' + id)
+  return fetch('/api/posts/' + id)
   .then((response) => {
       if (response.status !== 200) {
           return response.json().then(errorResponse => {

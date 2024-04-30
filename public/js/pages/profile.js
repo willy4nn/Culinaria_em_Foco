@@ -269,7 +269,7 @@ export default function profile() {
 
 
 async function getUserData() {
-  return fetch('http://localhost:3000/api/login/profile/')
+  return fetch('/api/login/profile/')
   .then((response) => {
       if (response.status !== 200) {
           return response.json().then(errorResponse => {
@@ -290,7 +290,7 @@ async function getUserData() {
 
 async function updateUser(username, data) {
   console.log("updateUser: ", username, data);
-  return fetch('http://localhost:3000/api/login/user/' + username, {
+  return fetch('/api/login/user/' + username, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
