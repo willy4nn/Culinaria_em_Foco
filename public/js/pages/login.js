@@ -3,6 +3,7 @@
 import createCustomEvent from '../eventModule.js';
 import setNavigation from '../setNavigation.js';
 import footer from './elements/footer.js';
+import { modalError } from './elements/modalError.js';
 
 // Exporta a função 'login' para que possa ser utilizada por outras partes do código
 export default function login() {
@@ -29,7 +30,7 @@ export default function login() {
           <input class="input paragraph-normal" id="password" type="password" name="password" placeholder="Password"/>
         </div>
       </div>
-      <a class="paragraph-normal">Forgot you password?</a>
+      <!-- <a class="paragraph-normal">Forgot you password?</a> -->
       <button class="button button-fill" id="buttonSignIn">Sign In</button>
     </form>
   </div>
@@ -38,6 +39,8 @@ export default function login() {
   </p>
 </main>
   `;
+
+  
 
   // Esta linha cria um novo elemento HTML do tipo 'div'
   const loginElement = document.createElement('div');
@@ -50,6 +53,10 @@ export default function login() {
 
   //Adiciona o elemento footer
   const main = loginElement.querySelector("main") 
+
+  //Modal de erro
+  const { popupCard, showPopup } = modalError();
+  main.insertAdjacentElement("afterend", popupCard);
 
   loginElement.append(footer())
 
@@ -67,7 +74,6 @@ export default function login() {
   buttonSignIn.addEventListener('click', (event) => {
     // Esta linha evita o comportamento padrão do botão, que é enviar o formulário
     event.preventDefault();
-
     // Esta linha define duas variáveis com nome de usuário e senha (altere-as para suas credenciais reais)
     const email = emailInput.value.toString();
     const password = passwordInput.value.toString();
@@ -94,6 +100,7 @@ export default function login() {
         console.log(data);
       })
       .catch((error) => {
+        showPopup(error);
         // Esta linha captura qualquer erro que ocorra durante o processo de login
         console.error('Erro:', error);
       });

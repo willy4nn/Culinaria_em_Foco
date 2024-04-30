@@ -219,13 +219,19 @@ export default function editPost(postId) {
       return oldBannerURI
     }
   }
-
+  // Se clicar e não selecionar nenhum arquivo, o anterior é perdido.
+  bannerInput.addEventListener('click', () => { 
+    console.log("entrou aqui;");
+    bannerPreview.src = '/assets/images/default_image_banner.png';
+  
+  });
   bannerInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
 
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       bannerPreview.src = imageUrl;
+      console.log("passou aqui");
     }
   });
 

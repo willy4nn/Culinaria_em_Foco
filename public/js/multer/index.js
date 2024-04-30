@@ -24,6 +24,7 @@ axios.post('http://localhost:3000/upload', { imageUrls, imageUris })
 
 async function importLocalFile(file, type) {
 
+  //Return "" usado no editPost caso o usuário não altere o banner
   if (!file) return "";
 
   const formData = new FormData();
