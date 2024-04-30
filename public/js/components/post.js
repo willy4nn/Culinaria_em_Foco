@@ -21,7 +21,7 @@ export { loadPost };
 
 async function getPostById(id) {
     console.log(id);
-    return fetch('http://localhost:3000/api/posts/' + id)
+    return fetch('/api/posts/' + id)
     .then((response) => {
         if (response.status !== 200) {
             return response.json().then(errorResponse => {
@@ -44,7 +44,7 @@ async function getIsLiked(posts_id) {
 
 const queryParams = new URLSearchParams({ posts_id }).toString();
 console.log("query", queryParams);
-return fetch(`http://localhost:3000/api/likes/posts/isliked?${queryParams}`, {
+return fetch(`/api/likes/posts/isliked?${queryParams}`, {
     method: 'GET',
     headers: {
         'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ async function getIsFavorited(posts_id) {
 
 const queryParams = new URLSearchParams({ posts_id }).toString();
 console.log("query fav", queryParams);
-return fetch(`http://localhost:3000/api/favorite/search?${queryParams}`, {
+return fetch(`/api/favorite/search?${queryParams}`, {
     method: 'GET',
     headers: {
         'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ return fetch(`http://localhost:3000/api/favorite/search?${queryParams}`, {
 async function likePost(posts_id){
 const data = { posts_id };
 
-return fetch('http://localhost:3000/api/likes/posts', {
+return fetch('/api/likes/posts', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -127,7 +127,7 @@ return fetch('http://localhost:3000/api/likes/posts', {
 async function favoritePost(posts_id){
 const data = { posts_id };
 
-return fetch('http://localhost:3000/api/favorite', {
+return fetch('/api/favorite', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',

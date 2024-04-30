@@ -73,7 +73,7 @@ export default function login() {
     const password = passwordInput.value.toString();
 
     // Esta linha envia uma requisição POST para o servidor com o nome de usuário e senha no corpo da requisição
-    fetch(`http://localhost:3000/api/login/auth`, {
+    fetch(`/api/login/auth`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -33,7 +33,7 @@ export default function home() {
   const featuredNewsContent = homeElement.querySelector('.featured-news-content');
 
   // Busca os posts em destaque da API
-  fetch('http://localhost:3000/api/posts/like?limit=3')
+  fetch('/api/posts/like?limit=3')
     .then(response => {
       if (!response.ok) {
         throw new Error('Erro na requisição: ' + response.statusText);

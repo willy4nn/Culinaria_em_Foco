@@ -123,7 +123,7 @@ export { loadComment };
   /* COMMENTS */
 
 async function getCommentsByPostId(id) {
-    return fetch('http://localhost:3000/api/comments/search?posts_id=' + id)
+    return fetch('/api/comments/search?posts_id=' + id)
     .then((response) => {
         if (response.status !== 200) {
             return response.json().then(errorResponse => {
@@ -143,7 +143,7 @@ async function getCommentsByPostId(id) {
 }
 
 async function createComment(data) {
-return fetch('http://localhost:3000/api/comments/', {
+return fetch('/api/comments/', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -171,7 +171,7 @@ return fetch('http://localhost:3000/api/comments/', {
 async function likeComment(posts_comments_id){
 const data = { posts_comments_id };
 
-return fetch('http://localhost:3000/api/likes/comments', {
+return fetch('/api/likes/comments', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -200,7 +200,7 @@ async function getCommentsIsLiked(comments_id) {
 
 const queryParams = new URLSearchParams({ comments_id }).toString();
 console.log("query", queryParams);
-return fetch(`http://localhost:3000/api/likes/comments/isliked?${queryParams}`, {
+return fetch(`/api/likes/comments/isliked?${queryParams}`, {
     method: 'GET',
     headers: {
         'Content-Type': 'application/json',

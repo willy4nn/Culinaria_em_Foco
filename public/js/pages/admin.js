@@ -218,7 +218,7 @@ export default function admin() {
   }
 
   function getUsers() {
-    fetch(`http://localhost:3000/api/login/all`, {
+    fetch(`/api/login/all`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -241,7 +241,7 @@ export default function admin() {
 
   const logoutButton = adminElement.querySelector('.logout');
   logoutButton.addEventListener('click', () => {
-    fetch(`http://localhost:3000/api/login/logout`, {
+    fetch(`/api/login/logout`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -274,7 +274,7 @@ export default function admin() {
 
 
 async function updateUser(username, data) {
-  fetch('http://localhost:3000/api/login/user/' + username, {
+  fetch('/api/login/user/' + username, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -302,7 +302,7 @@ async function updateUser(username, data) {
 }
 
 async function deleteUser(id) {
-  return fetch('http://localhost:3000/api/login/user/' + id, {
+  return fetch('/api/login/user/' + id, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

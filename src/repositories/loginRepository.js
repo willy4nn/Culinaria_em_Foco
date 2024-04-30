@@ -104,7 +104,7 @@ const loginRepository = {
       const client = await pool.connect();
     
       const newUser = user;
-      const hashedPassword = await hashPassword(newUser.password);
+      
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       
       // Aqui são feitas as validações, caso o usuário não exista ele procede com o registro
@@ -138,6 +138,11 @@ const loginRepository = {
           const error = { success: false, error: 'A senha precisa ter pelo menos 8 caracteres'};
           return error;
         }
+
+        if (newUser.password !== newUser.password2) {
+          const error = { success: false, error: 'As senhas não coincidem!'};
+          return error;
+        }
     
         const test1 = await client.query('SELECT * FROM users WHERE username = $1', [newUser.username]);
         if (test1.rowCount > 0) {
@@ -150,6 +155,8 @@ const loginRepository = {
           const error = { success: false, error: 'Esse email já possui cadastro!'};
           return error;
         }
+
+        const hashedPassword = await hashPassword(newUser.password);
         
         await client.query('BEGIN');
       

@@ -613,7 +613,7 @@ export default function getPost(postId) {
 
 async function getPostById(id) {
   console.log(id);
-  return fetch('http://localhost:3000/api/posts/' + id)
+  return fetch('/api/posts/' + id)
   .then((response) => {
       if (response.status !== 200) {
           return response.json().then(errorResponse => {
@@ -636,7 +636,7 @@ async function getIsLiked(posts_id) {
   
   const queryParams = new URLSearchParams({ posts_id }).toString();
   console.log("query", queryParams);
-  return fetch(`http://localhost:3000/api/likes/posts/isliked?${queryParams}`, {
+  return fetch(`/api/likes/posts/isliked?${queryParams}`, {
     method: 'GET',
     headers: {
         'Content-Type': 'application/json',
@@ -664,7 +664,7 @@ async function getIsFavorited(posts_id) {
   
   const queryParams = new URLSearchParams({ posts_id }).toString();
   console.log("query fav", queryParams);
-  return fetch(`http://localhost:3000/api/favorite/search?${queryParams}`, {
+  return fetch(`/api/favorite/search?${queryParams}`, {
     method: 'GET',
     headers: {
         'Content-Type': 'application/json',
@@ -691,7 +691,7 @@ async function getIsFavorited(posts_id) {
 async function likePost(posts_id){
   const data = { posts_id };
 
-  return fetch('http://localhost:3000/api/likes/posts', {
+  return fetch('/api/likes/posts', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -719,7 +719,7 @@ async function likePost(posts_id){
 async function favoritePost(posts_id){
   const data = { posts_id };
 
-  return fetch('http://localhost:3000/api/favorite', {
+  return fetch('/api/favorite', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -747,7 +747,7 @@ async function favoritePost(posts_id){
 /* COMMENTS */
 
 async function getCommentsByPostId(id) {
-  return fetch('http://localhost:3000/api/comments/search?posts_id=' + id)
+  return fetch('/api/comments/search?posts_id=' + id)
   .then((response) => {
       if (response.status !== 200) {
           return response.json().then(errorResponse => {
@@ -767,7 +767,7 @@ async function getCommentsByPostId(id) {
 }
 
 async function createComment(data) {
-  return fetch('http://localhost:3000/api/comments/', {
+  return fetch('/api/comments/', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -795,7 +795,7 @@ async function createComment(data) {
 async function likeComment(posts_comments_id){
   const data = { posts_comments_id };
 
-  return fetch('http://localhost:3000/api/likes/comments', {
+  return fetch('/api/likes/comments', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -824,7 +824,7 @@ async function getCommentsIsLiked(comments_id) {
   
   const queryParams = new URLSearchParams({ comments_id }).toString();
   console.log("query", queryParams);
-  return fetch(`http://localhost:3000/api/likes/comments/isliked?${queryParams}`, {
+  return fetch(`/api/likes/comments/isliked?${queryParams}`, {
     method: 'GET',
     headers: {
         'Content-Type': 'application/json',
@@ -851,7 +851,7 @@ async function getCommentsIsLiked(comments_id) {
 /* REPLIES */
 
 async function getRepliesByCommentId(id) {
-  return fetch('http://localhost:3000/api/replies/search?comments_id=' + id)
+  return fetch('/api/replies/search?comments_id=' + id)
   .then((response) => {
       if (response.status !== 200) {
           return response.json().then(errorResponse => {
@@ -874,7 +874,7 @@ async function getRepliesIsLiked(replies_id) {
   
   const queryParams = new URLSearchParams({ replies_id }).toString();
   console.log("query", queryParams);
-  return fetch(`http://localhost:3000/api/likes/replies/isliked?${queryParams}`, {
+  return fetch(`/api/likes/replies/isliked?${queryParams}`, {
     method: 'GET',
     headers: {
         'Content-Type': 'application/json',
@@ -899,7 +899,7 @@ async function getRepliesIsLiked(replies_id) {
 }
 
 async function createReply(data) {
-  return fetch('http://localhost:3000/api/replies/', {
+  return fetch('/api/replies/', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -927,7 +927,7 @@ async function createReply(data) {
 async function likeReply(comments_replies_id){
   const data = { comments_replies_id };
 
-  return fetch('http://localhost:3000/api/likes/replies', {
+  return fetch('/api/likes/replies', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -955,7 +955,7 @@ async function likeReply(comments_replies_id){
 /* OTHERS */
 
 async function getLogin() {
-  return fetch('http://localhost:3000/api/login/user')
+  return fetch('/api/login/user')
   .then((response) => {
       if (response.status !== 200) {
           return response.json().then(errorResponse => {
