@@ -19,7 +19,7 @@
   overflow: hidden;
 }
 
-.main-main > .text-container {
+.main-main>.text-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -29,21 +29,34 @@
   height: 100%;
 }
 
-.main-main > .text-container > div {
+.main-main>.text-container>div {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.main-main > .image-container {
+.main-main>.image-container {
   flex: 1;
   height: 100%;
   overflow: hidden;
   border-radius: 1.5rem;
 }
 
-.main-main .image-container > img {
+.main-main .image-container>img {
   object-fit: cover;
   width: 100%;
   height: 100%;
+}
+
+.append-div {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  font-family: 'Nunito', sans-serif;
+  flex: 1;
 }

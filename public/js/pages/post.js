@@ -17,7 +17,7 @@ export default function createPost() {
   <form class="editor-container">
     <!-- Campo para inserir o título do post -->
     <div class="input-container">
-      <input class="title-input secondary-heading" id="title" type="text" name="title" placeholder="Untitled" />
+      <input class="title-input tertiary-heading" id="title" type="text" name="title" placeholder="Untitled" />
     </div>  
     <!-- Dropdown para selecionar a categoria do post -->
     <div class="select-category">
