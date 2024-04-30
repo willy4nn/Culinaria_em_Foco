@@ -1,38 +1,32 @@
 // Importa os módulos necessários
 import getTimeAgo from "../utils/getTimeAgo.js";
 
-async function getFeaturedNews(limit) {
-  let url = limit ? `http://localhost:3000/api/posts/like?limit=${limit}` : `http://localhost:3000/api/posts/like?limit=1`;
+function getFeaturedNews() {
+  return fetch('http://localhost:3000/api/posts/like?limit=3')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to fetch featured news');
+      }
+      return response.json();
+    })
+    .catch(error => {
+      console.error('Error fetching featured news:', error);
+      return null;
+    });
+}
 
-  try {
-    const response = await fetch(url);
-    
+function getNewsFeed() {
+return fetch('http://localhost:3000/api/posts/all')
+  .then(response => {
     if (!response.ok) {
       throw new Error('Failed to fetch featured news');
     }
-    
-    return await response.json();
-  } catch (error) {
+    return response.json();
+  })
+  .catch(error => {
     console.error('Error fetching featured news:', error);
     return null;
-  }
-}
-
-async function getNewsFeed(category) {
-  let url = category ? `http://localhost:3000/api/posts/category/${category}` : `http://localhost:3000/api/posts/all`;
-  
-  try {
-    const response = await fetch(url);
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch news');
-    }
-    
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching news:', error);
-    return null;
-  }
+  });
 }
 
 function renderFeaturedNewsSection(news) {
@@ -95,6 +89,7 @@ function renderFeaturedNewsSection(news) {
       return;
     }
     banner.src = news[indexPost].banner;
+    console.log(news[0]);
     category.textContent = news[indexPost].category;
     posted.textContent = getTimeAgo(news[indexPost].updated_at);
     title.textContent = news[indexPost].title;
@@ -131,128 +126,26 @@ function renderNewsFeed(news) {
   const newsFeedHTML = `
     <div class="news-feed-container">
       <h1 class="primary-heading">News Feed</h1>
-      <div class="filters">
-        <label class="checkbox">
-          Latest News
-          <input class="filter" type="radio" name="category" value="latest_news">
-        </label>
-        <label class="checkbox">
-          Tips
-          <input class="filter" type="radio" name="category" value="tips">
-        </label>
-        <label class="checkbox">
-          Stories
-          <input class="filter" type="radio" name="category" value="stories">
-        </label>
-        <label class="checkbox">
-          Tendencies
-          <input class="filter" type="radio" name="category" value="tendencies">
-        </label>
-        <label class="checkbox">
-          Interviews
-          <input class="filter" type="radio" name="category" value="interviews">
-        </label>
-      </div>
       <div class="news-feed-content">
 
       </div>
     </div>
   `
 
+  // console.log('📢 NOTÍCIAS DO FEED:', news);
+
   const newsFeed = document.createElement('section');
   newsFeed.innerHTML = newsFeedHTML;
 
   const newsFeedContent = newsFeed.querySelector('.news-feed-content');
 
-  const filters = newsFeed.querySelectorAll('.filter');
-  filters.forEach((filter) => {
-    filter.addEventListener('click', () => {
-      getNewsFeed(filter.value).then(news => {
-        console.log(news);
-        console.log(filter.value);
-        renderNews(filter.value, news);
-      });
-    })
-  })
-
-  const renders = {
-    createCardNews : (post) => {
-      const cardNews = document.createElement('div');
-      const details = document.createElement('div');
-      const category = document.createElement('span');
-      const datePost = document.createElement('span');
-      const title = document.createElement('div');
-
-      category.textContent = post.category;
-      datePost.textContent = post.updated_at;
-      title.textContent = post.title;
-
-      details.appendChild(category);
-      details.appendChild(datePost);
-      cardNews.appendChild(details);
-      cardNews.appendChild(title);
-
-      return cardNews;
-    },
-    default : (news) => {
-      const defaultNewsFeedHTML = `
-        <div>
-        <div class="column column-1"></div>
-        <div class="column column-2"></div>
-        <div class="column column-3"></div>
-        </div>
-      `
-
-      const defaultNewsFeed = document.createElement('div');
-      defaultNewsFeed.innerHTML = defaultNewsFeedHTML;
-
-      const firstColumn = defaultNewsFeed.querySelector('.column-1');
-      const secondColumn = defaultNewsFeed.querySelector('.column-2');
-      const thirdColumn = defaultNewsFeed.querySelector('.column-3');
-
-      news.forEach((post, index) => {
-
-        if (index <= 5) {
-          firstColumn.appendChild(renders.createCardNews(post));
-        } else if (index = 6) {
-          secondColumn.appendChild(renders.createCardNews(post));
-        } else if (index > 6 && index <= 9) {
-          thirdColumn.appendChild(renders.createCardNews(post));
-        }
-      })
-
-      return defaultNewsFeed;
-    },
-    category : (news) => {
-      console.log('Teste:', news);
-      const defaultNewsFeedHTML = `
-        <div>
-
-        </div>
-      `
-
-      const defaultNewsFeed = document.createElement('div');
-      defaultNewsFeed.innerHTML = defaultNewsFeedHTML;
-
-
-      news.forEach((post, index) => {
-        defaultNewsFeed.querySelector('div').appendChild(renders.createCardNews(post));
-      })
-
-      return defaultNewsFeed;
-    }
+  if (!news) {
+    console.log('Não há notícias');
+  } else {
+    news.forEach((post, index) => {
+      console.log(`[📢] [${index}] # POSTAGEM : `, post);
+    });
   }
-
-  function renderNews(filter, news){
-    newsFeedContent.innerHTML = '';
-    if (!filter) {
-      newsFeedContent.appendChild(renders.default(news));
-      return;
-    }
-    newsFeedContent.appendChild(renders.category(news.data));
-
-  }
-  renderNews(null, news);
 
   return newsFeed;
 }
@@ -260,8 +153,7 @@ function renderNewsFeed(news) {
 // Função principal que renderiza a página inicial
 export default function home() {
   // HTML do conteúdo da página inicial
-  function createHomeContentHTML() {
-    const homeContentHTML = `
+  const homeContentHTML = `
     <header class="header header-home">
       <div class="logo">
           <img src="./assets/images/croissant-logo.svg" alt="Logo Chef's Corner">
@@ -279,16 +171,19 @@ export default function home() {
         <p class="paragraph-medium">© 2024 Chef's Corner. All rights reserved.</p>
     </footer>
   `;
-    return homeContentHTML;
-  }
 
   // Cria um elemento div para a página inicial
   const homeElement = document.createElement('div');
   homeElement.classList.add('home-container');
-  homeElement.innerHTML = createHomeContentHTML();
+  homeElement.innerHTML = homeContentHTML;
 
   // Chama a função getFeaturedNews() para obter as notícias em destaque
-  getFeaturedNews(3).then(news => {
+  getFeaturedNews().then(news => {
+    // Verifica se há notícias antes de renderizar
+    if (!news) {
+      renderFeaturedNewsSection();
+      return;
+    }
     // Renderiza a seção de notícias em destaque
     const featuredNewsSection = renderFeaturedNewsSection(news.data);
     // Adiciona a seção de notícias em destaque ao elemento principal da página inicial
@@ -297,6 +192,11 @@ export default function home() {
   });
 
   getNewsFeed().then(news => {
+    // Verifica se há notícias antes de renderizar
+    if (!news) {
+      renderNewsFeed();
+      return;
+    }
     // Renderiza a seção de notícias em destaque
     const newsFeedSection = renderNewsFeed(news.data);
     // Adiciona a seção de notícias em destaque ao elemento principal da página inicial
