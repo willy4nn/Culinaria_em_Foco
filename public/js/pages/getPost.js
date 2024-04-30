@@ -2,6 +2,7 @@ import createCustomEvent from '../eventModule.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
 import menuToggle from './elements/menuToggle.js';
+import { modalError } from './elements/modalError.js';
 
 // Exporta a função que retorna a página de login
 export default function getPost(postId) {
@@ -63,7 +64,10 @@ export default function getPost(postId) {
   getPostElement.insertBefore(header(), main)
   getPostElement.append(footer())
   getPostElement.append(menuToggle())
-
+  const { popupCard, showPopup } = modalError();
+  //main.appendChild(popupCard);
+  main.insertAdjacentElement("afterend", popupCard);
+  
   const buttonGet = getPostElement.querySelector('#button-get');
   const inputId = getPostElement.querySelector('#input-id');
 
@@ -344,6 +348,7 @@ export default function getPost(postId) {
       div.appendChild(newReplies);
       // Mostrar respostas
       showRepliesButton.addEventListener('click', async () => {
+        showPopup();
         if (newReplies.childNodes.length === 0) {
           newReplies.appendChild( await renderRepliesByCommentId(div, comment.id));
           shownReply = true;

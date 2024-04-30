@@ -5,6 +5,7 @@ import createCustomEvent from '../eventModule.js';
 import setNavigation from '../setNavigation.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
+import { modalError } from './elements/modalError.js';
 
 // Exporta a função principal que retorna a página principal
 export default function register() {
@@ -92,6 +93,10 @@ export default function register() {
   const main = registerElement.querySelector("main") 
   registerElement.append(footer())
 
+  //Modal de erro
+  const { popupCard, showPopup } = modalError();
+  main.insertAdjacentElement("afterend", popupCard);
+
   const signinButton = registerElement.querySelector('.signin-button');
   const signinLink = registerElement.querySelector('.signin-link');
   setNavigation(signinLink, '/login');
@@ -140,7 +145,8 @@ export default function register() {
         console.log(data);
       })
       .catch((err) => {
-        alert(err)
+        //alert(err)
+        showPopup(err);
         console.error(err);
       });
   });
