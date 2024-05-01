@@ -3,6 +3,9 @@
 // Importa a função createCustomEvent do módulo de eventos
 import createCustomEvent from '../eventModule.js';
 import setNavigation from '../setNavigation.js';
+import header from './elements/header.js';
+import footer from './elements/footer.js';
+import { modalError } from './elements/modalError.js';
 
 // Exporta a função principal que retorna a página principal
 export default function register() {
@@ -10,7 +13,7 @@ export default function register() {
   const registerContentHTML = `
 <header class="header header-register">
   <div class="logo">
-    <img src="./assets/images/croissant-logo.svg" alt="Logo Chef's Corner" />
+    <img src="/assets/images/croissant-logo.svg" alt="Logo Chef's Corner" />
     <span class="paragraph-medium">Chef's Corner</span>
   </div>
   <div class="buttons">
@@ -18,27 +21,27 @@ export default function register() {
   </div>
 </header>
 <main class="main main-register">
-  <h1 class="primary-heading">Register</h1>
+  <h1 class="primary-heading">Registrar</h1>
   <div>
     <form class="form">
     <div class="inputs-container">
-      <div>
-        <input 
-          class="input paragraph-normal"
-          id="name"
-          type="text"
-          name="name"
-          placeholder="User Name"
-          required
-        />
-      </div>
       <div>
         <input
           class="input paragraph-normal"
           id="username"
           type="text"
           name="username"
-          placeholder="Full Name"
+          placeholder="Apelido"
+          required
+        />
+      </div>
+      <div>
+        <input 
+          class="input paragraph-normal"
+          id="name"
+          type="text"
+          name="name"
+          placeholder="Nome Completo"
           required
         />
       </div>
@@ -48,29 +51,36 @@ export default function register() {
           id="email"
           type="email"
           name="email"
-          placeholder="Email Address"
+          placeholder="Endereço de Email"
           required
         />
       </div>
       <div>
         <input
           class="input paragraph-normal"
-          id="password"
+          id="password1"
           type="password"
           name="password"
-          placeholder="Password"
+          placeholder="Senha"
+          required
+        />
+      </div>
+      <div>
+        <input
+          class="input paragraph-normal"
+          id="password2"
+          type="password"
+          name="password"
+          placeholder="Repita a Senha"
           required
         />
       </div>
     </div>
-      <button class="button button-fill" id="buttonSignUp">Register</button>
+      <button class="button button-fill" id="buttonSignUp">Registrar</button>
     </form>
   </div>
-  <a class="signin-link paragraph-medium">Already have an account? Sign in</a>
+  <a class="signin-link paragraph-medium interact-span">Já possui uma conta? Entre!</a>
 </main>
-<footer class="footer footer-register">
-  <p class="paragraph-medium">© 2024 Chef's Corner. All rights reserved.</p>
-</footer>
 
   `;
 
@@ -79,23 +89,38 @@ export default function register() {
   registerElement.classList.add('register-container');
   registerElement.innerHTML = registerContentHTML;
 
+  //Adiciona os elementos footer e header
+  const main = registerElement.querySelector("main") 
+  registerElement.append(footer())
+
+  //Modal de erro
+  const { popupCard, showPopup } = modalError();
+  main.insertAdjacentElement("afterend", popupCard);
+
   const signinButton = registerElement.querySelector('.signin-button');
+  const signinLink = registerElement.querySelector('.signin-link');
+  setNavigation(signinLink, '/login');
   setNavigation(signinButton, '/login');
 
   const buttonSignUp = registerElement.querySelector('#buttonSignUp');
-  const btnName = registerElement.querySelector('#name');
-  const btnUsername = registerElement.querySelector('#username');
-  const btnEmail = registerElement.querySelector('#email');
-  const btnPassword = registerElement.querySelector('#password');
+  const inptName = registerElement.querySelector('#name');
+  const inptUsername = registerElement.querySelector('#username');
+  const inptEmail = registerElement.querySelector('#email');
+  const inptPassword1 = registerElement.querySelector('#password1');
+  const inptPassword2 = registerElement.querySelector('#password2');
 
   buttonSignUp.addEventListener('click', (event) => {
     event.preventDefault();
 
+    if (inptPassword1.value !== inptPassword2.value){
+      return console.log("As senhas não coincidem")
+    }
+
     const payload = {
-      name: btnName.value,
-      username: btnUsername.value,
-      email: btnEmail.value,
-      password: btnPassword.value,
+      name: inptName.value,
+      username: inptUsername.value,
+      email: inptEmail.value,
+      password: inptPassword1.value,
     };
 
     fetch('http://localhost:3000/api/login/register', {
@@ -120,6 +145,8 @@ export default function register() {
         console.log(data);
       })
       .catch((err) => {
+        //alert(err)
+        showPopup(err);
         console.error(err);
       });
   });

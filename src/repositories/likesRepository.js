@@ -26,7 +26,7 @@ const likesRepository = {
             return result.rows;
         } catch (error) {
             await client.query('ROLLBACK');
-            console.error("Erro ao fetuar like ou unline: ", error);
+            console.error("Erro ao fetuar like ou unlike: ", error);
             throw error;
         } finally {
             client.release();

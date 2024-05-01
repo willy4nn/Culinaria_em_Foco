@@ -1,5 +1,9 @@
 // Importa os módulos necessários
 import getTimeAgo from "../utils/getTimeAgo.js";
+import createCustomEvent from '../eventModule.js';
+import footer from './elements/footer.js'
+import header from './elements/header.js'
+import menuToggle from './elements/menuToggle.js';
 
 async function getFeaturedNews(limit) {
   let url = limit ? `http://localhost:3000/api/posts/like?limit=${limit}` : `http://localhost:3000/api/posts/like?limit=1`;
@@ -33,6 +37,50 @@ async function getNewsFeed(category) {
     console.error('Error fetching news:', error);
     return null;
   }
+
+// Função principal que renderiza a página inicial
+export default function home() {
+  // HTML do conteúdo da página inicial
+  const homeContentHTML = `
+
+    <main class="main main-home">
+      <div class="featured-news-container">
+          <h1 class="primary-heading">Featured News</h1>
+          <div class="featured-news-content">
+          </div>
+      </div>
+    </main>
+  `;
+
+  // Cria um elemento div para a página inicial
+  const homeElement = document.createElement('div');
+  homeElement.classList.add('home-container');
+  homeElement.innerHTML = homeContentHTML;
+
+  //Adiciona os elementos footer e header
+  const main = homeElement.querySelector("main") 
+  homeElement.insertBefore(header(), main)
+  homeElement.append(footer())
+  homeElement.append(menuToggle())
+
+  // Seleciona o contêiner do conteúdo em destaque
+  const featuredNewsContent = homeElement.querySelector('.featured-news-content');
+
+  // Busca os posts em destaque da API
+  fetch('http://localhost:3000/api/posts/like?limit=3')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Erro na requisição: ' + response.statusText);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      featuredNewsContent.appendChild(renderCarousel(data.data));
+    })
+    .catch(error => console.error('Erro:', error));
+
+  // Retorna o elemento da página inicial
+  return homeElement;
 }
 
 function renderFeaturedNewsSection(news) {
@@ -126,6 +174,7 @@ function renderFeaturedNewsSection(news) {
 
   return featuredNewsSection;
 }
+
 
 function renderNewsFeed(news) {
   const newsFeedHTML = `

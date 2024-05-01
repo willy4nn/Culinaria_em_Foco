@@ -18,7 +18,8 @@
 }
 
 .header .logo-image {
-  width: 48px;
+  width: 35px;
+  cursor: pointer;
 }
 
 .header .buttons {

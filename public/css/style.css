@@ -8,6 +8,7 @@
 @import './components/form.css';
 @import './components/button.css';
 @import './components/form.css';
+@import './components/modal.css';
 @import './global/header.css';
 @import './global/footer.css';
 @import './pages/main.css';
@@ -19,3 +20,7 @@
 @import './pages/dashboard.css';
 @import './pages/favorite.css';
 @import './pages/home.css';
+@import './pages/admin.css';
+@import './pages/profile.css';
+@import './components/menuToggle.css';
+@import './components/popup.css'

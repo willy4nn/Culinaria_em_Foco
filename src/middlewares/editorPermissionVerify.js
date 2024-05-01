@@ -12,12 +12,11 @@ async function editorPermissionVerify(req, res, next) {
       } 
         const userType = decoded.user.userType;
 
-        if (userType === "editor" || "admin") {
+        if (userType === "user") {
+          return res.status(403).json({ error: "Não autorizado!" });
+        } 
           req.user = decoded.user;
           next();
-        } else {
-          return res.status(403).json({ error: "Não autorizado!" });
-        }
       }
     );
   }

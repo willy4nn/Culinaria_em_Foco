@@ -13,8 +13,9 @@ async function selfPermissionVerify(req, res, next) {
       } 
         const userName = decoded.user.username;
         const userType = decoded.user.userType;
+        const userId = decoded.user.id;
 
-        if (userName === selfUsername || userType === "admin") {
+        if (userName === selfUsername|| userId == selfUsername || userType === "admin") {
           req.user = decoded.user;
           next();
         } else {

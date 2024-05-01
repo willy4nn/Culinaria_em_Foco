@@ -1,30 +1,24 @@
 // main.js
 
 // Importa a função createCustomEvent do módulo de eventos
-import dateFormat from '../utils/dateFormat.js';
+import { dateFormat } from '../utils/dateFormat.js';
 import createCustomEvent from '../eventModule.js';
 import setNavigation from '../setNavigation.js';
+import header from './elements/header.js';
+import footer from './elements/footer.js';
+import menuToggle from './elements/menuToggle.js';
 
 // Exporta a função principal que retorna a página principal
 export default function dashboard() {
   // HTML do elemento principal
   const dashboardContentHTML = `
-    <header class="header">
-      <div class="logo">
-        <img src="./assets/images/croissant-logo.svg" alt="Logo Chef's Corner">
-        <span class="paragraph-medium">Chef's Corner</span>
-      </div>
-      <div class="buttons">
-        <a class="paragraph-medium">Contact Us</a>
-        <a class="button button-fill logout">Logout</a>
-      </div>
-    </header>
+
     <main>
       
       <div id="container-dashboard">
 
         <div id="container-header">
-            <h1>Dashboard</h1>
+            <h1 class="secondary-heading">Dashboard</h1>
         </div>
 
         <div id="dashboard-content">
@@ -55,14 +49,18 @@ export default function dashboard() {
       </div>
 
     </main>
-    <footer class="footer">
-        <p class="paragraph-medium">© 2024 Chef's Corner. All rights reserved.</p>
-    </footer>
+
   `;
 
   // Cria o elemento principal
   const dashboardElement = document.createElement('div');
   dashboardElement.innerHTML = dashboardContentHTML;
+
+  //Adiciona os elementos footer e header
+  const main = dashboardElement.querySelector("main") 
+  dashboardElement.insertBefore(header(), main)
+  dashboardElement.append(footer())
+  dashboardElement.append(menuToggle())  
 
   const containerDashbaord = dashboardElement.querySelector('#container-dashboard');
   const contentTable = dashboardElement.querySelector('#content-table');
@@ -91,11 +89,9 @@ export default function dashboard() {
   function renderNews(data){
 
     // For apenas para testar a renderização com mais dados
-    for(let i=0; i<10; i++) {
+    /* for(let i=0; i<10; i++) { */
 
       data.forEach((item, index) => {
-        
-          console.log(item);
           const trableRow = document.createElement('tr');
           const title = document.createElement('td');
           const banner = document.createElement('td');
@@ -126,6 +122,8 @@ export default function dashboard() {
           buttonDelete.innerText = 'Delete';
 
           bannerImg.classList.add('banner-image');
+          buttonEdit.classList.add('table-button', 'button-fill');
+          buttonDelete.classList.add('table-button', 'button-delete');
 
           //div.style.border = 'thin solid #b1b1b1';
 
@@ -148,35 +146,11 @@ export default function dashboard() {
 
           });
       });
-    }
+    /* } */
   }
 
-  const logoutButton = dashboardElement.querySelector('.logout');
-  logoutButton.addEventListener('click', () => {
-    fetch(`http://localhost:3000/api/login/logout`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        // Esta linha verifica se a resposta do servidor é bem-sucedida
-        if (!response.ok) {
-          throw new Error('Falha no logout');
-        }
-        // Esta linha retorna os dados da resposta em formato JSON
-        window.dispatchEvent(createCustomEvent('/login'));
-        return response.json();
-      })
-      .then((data) => {
-        // Esta linha registra os dados recebidos do servidor no console (você pode substituir isso por sua própria lógica para lidar com a resposta)
-        console.log(data);
-      })
-      .catch((error) => {
-        // Esta linha captura qualquer erro que ocorra durante o processo de login
-        console.error('Erro:', error);
-      });
-  });
+  // const logoutButton = dashboardElement.querySelector('.logout');
+  
 
   // Retorna o elemento principal
   return dashboardElement;

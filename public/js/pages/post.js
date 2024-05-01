@@ -1,19 +1,14 @@
 import createCustomEvent from '../eventModule.js';
 import { importHTMLContentFiles, importLocalFile } from '../multer/index.js';
+import header from './elements/header.js';
+import footer from './elements/footer.js';
+import menuToggle from './elements/menuToggle.js';
 
 // Exporta a função que retorna a página de login
 export default function createPost() {
   const createPostContentHTML = `
-    <header class="header">
-      <div class="logo">
-        <img src="./assets/images/croissant-logo.svg" alt="Logo Chef's Corner" />
-        <span>Chef's Corner</span>
-      </div>
-      <div class="buttons">
-        <a class="button button-fill">Sign Up</a>
-      </div>
-    </header>
-    <!-- ########## MAIN ########## -->
+
+  <!-- ########## MAIN ########## -->
 <main class="main main-create-post"> 
   <!-- Título da página -->
   <h1 class="primary-heading">Create Post</h1>
@@ -22,7 +17,7 @@ export default function createPost() {
   <form class="editor-container">
     <!-- Campo para inserir o título do post -->
     <div class="input-container">
-      <input class="title-input secondary-heading" id="title" type="text" name="title" placeholder="Untitled" />
+      <input class="title-input tertiary-heading" id="title" type="text" name="title" placeholder="Untitled" />
     </div>  
     <!-- Dropdown para selecionar a categoria do post -->
     <div class="select-category">
@@ -46,6 +41,7 @@ export default function createPost() {
     <div class="select-banner">
       <label class="paragraph-medium" for='files'>Select Banner</label>
       <input class="paragraph-medium" id='banner' type="file" name="files">
+      <img id="banner-preview" class="create-post-banner">
     </div>
 
     <div class="editor input-container">
@@ -121,21 +117,26 @@ export default function createPost() {
     </div>
   </form>
 </main>
-    <footer class="footer">
-      <p>© 2024 Chef's Corner. All rights reserved.</p>
-    </footer>
+
   `;
 
   const createPostElement = document.createElement('div');
   createPostElement.classList.add('create-post-container');
   createPostElement.innerHTML = createPostContentHTML;
 
+  //Adiciona os elementos footer e header
+  const main = createPostElement.querySelector("main") 
+  createPostElement.insertBefore(header(), main)
+  createPostElement.append(footer())
+  createPostElement.append(menuToggle())  
+
   const titleInput = createPostElement.querySelector('#title');
-  const categoryInputs = createPostElement.querySelectorAll(
-    'input[name="category"]'
-  );
+  const categoryInputs = createPostElement.querySelectorAll('input[name="category"]');
+
   const bannerInput = createPostElement.querySelector('#banner');
   const imageInput = createPostElement.querySelector('#image');
+  const bannerPreview = createPostElement.querySelector('#banner-preview');
+  bannerPreview.src = '/assets/images/default_image_banner.png';
 
   const buttonPost = createPostElement.querySelector('#button-post');
   const buttonSave = createPostElement.querySelector('#button-save');
@@ -194,7 +195,21 @@ export default function createPost() {
       console.error("Erro:", error);
   });
   
+ 
+  // Se clicar e não selecionar nenhum arquivo, o anterior é perdido.
+  bannerInput.addEventListener('click', () => { 
+    console.log("entrou aqui;");
+    bannerPreview.src = '/assets/images/default_image_banner.png';
   
+  });
+  bannerInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      bannerPreview.src = imageUrl;
+    }
+  });
   
   
   
@@ -243,10 +258,11 @@ export default function createPost() {
         category = input.value;
       }
     });
-    category = category ? category.toLowerCase() : ''; // Fixando a categoria vazia se não houver seleção
+    category = category ? category.toLowerCase() : ''; 
+    // Fixando a categoria vazia se não houver seleção
     const content = editorContent.toString();
     // Se tiver file armazena a imagem no back e retorna a uri, se não retorna vazio
-    const banner = await importLocalFile(bannerInput.files[0]);
+    const banner = await importLocalFile(bannerInput.files[0], 'banner');
     const image = imageInput.value.toString();
 
     console.log('bn', bannerInput);

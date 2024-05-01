@@ -1,26 +1,23 @@
 import createCustomEvent from '../eventModule.js';
+import header from './elements/header.js';
+import footer from './elements/footer.js';
+import menuToggle from './elements/menuToggle.js';
+import { modalError } from './elements/modalError.js';
+import { dateFormat } from '../utils/dateFormat.js';
 
 // Exporta a função que retorna a página de login
 export default function getPost(postId) {
   // HTML do elemento de login
   const getPostContentHTML = `
-    <header class="header">
-      <div class="logo">
-        <img src="/assets/images/croissant-logo.svg" alt="Logo Chef's Corner" />
-        <span>Chef's Corner</span>
-      </div>
-      <div class="buttons">
-        <a class="button button-fill">Sign Up</a>
-      </div>
-    </header>
+
     <main class=""> 
 
       <div id="container">
-        <div id="buttons-temp">
+        <!-- <div id="buttons-temp">
           <button id="button-get">Buscar</button>
           <input id="input-id" placeholder="ID do Post"></input>
-        </div>
-        </br>
+        </div> 
+        </br> -->
 
         <div id="news-container">
           <div id="news-body"></div>
@@ -56,17 +53,24 @@ export default function getPost(postId) {
       </div>
 
     </main>
-    <footer class="footer">
-      <p>© 2024 Chef's Corner. All rights reserved.</p>
-    </footer>
+
   `;
 
   const getPostElement = document.createElement('div');
   getPostElement.classList.add('create-post-element');
   getPostElement.innerHTML = getPostContentHTML;
 
-  const buttonGet = getPostElement.querySelector('#button-get');
-  const inputId = getPostElement.querySelector('#input-id');
+  //Adiciona os elementos footer e header
+  const main = getPostElement.querySelector("main") 
+  getPostElement.insertBefore(header(), main)
+  getPostElement.append(footer())
+  getPostElement.append(menuToggle())
+  const { popupCard, showPopup } = modalError();
+  //main.appendChild(popupCard);
+  main.insertAdjacentElement("afterend", popupCard);
+  
+  //const buttonGet = getPostElement.querySelector('#button-get');
+  //const inputId = getPostElement.querySelector('#input-id');
 
   const newsContainer = getPostElement.querySelector('#news-container');
   const newsBody = getPostElement.querySelector('#news-body');
@@ -85,8 +89,8 @@ export default function getPost(postId) {
   const buttonComment = getPostElement.querySelector('#comment-button');
   const commentsList = getPostElement.querySelector('#comments-list');
 
-  var userLogged;
-
+  let userLogged;
+  
   // Carrega os dados do usuário logado
   // Todas as requisições que dependam do ID do usuário serão feitas aqui dentro
   getLogin()
@@ -98,11 +102,11 @@ export default function getPost(postId) {
     return postPromise.then(post => ({ userData, post }));
   })
   .then(({ userData, post }) => {
-    return getIsLiked(postId, userData.id)
+    return getIsLiked(postId)
   .then(isliked => ({ userData, post, isliked }));
   })
   .then(({ userData, post, isliked }) => {
-    return getIsFavorited(postId, userData.id)
+    return getIsFavorited(postId)
       .then(isfavorited => ({ userData, post, isliked, isfavorited }));
   })
   .then(({ userData, post, isliked, isfavorited }) => {
@@ -113,7 +117,19 @@ export default function getPost(postId) {
       const content = document.createElement('div');
       title.innerText = post.title;
       content.innerHTML = post.content;
-      newsBody.append(title, content);
+      
+      const banner = document.createElement('img');
+      const div = document.createElement('div');
+      const createdAtPost = document.createElement('span');
+      banner.src = post.banner;
+      createdAtPost.innerText = dateFormat(post.created_at);
+
+      banner.classList.add('post-banner');
+      div.classList.add('post-details');
+      createdAtPost.classList.add('post-created-at');
+
+      div.appendChild(createdAtPost)
+      newsBody.append(title, banner, content, div);
 
       renderLikeAndFavorite(post, isliked, isfavorited);
 
@@ -123,7 +139,7 @@ export default function getPost(postId) {
       console.log("true or false", liked, favorited);
 
       buttonLike.addEventListener('click', async () => {
-        const newQuantity = await likePost(postId, userData.id);
+        const newQuantity = await likePost(postId);
         likesQuantity.innerText = `${newQuantity} curtidas`;
 
         if (liked) {
@@ -151,9 +167,10 @@ export default function getPost(postId) {
       });
 
       buttonComment.addEventListener('click', function(e) {
+        if (commentTextarea.value.trim().toString() == '') return;
+
         const data = {
           posts_id: postId,
-          users_id: userData.id,
           content: commentTextarea.value.trim().toString(),
         }
 
@@ -214,7 +231,7 @@ export default function getPost(postId) {
   }
   
   //Pode remover
-  buttonGet.addEventListener('click', async () => {
+  /* buttonGet.addEventListener('click', async () => {
     // Faz requisição de consulta de post por ID
     getPostById(inputId.value)
     .then(data => {
@@ -229,7 +246,7 @@ export default function getPost(postId) {
     .catch(error => {
       console.error('Erro ao buscar post:', error);
     });
-  });
+  }); */
 
   commentEditor.addEventListener('click', function() {
     buttonsContainer.style.display = 'flex';
@@ -263,6 +280,7 @@ export default function getPost(postId) {
 
       const commentIsLiked = await getCommentsIsLiked(comment.id);
       console.log("commentIsLiked", commentIsLiked);
+      console.log("replies qty", comment.replies_quantity);
 
       const div = document.createElement('div');
       const headerDiv = document.createElement('div');
@@ -277,7 +295,10 @@ export default function getPost(postId) {
 
       const likeIcon = document.createElement('span');
       const openReplyTextarea = document.createElement('span');
+
       const showRepliesButton = document.createElement('span');
+      const showRepliesNumber = document.createElement('span');
+      const showRepliesComplement = document.createElement('span');
       const showArrowIcon = document.createElement('span');
 
       div.classList.add('comment');
@@ -295,7 +316,8 @@ export default function getPost(postId) {
       if (commentIsLiked) likeIcon.classList.add('liked');
       if (commentIsLiked) console.log("colorido");
       openReplyTextarea.classList.add('open-reply');
-      showRepliesButton.classList.add('open-reply');
+      showRepliesButton.classList.add('show-reply');
+      showRepliesNumber.classList.add('reply-quantity');
       showArrowIcon.classList.add('material-symbols-outlined', 'arrow-icon');
 
       profilePhoto.src = comment.profile_photo || '../../uploads/profile_photo/default_profile_normal.png';
@@ -306,9 +328,13 @@ export default function getPost(postId) {
 
       likeIcon.innerHTML = 'favorite';
       openReplyTextarea.innerText = 'Reply';
-      showRepliesButton.innerText = `${comment.replies_quantity} replies`
+      //showRepliesButton.innerText = `${comment.replies_quantity} replies`
+      showRepliesNumber.innerText = comment.replies_quantity
+      showRepliesComplement.innerText = comment.replies_quantity > 1 ? 'replies' : 'reply';
+      console.log("sssss",showRepliesComplement.innerText);
       showArrowIcon.innerText = 'arrow_drop_down';
-      showRepliesButton.appendChild(showArrowIcon);
+      
+      showRepliesButton.append(showArrowIcon, showRepliesNumber, showRepliesComplement);
       leftHeaderDiv.append(profilePhoto, name, separatorDot, createdAt);
       rightHeaderDiv.append(showRepliesButton, openReplyTextarea, likeIcon);
 
@@ -334,11 +360,13 @@ export default function getPost(postId) {
       let newReplies = document.createElement('div');
       div.appendChild(newReplies);
       // Mostrar respostas
-      showRepliesButton.addEventListener('click', () => {
+      showRepliesButton.addEventListener('click', async () => {
+        showPopup();
         if (newReplies.childNodes.length === 0) {
-          newReplies.appendChild(renderRepliesByCommentId(div, comment.id));
+          newReplies.appendChild( await renderRepliesByCommentId(div, comment.id));
           shownReply = true;
           showArrowIcon.innerText = 'arrow_drop_up';
+
         } else {
           if (!shownReply) {
             //newReplies.innerHTML = '';
@@ -357,6 +385,9 @@ export default function getPost(postId) {
             showArrowIcon.innerText = 'arrow_drop_down';
           }
         }
+        /* const replyreplyButton = newReplies.querySelector('.open-reply-reply');
+        replyreplyButton.addEventListener('click', () => openReplyTextarea.click()); */
+        
       });
 
       let openedReply = false;
@@ -378,8 +409,8 @@ export default function getPost(postId) {
           buttonsDiv.classList.add('reply-buttons-container');
           buttonCancel.classList.add('comment-button', 'button-fill-cancel', 'reply-button');
           buttonReply.classList.add('comment-button', 'button-fill', 'reply-button');
-
-          profilePhoto.src = userLogged.profile_photo || '../../uploads/profile_photo/default_profile_normal.png';
+          console.log("userlogge", userLogged);
+          profilePhoto.src = userLogged.profilePhoto || '../../uploads/profile_photo/default_profile_normal.png';
           replyTextarea.placeholder = 'Add a reply';
           buttonCancel.innerText = 'Cancel';
           buttonReply.innerText = 'Reply';
@@ -403,6 +434,7 @@ export default function getPost(postId) {
           });
 
           buttonReply.addEventListener('click', () => {
+            if (replyTextarea.value.trim().toString() === '') return;
             replyTextarea.disabled = true;
 
             const data = {
@@ -410,27 +442,70 @@ export default function getPost(postId) {
               content: replyTextarea.value.trim().toString(),
             }
 
-            createReply(data)
-            .then(() => {
+            const dataSuccess = {
+              name: userLogged.name,
+              content: replyTextarea.value.trim().toString(),
+              profile_photo: userLogged.profilePhoto || '../../uploads/profile_photo/default_profile_normal.png',
+              created_at: new Date(),
+            }
+
+            /* createReply(data)
+            .then(async () => {
               replyTextarea.value = '';
               replyTextarea.disabled = false;
               buttonCancel.click();
               shownReply = false;
               showArrowIcon.innerText = 'arrow_drop_down';
-              showRepliesButton.click()
-              /* getCommentsByPostId(postId)
-              .then(data => {   
-                renderCommentsByPostId(data);
-              }) */
-              })
-              .catch(error => {
-                console.error('Erro ao buscar post:', error);
-              });
+              showRepliesButton.click();
+              //getCommentsByPostId(postId)
+              //.then(data => {   
+              //  renderCommentsByPostId(data);
+              //})
+              
+              //newReplies.innerHTML = '';
+              //newReplies.appendChild(await renderRepliesByCommentId(div, comment.id));
+
+            })
+            .catch(error => {
+              console.error('Erro ao buscar post:', error);
+            }); */
+
+
+              createReply(data)
+            .then(async (data) => {
+              
+              //buttonCancel.click();
+                      
+              //getCommentsByPostId(postId)
+              //.then(data => {   
+              //  renderCommentsByPostId(data);
+              //})
+              //;
+              if (data) {
+                //newReplies.appendChild(await replyElement(dataSuccess));
+                replyDiv.insertAdjacentElement('afterend', await replyElement(dataSuccess));
+                replyTextarea.value = '';
+                replyTextarea.disabled = false;
+                showRepliesNumber.innerText = parseInt(showRepliesNumber.innerText) + 1;
+    
+                showArrowIcon.innerText = 'arrow_drop_down';
+                shownReply = false;
+                showRepliesButton.click()
+              }
+              replyTextarea.disabled = false;
+            })
+            .catch(error => {
+              console.error('Erro ao buscar post:', error);
+            });
+
+
            /*  }) */
           });
         }
 
       });
+
+      
 
       /* // Renderizar respostas dos comentários
       renderRepliesByCommentId(div, comment.id) */
@@ -441,72 +516,111 @@ export default function getPost(postId) {
   }
 
 
-  function renderRepliesByCommentId(repliedCommentDiv, repliedCommentId) {
+  async function renderRepliesByCommentId(repliedCommentDiv, repliedCommentId) {
     const newReplies = document.createElement('div');
     const loader = loaderr();
     repliedCommentDiv.appendChild(loader);
- 
-    getRepliesByCommentId(repliedCommentId)
-    .then(data => {
-      //commentsList.innerHTML = "";
-      data.forEach(async reply => {
-  
-        const replyIsLiked = await getRepliesIsLiked(reply.id);
-        console.log("replyIsLiked", replyIsLiked);
-  
-        const div = document.createElement('div');
-        const headerDiv = document.createElement('div');
-        const leftHeaderDiv = document.createElement('div');
-        const rightHeaderDiv = document.createElement('div');
-  
-        const profilePhoto = document.createElement('img');
-        const name = document.createElement('p');
-        const createdAt = document.createElement('p');
-        const separatorDot = document.createElement('span');
-        const content = document.createElement('div');
+    
+    const repliesloaded = await loadReplies(repliedCommentId, repliedCommentDiv);
+    repliesloaded.forEach(reply => newReplies.appendChild(reply));
 
-        const likeIcon = document.createElement('span');
-        const openReplyTextarea = document.createElement('span');
-  
-        div.classList.add('comment', 'reply');
-        headerDiv.classList.add('comment-header');
-        leftHeaderDiv.classList.add('comment-left-header');
-        rightHeaderDiv.classList.add('comment-right-header');
-  
-        profilePhoto.classList.add('reply-profile-photo');
-        name.classList.add('user-name');
-        createdAt.classList.add('created-at');
-        separatorDot.classList.add('separator-dot');
-        content.classList.add('comment-content');
-  
-        likeIcon.classList.add('material-symbols-outlined', 'comment-like');
-        if (replyIsLiked) likeIcon.classList.add('liked');
-        if (replyIsLiked) console.log("colorido");
-        openReplyTextarea.classList.add('open-reply');
-
-        profilePhoto.src = reply.profile_photo || '../../uploads/profile_photo/default_profile_normal.png';
-        name.innerText = reply.name ;
-        createdAt.innerText = getTimeAgo(reply.created_at);
-        separatorDot.innerText = '·';
-        content.innerHTML = reply.content;
-  
-        likeIcon.innerHTML = 'favorite';
-        openReplyTextarea.innerText = 'Reply';
-  
-        leftHeaderDiv.append(profilePhoto, name, separatorDot, createdAt);
-        rightHeaderDiv.append(openReplyTextarea, likeIcon);
-  
-        headerDiv.append(leftHeaderDiv, rightHeaderDiv);
-        div.append(headerDiv, content);
-
-        //repliedCommentDiv.removeChild(loader);
-        //repliedCommentDiv.appendChild(div);
-        newReplies.appendChild(div);
-      });
-      repliedCommentDiv.removeChild(loader);
-    })
-
+    repliedCommentDiv.removeChild(loader);
     return newReplies;
+  }
+  
+  async function loadReplies(repliedCommentId, repliedCommentDiv) {
+    try {
+      ///loading(commentsList);
+      const replies = await getRepliesByCommentId(repliedCommentId);
+      const renderedList = renderReplies(replies, repliedCommentDiv);
+
+      return renderedList;
+    } catch (error) {
+      console.error('Erro ao buscar comentários:', error);
+    }
+  }
+  async function renderReplies(replies, repliedCommentDiv) {
+      //const replyElementListPromises = replies.map(replyElement);
+      const replyElementListPromises = replies.map(reply => replyElement(reply, repliedCommentDiv));
+      const replyElementList = await Promise.all(replyElementListPromises);
+      
+      return replyElementList;
+  }
+
+  async function replyElement(reply, repliedCommentDiv) {
+
+    let replyIsLiked;
+    if (reply.id) {
+      replyIsLiked = await getRepliesIsLiked(reply.id);
+    }
+    //const replyIsLiked = await getRepliesIsLiked(reply.id);
+    console.log("replyIsLiked", replyIsLiked);
+
+    const div = document.createElement('div');
+    const headerDiv = document.createElement('div');
+    const leftHeaderDiv = document.createElement('div');
+    const rightHeaderDiv = document.createElement('div');
+
+    const profilePhoto = document.createElement('img');
+    const name = document.createElement('p');
+    const createdAt = document.createElement('p');
+    const separatorDot = document.createElement('span');
+    const content = document.createElement('div');
+
+    const likeIcon = document.createElement('span');
+    const openReplyReplyTextarea = document.createElement('span');
+
+    div.classList.add('comment', 'reply');
+    headerDiv.classList.add('comment-header');
+    leftHeaderDiv.classList.add('comment-left-header');
+    rightHeaderDiv.classList.add('comment-right-header');
+
+    profilePhoto.classList.add('reply-profile-photo');
+    name.classList.add('user-name');
+    createdAt.classList.add('created-at');
+    separatorDot.classList.add('separator-dot');
+    content.classList.add('comment-content');
+
+    likeIcon.classList.add('material-symbols-outlined', 'comment-like');
+    if (replyIsLiked) likeIcon.classList.add('liked');
+    if (replyIsLiked) console.log("colorido");
+    openReplyReplyTextarea.classList.add('open-reply-reply');
+
+    profilePhoto.src = reply.profile_photo || '../../uploads/profile_photo/default_profile_normal.png';
+    name.innerText = reply.name ;
+    createdAt.innerText = getTimeAgo(reply.created_at);
+    separatorDot.innerText = '·';
+    content.innerHTML = reply.content;
+
+    likeIcon.innerHTML = 'favorite';
+    openReplyReplyTextarea.innerText = 'Reply';
+
+    leftHeaderDiv.append(profilePhoto, name, separatorDot, createdAt);
+    rightHeaderDiv.append(openReplyReplyTextarea, likeIcon);
+
+    headerDiv.append(leftHeaderDiv, rightHeaderDiv);
+    div.append(headerDiv, content);
+
+
+    likeIcon.addEventListener('click', async () => {
+      const newLiked = await likeReply(reply.id);
+      console.log("new",newLiked);
+      
+      const cleanResult = newLiked.substring(1, newLiked.length - 1);
+      const values = cleanResult.split(',');
+      const isLiked = values[1].trim() === 't' ? true : false;
+
+      console.log("newliked", cleanResult, isLiked);
+
+      if (isLiked) likeIcon.classList.add('liked');
+      else likeIcon.classList.remove('liked');
+    });
+
+    const replyButton = repliedCommentDiv.querySelector('.open-reply');
+    openReplyReplyTextarea.addEventListener('click', () => replyButton.click());
+
+
+    return div;
   }
 
 
@@ -516,6 +630,7 @@ export default function getPost(postId) {
 /* POSTS */
 
 async function getPostById(id) {
+  console.log(id);
   return fetch('http://localhost:3000/api/posts/' + id)
   .then((response) => {
       if (response.status !== 200) {
@@ -535,9 +650,9 @@ async function getPostById(id) {
   });
 }
 
-async function getIsLiked(posts_id, users_id) {
+async function getIsLiked(posts_id) {
   
-  const queryParams = new URLSearchParams({ posts_id, users_id }).toString();
+  const queryParams = new URLSearchParams({ posts_id }).toString();
   console.log("query", queryParams);
   return fetch(`http://localhost:3000/api/likes/posts/isliked?${queryParams}`, {
     method: 'GET',
@@ -591,8 +706,8 @@ async function getIsFavorited(posts_id) {
   });
 }
 
-async function likePost(posts_id, users_id){
-  const data = { posts_id, users_id };
+async function likePost(posts_id){
+  const data = { posts_id };
 
   return fetch('http://localhost:3000/api/likes/posts', {
     method: 'POST',
@@ -820,6 +935,34 @@ async function createReply(data) {
   .then((data) => {
     console.log("create reply:", data);
       return data;
+  })
+  .catch((error) => {
+      //displayError(error.error);
+      console.error('Erro:', error.error);
+  });
+}
+
+async function likeReply(comments_replies_id){
+  const data = { comments_replies_id };
+
+  return fetch('http://localhost:3000/api/likes/replies', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+  .then((response) => {
+      if (response.status !== 200) {
+          return response.json().then(errorResponse => {
+              throw errorResponse;
+          });
+      }
+      return response.json();
+  })
+  .then((data) => {
+    console.log("like post :", data);
+      return data.data[0].like_unlike_replies;
   })
   .catch((error) => {
       //displayError(error.error);

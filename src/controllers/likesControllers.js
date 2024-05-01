@@ -6,7 +6,8 @@ const likesController = {
 
     // CREATE / DELETE
     likeUnlikePost: async (req, res) => {
-        const { posts_id, users_id } = req.body;
+        const posts_id = req.body.posts_id;
+        const users_id = req.user.id
 
         try {
             const response = await likesRepository.likeUnlikePost(
@@ -46,7 +47,8 @@ const likesController = {
 
     // GET BY POST ID AND USER ID
     getPostsIsLiked: async (req, res) => {
-        const { posts_id, users_id } = req.query;
+        const posts_id = req.query.posts_id;
+        const users_id = req.user.id;
         console.log("po", posts_id);
         console.log("us", users_id);
 
