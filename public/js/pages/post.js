@@ -3,6 +3,7 @@ import { importHTMLContentFiles, importLocalFile } from '../multer/index.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
 import menuToggle from './elements/menuToggle.js';
+import { modalError } from './elements/modalError.js';
 
 // Exporta a função que retorna a página de login
 export default function createPost() {
@@ -128,7 +129,11 @@ export default function createPost() {
   const main = createPostElement.querySelector("main") 
   createPostElement.insertBefore(header(), main)
   createPostElement.append(footer())
-  createPostElement.append(menuToggle())  
+  createPostElement.append(menuToggle())
+  
+  //Modal de erro
+  const { popupCard, showPopup } = modalError();
+  main.insertAdjacentElement("afterend", popupCard);
 
   const titleInput = createPostElement.querySelector('#title');
   const categoryInputs = createPostElement.querySelectorAll(
@@ -193,6 +198,7 @@ export default function createPost() {
       });
   })
   .catch(error => {
+      showPopup(error)
       console.error("Erro:", error);
   });
   
@@ -211,45 +217,6 @@ export default function createPost() {
       bannerPreview.src = imageUrl;
     }
   });
-  
-  
-  
-  /* getLogin()
-  .then(userData => {
-
-    console.log("Carregou:", userData);
-
-    // Carrega o editor de texto
-    quillScriptElement.addEventListener('load', function () {
-      const editor = new Quill('#editor', {
-        modules: { toolbar: '#toolbar' },
-        theme: 'snow',
-      });
-
-      buttonPost.addEventListener('click', (event) => {
-        event.preventDefault();
-
-        // Trata o conteúdo princial da postagem e salva as imagens no storage
-        const content = importHTMLContentFiles(editor.root.innerHTML);
-
-        // Efetua a postagem
-        submitPost(true, content);
-      });
-
-      buttonSave.addEventListener('click', (event) => {
-        event.preventDefault();
-
-        // Trata o conteúdo princial da postagem e salva as imagens no storage
-        const content = importHTMLContentFiles(editor.root.innerHTML);
-
-        // Salva a postagem como rascunho
-        submitPost(false, content);
-      });
-    });
-
-  }) */
-
-  
 
   async function submitPost(posted_draft, editorContent, users_id) {
     const title = titleInput.value.toString();
@@ -259,6 +226,22 @@ export default function createPost() {
         category = input.value;
       }
     });
+
+    if (!bannerInput.files[0]){
+      showPopup("Insira uma imagem para a Postagem")
+      return
+    }
+
+    if (title == ""){
+      showPopup("Insira um Título para a Postagem")
+      return
+    }
+
+    if(!category){
+      showPopup("Marque uma Categoria para a Postagem")
+      return
+    }
+    
     category = category ? category.toLowerCase() : ''; // Fixando a categoria vazia se não houver seleção
     const content = editorContent.toString();
     // Se tiver file armazena a imagem no back e retorna a uri, se não retorna vazio
@@ -282,13 +265,17 @@ export default function createPost() {
         if (!response.ok) {
           throw new Error('Falha efetuar a postagem');
         }
-        window.dispatchEvent(createCustomEvent('/post'));
+        setTimeout(() => {
+          window.dispatchEvent(createCustomEvent('/post'));
+        }, 3000); 
+        showPopup("Post efetuado com sucesso!", "Sucesso!")
         return response.json();
       })
       .then((data) => {
         console.log(data);
       })
       .catch((error) => {
+        showPopup(error)
         console.error('Erro:', error);
       });
   }

@@ -215,7 +215,21 @@ const loginRepository = {
           [newUser.name, newUser.username, newUser.email, newUser.password, newUser.user_type, newUser.premium_active, newUser.premium_date, newUser.profile_photo, newUser.created_at, username]);
 
           await client.query('COMMIT')
-          const success = { success: true, message: 'Usuário atualizado com sucesso!' }
+
+          //Ao ser atualizado usuário ganha novo Token
+          //Dados do token a ser gerado
+          const userToken = {
+            id: newUser.id,
+            username: newUser.username,
+            name: newUser.name,
+            userType: newUser.user_type,
+            profilePhoto: newUser.profile_photo,
+            premiumActive: newUser.premium_active
+          }
+          //Aqui é feito o processo de assinatura do token
+          const sessionToken = await jwt.sign({ user: userToken }, config.SECRET_KEY);
+           
+          const success = { success: true, sessionToken: sessionToken, message: 'Usuário atualizado com sucesso!' }
           return success
 
           } catch (err) {
