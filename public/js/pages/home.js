@@ -37,50 +37,6 @@ async function getNewsFeed(category) {
     console.error('Error fetching news:', error);
     return null;
   }
-
-// Função principal que renderiza a página inicial
-export default function home() {
-  // HTML do conteúdo da página inicial
-  const homeContentHTML = `
-
-    <main class="main main-home">
-      <div class="featured-news-container">
-          <h1 class="primary-heading">Featured News</h1>
-          <div class="featured-news-content">
-          </div>
-      </div>
-    </main>
-  `;
-
-  // Cria um elemento div para a página inicial
-  const homeElement = document.createElement('div');
-  homeElement.classList.add('home-container');
-  homeElement.innerHTML = homeContentHTML;
-
-  //Adiciona os elementos footer e header
-  const main = homeElement.querySelector("main") 
-  homeElement.insertBefore(header(), main)
-  homeElement.append(footer())
-  homeElement.append(menuToggle())
-
-  // Seleciona o contêiner do conteúdo em destaque
-  const featuredNewsContent = homeElement.querySelector('.featured-news-content');
-
-  // Busca os posts em destaque da API
-  fetch('http://localhost:3000/api/posts/like?limit=3')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Erro na requisição: ' + response.statusText);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      featuredNewsContent.appendChild(renderCarousel(data.data));
-    })
-    .catch(error => console.error('Erro:', error));
-
-  // Retorna o elemento da página inicial
-  return homeElement;
 }
 
 function renderFeaturedNewsSection(news) {
@@ -311,22 +267,9 @@ export default function home() {
   // HTML do conteúdo da página inicial
   function createHomeContentHTML() {
     const homeContentHTML = `
-    <header class="header header-home">
-      <div class="logo">
-          <img src="./assets/images/croissant-logo.svg" alt="Logo Chef's Corner">
-          <span class="paragraph-medium">Chef's Corner</span>
-      </div>
-      <div class="buttons">
-          <a class="paragraph-medium">Contact Us</a>
-          <a class="button button-fill logout">Logout</a>
-      </div>
-    </header>
     <main class="main main-home">
 
     </main>
-    <footer class="footer footer-home">
-        <p class="paragraph-medium">© 2024 Chef's Corner. All rights reserved.</p>
-    </footer>
   `;
     return homeContentHTML;
   }
@@ -335,6 +278,12 @@ export default function home() {
   const homeElement = document.createElement('div');
   homeElement.classList.add('home-container');
   homeElement.innerHTML = createHomeContentHTML();
+
+  const main = homeElement.querySelector("main") 
+
+  homeElement.insertBefore(header(), main)
+  homeElement.append(footer())
+  homeElement.append(menuToggle())
 
   // Chama a função getFeaturedNews() para obter as notícias em destaque
   getFeaturedNews(3).then(news => {
