@@ -84,6 +84,13 @@ export default function favorite() {
           created_at.innerText = dateFormat(item.created_at);
           commentsQuantity.innerText = item.comments_quantity;
           likesQuantity.innerText = item.likes_quantity;
+          console.log("category", category.innerText);
+
+          if (category.innerText == 'Trends') category.style.backgroundColor = '#1f7e93';
+          if (category.innerText == 'Interviews') category.style.backgroundColor = '#5d34a7';
+          if (category.innerText == 'Tips') category.style.backgroundColor = '#b26a00';
+          if (category.innerText == 'Stories') category.style.backgroundColor = '#6d931f';
+          if (category.innerText == 'Reviews') category.style.backgroundColor = '#970404';
 
     
           divContainer.classList.add('favorite-item');
