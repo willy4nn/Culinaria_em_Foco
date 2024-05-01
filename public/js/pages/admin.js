@@ -89,9 +89,9 @@ export default function admin() {
           //const buttonEdit = document.createElement('button');
           //const buttonConfirm = document.createElement('button');
           //const buttonDelete = document.createElement('button');
-          const buttonEdit = document.createElement('span');
-          const buttonConfirm = document.createElement('span');
-          const buttonDelete = document.createElement('span');
+          const buttonEdit = document.createElement('button');
+          const buttonConfirm = document.createElement('button');
+          const buttonDelete = document.createElement('button');
 
           id.innerText = item.id;
           name.innerText = item.name;
@@ -111,9 +111,17 @@ export default function admin() {
 
           profilePhotoImg.classList.add('admin-profile-image');
           buttonConfirm.style.display = 'none';
-          buttonEdit.classList.add('material-symbols-outlined');
+          buttonEdit.classList.add('table-button', 'button-fill');
+          buttonConfirm.classList.add('table-button', 'button-fill');
+          buttonDelete.classList.add('table-button', 'button-delete');
+          tdEdit.classList.add('group-table-button');
+          /* buttonEdit.classList.add('material-symbols-outlined');
           buttonConfirm.classList.add('material-symbols-outlined');
-          buttonDelete.classList.add('material-symbols-outlined');
+          buttonDelete.classList.add('material-symbols-outlined'); */
+
+          buttonEdit.innerHTML = 'Editar';
+          buttonConfirm.innerHTML = 'Confirmar';
+          buttonDelete.innerHTML = 'Deletar';
 
           profilePhoto.appendChild(profilePhotoImg);
           tdEdit.append(buttonEdit, buttonConfirm);
@@ -140,14 +148,17 @@ export default function admin() {
                 }
               });
               editOpened = false;
-              buttonEdit.innerText = 'edit_square';
+              buttonEdit.innerText = 'Editar';
+              buttonEdit.style.backgroundColor = '#414833';
               buttonConfirm.style.display = 'none';
               return;
             }
 
             // Se não tiver aberto, abre e inicia a edição
             editOpened = true;
-            buttonEdit.innerText = 'cancel';
+            buttonEdit.innerText = 'Cancelar';
+            buttonEdit.style.backgroundColor = '#6b6b6b';
+            
             buttonConfirm.style.display = 'block';
 
             [name, username, email, userType, premiumActive, premiumDate].forEach((element) => {
