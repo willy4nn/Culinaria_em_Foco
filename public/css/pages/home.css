@@ -5,6 +5,8 @@
 .main-home {
     padding: 1rem 5rem;
     width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .featured-news-container {

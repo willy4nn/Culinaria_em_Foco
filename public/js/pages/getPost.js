@@ -3,6 +3,7 @@ import header from './elements/header.js';
 import footer from './elements/footer.js';
 import menuToggle from './elements/menuToggle.js';
 import { modalError } from './elements/modalError.js';
+import { dateFormat } from '../utils/dateFormat.js';
 
 // Exporta a função que retorna a página de login
 export default function getPost(postId) {
@@ -12,11 +13,11 @@ export default function getPost(postId) {
     <main class=""> 
 
       <div id="container">
-        <div id="buttons-temp">
+        <!-- <div id="buttons-temp">
           <button id="button-get">Buscar</button>
           <input id="input-id" placeholder="ID do Post"></input>
-        </div>
-        </br>
+        </div> 
+        </br> -->
 
         <div id="news-container">
           <div id="news-body"></div>
@@ -68,8 +69,8 @@ export default function getPost(postId) {
   //main.appendChild(popupCard);
   main.insertAdjacentElement("afterend", popupCard);
   
-  const buttonGet = getPostElement.querySelector('#button-get');
-  const inputId = getPostElement.querySelector('#input-id');
+  //const buttonGet = getPostElement.querySelector('#button-get');
+  //const inputId = getPostElement.querySelector('#input-id');
 
   const newsContainer = getPostElement.querySelector('#news-container');
   const newsBody = getPostElement.querySelector('#news-body');
@@ -116,7 +117,19 @@ export default function getPost(postId) {
       const content = document.createElement('div');
       title.innerText = post.title;
       content.innerHTML = post.content;
-      newsBody.append(title, content);
+      
+      const banner = document.createElement('img');
+      const div = document.createElement('div');
+      const createdAtPost = document.createElement('span');
+      banner.src = post.banner;
+      createdAtPost.innerText = dateFormat(post.created_at);
+
+      banner.classList.add('post-banner');
+      div.classList.add('post-details');
+      createdAtPost.classList.add('post-created-at');
+
+      div.appendChild(createdAtPost)
+      newsBody.append(title, banner, content, div);
 
       renderLikeAndFavorite(post, isliked, isfavorited);
 
@@ -218,7 +231,7 @@ export default function getPost(postId) {
   }
   
   //Pode remover
-  buttonGet.addEventListener('click', async () => {
+  /* buttonGet.addEventListener('click', async () => {
     // Faz requisição de consulta de post por ID
     getPostById(inputId.value)
     .then(data => {
@@ -233,7 +246,7 @@ export default function getPost(postId) {
     .catch(error => {
       console.error('Erro ao buscar post:', error);
     });
-  });
+  }); */
 
   commentEditor.addEventListener('click', function() {
     buttonsContainer.style.display = 'flex';

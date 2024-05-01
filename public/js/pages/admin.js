@@ -239,32 +239,32 @@ export default function admin() {
     });
   }
 
-  const logoutButton = adminElement.querySelector('.logout');
-  logoutButton.addEventListener('click', () => {
-    fetch(`/api/login/logout`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        // Esta linha verifica se a resposta do servidor é bem-sucedida
-        if (!response.ok) {
-          throw new Error('Falha no logout');
-        }
-        // Esta linha retorna os dados da resposta em formato JSON
-        window.dispatchEvent(createCustomEvent('/login'));
-        return response.json();
-      })
-      .then((data) => {
-        // Esta linha registra os dados recebidos do servidor no console (você pode substituir isso por sua própria lógica para lidar com a resposta)
-        console.log(data);
-      })
-      .catch((error) => {
-        // Esta linha captura qualquer erro que ocorra durante o processo de login
-        console.error('Erro:', error);
-      });
-  });
+  // const logoutButton = adminElement.querySelector('.logout');
+  // logoutButton.addEventListener('click', () => {
+  //   fetch(`http://localhost:3000/api/login/logout`, {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //   })
+  //     .then((response) => {
+  //       // Esta linha verifica se a resposta do servidor é bem-sucedida
+  //       if (!response.ok) {
+  //         throw new Error('Falha no logout');
+  //       }
+  //       // Esta linha retorna os dados da resposta em formato JSON
+  //       window.dispatchEvent(createCustomEvent('/login'));
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       // Esta linha registra os dados recebidos do servidor no console (você pode substituir isso por sua própria lógica para lidar com a resposta)
+  //       console.log(data);
+  //     })
+  //     .catch((error) => {
+  //       // Esta linha captura qualquer erro que ocorra durante o processo de login
+  //       console.error('Erro:', error);
+  //     });
+  // });
 
   // Retorna o elemento principal
   return adminElement;
