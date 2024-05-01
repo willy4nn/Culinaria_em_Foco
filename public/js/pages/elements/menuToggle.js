@@ -103,9 +103,19 @@ export default function menu() {
 
   menuContainer.appendChild(menuButton);
 
+  menuButton.addEventListener('click', () => {
+    toggleMenu();
+  })
+
+  function toggleMenu() {
+    menuContainer.querySelector('.menu-opened').classList.toggle('hidden');
+    menuContainer.querySelector('.menu-opened').classList.toggle('show');
+  }
+
   getUserData()
     .then(user => {
       const menuOpened = renderMenuOpened(user);
+      menuOpened.classList.add('menu-opened', 'hidden');
       menuContainer.appendChild(menuOpened);
     })
     .catch(error => {

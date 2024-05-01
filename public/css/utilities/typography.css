@@ -47,6 +47,14 @@
   color: var(--c9);
 }
 
+.paragraph-bold {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--c9);
+}
+
 /* ########## LINK ########## */
 a {
   text-decoration: none;
