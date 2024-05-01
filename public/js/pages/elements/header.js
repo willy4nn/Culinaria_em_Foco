@@ -13,6 +13,8 @@ export default function header() {
   divLogoImg.alt= "Logo Culinária em Foco";
   divLogo.appendChild(divLogoImg);
 
+  console.log(divLogoImg.src);
+
   const divLogoSpan = document.createElement('span');
   divLogoSpan.classList.add('paragraph-medium');
   divLogoSpan.textContent = 'Culinária em Foco';
