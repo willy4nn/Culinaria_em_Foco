@@ -89,7 +89,7 @@ export default function dashboard() {
   function renderNews(data){
 
     // For apenas para testar a renderização com mais dados
-    for(let i=0; i<10; i++) {
+    /* for(let i=0; i<10; i++) { */
 
       data.forEach((item, index) => {
           const trableRow = document.createElement('tr');
@@ -122,6 +122,8 @@ export default function dashboard() {
           buttonDelete.innerText = 'Delete';
 
           bannerImg.classList.add('banner-image');
+          buttonEdit.classList.add('table-button', 'button-fill');
+          buttonDelete.classList.add('table-button', 'button-delete');
 
           //div.style.border = 'thin solid #b1b1b1';
 
@@ -144,7 +146,7 @@ export default function dashboard() {
 
           });
       });
-    }
+    /* } */
   }
 
   // const logoutButton = dashboardElement.querySelector('.logout');

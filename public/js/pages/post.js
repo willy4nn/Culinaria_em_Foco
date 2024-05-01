@@ -41,7 +41,7 @@ export default function createPost() {
     <div class="select-banner">
       <label class="paragraph-medium" for='files'>Select Banner</label>
       <input class="paragraph-medium" id='banner' type="file" name="files">
-      <img id="create-post-banner" class="create-post-banner">
+      <img id="banner-preview" class="create-post-banner">
     </div>
 
     <div class="editor input-container">
@@ -131,12 +131,11 @@ export default function createPost() {
   createPostElement.append(menuToggle())  
 
   const titleInput = createPostElement.querySelector('#title');
-  const categoryInputs = createPostElement.querySelectorAll(
-    'input[name="category"]'
-  );
+  const categoryInputs = createPostElement.querySelectorAll('input[name="category"]');
+
   const bannerInput = createPostElement.querySelector('#banner');
   const imageInput = createPostElement.querySelector('#image');
-  const bannerPreview = createPostElement.querySelector('#create-post-banner');
+  const bannerPreview = createPostElement.querySelector('#banner-preview');
   bannerPreview.src = '/assets/images/default_image_banner.png';
 
   const buttonPost = createPostElement.querySelector('#button-post');
@@ -259,7 +258,8 @@ export default function createPost() {
         category = input.value;
       }
     });
-    category = category ? category.toLowerCase() : ''; // Fixando a categoria vazia se não houver seleção
+    category = category ? category.toLowerCase() : ''; 
+    // Fixando a categoria vazia se não houver seleção
     const content = editorContent.toString();
     // Se tiver file armazena a imagem no back e retorna a uri, se não retorna vazio
     const banner = await importLocalFile(bannerInput.files[0], 'banner');

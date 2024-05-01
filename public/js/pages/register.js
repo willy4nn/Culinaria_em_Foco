@@ -13,7 +13,7 @@ export default function register() {
   const registerContentHTML = `
 <header class="header header-register">
   <div class="logo">
-    <img src="./assets/images/croissant-logo.svg" alt="Logo Chef's Corner" />
+    <img src="/assets/images/croissant-logo.svg" alt="Logo Chef's Corner" />
     <span class="paragraph-medium">Chef's Corner</span>
   </div>
   <div class="buttons">

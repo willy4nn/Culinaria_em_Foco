@@ -9,7 +9,7 @@ export default function header() {
   
   const divLogoImg = document.createElement('img');
   divLogoImg.classList.add('logo-image')
-  divLogoImg.src= "./assets/images/croissant-logo.svg";
+  divLogoImg.src= "/assets/images/croissant-logo.svg";
   divLogoImg.alt= "Logo Culinária em Foco";
   divLogo.appendChild(divLogoImg);
 
