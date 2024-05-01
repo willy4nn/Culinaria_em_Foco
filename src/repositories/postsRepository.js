@@ -89,6 +89,22 @@ const postsRepository = {
         }
     },
 
+    // GET ALL ORDER BY CREATED_AT (LIMIT = MAX RESULTS)
+    getPostsOrderByCreatedAt: async function (maxResults) {
+
+        // Se limit for omitido, retorna todas as ocorrências
+        const limit = maxResults === "" ? null : maxResults;
+        const query = "SELECT * FROM posts ORDER BY created_at DESC LIMIT $1";
+
+        try {
+            const result = await pool.query(query, [limit]);
+            return result.rows;
+        } catch (error) {
+            console.error("Erro ao selecionar dados: ", error);
+            throw error;
+        }
+    },
+
     // GET ALL BY USER ID
     getPostsByUserId: async function (created_by) {
 

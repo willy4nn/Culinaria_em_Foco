@@ -79,6 +79,20 @@ const postsController = {
         }
     },
 
+    // GET ALL ORDER BY CREATED_AT (LIMIT = MAX RESULTS)
+    getPostsOrderByCreatedAt: async (req, res) => {
+        const maxResults = req.query.limit;
+        console.log("mm",maxResults);
+
+        try {
+            const response = await postsRepository.getPostsOrderByCreatedAt(maxResults);
+
+            res.status(200).json({ data: response, status: 200 });
+        } catch (error) {
+            res.status(error.code || 500).json({ error, status: error.code || 500 });
+        }
+    },
+    
     // GET ALL BY CATEGORY
     getPostsByUserId: async (req, res) => {
         const created_by = req.user.id;

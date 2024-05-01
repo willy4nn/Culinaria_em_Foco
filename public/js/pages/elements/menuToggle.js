@@ -1,80 +1,117 @@
+
 import setNavigation from "../../setNavigation.js";
 import createCustomEvent from "../../eventModule.js";
 
-export default function menuButton() {
-  const menuButton = document.createElement('div');
-  menuButton.classList.add('menu-toggle');
+function getUserData() {
+  return fetch('http://localhost:3000/api/login/profile/')
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then(errorResponse => {
+          throw errorResponse;
+        });
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("get user: ", data);
+      return data;
+    })
+    .catch((error) => {
+      console.error('Erro:', error);
+      throw error; // Propague o erro para quem chamar essa função
+    });
+}
 
-  const menuButtonIcon = document.createElement('img');
-  menuButtonIcon.src = '/../../../../assets/images/menu.svg'
-  console.log(menuButtonIcon.src);
-
+function renderMenuOpened(user) {
   const menu = document.createElement('div');
 
-  const linkProfile = document.createElement('div');
-  linkProfile.textContent = 'Perfil';
-  setNavigation(linkProfile, "/profile")
-
-  const linkPost = document.createElement('div');
-  linkPost.textContent = 'Criar Post';
-  setNavigation(linkPost, "/post")
-
-  const linkFavorites = document.createElement('div');
-  linkFavorites.textContent = 'Favoritos';
-  setNavigation(linkFavorites, "/favorite")
-
-  const linkDashboard = document.createElement('div');
-  linkDashboard.textContent = 'Dashboard';
-  setNavigation(linkDashboard, "/dashboard")
-
-  const linkAdmin = document.createElement('div');
-  linkAdmin.textContent = 'Admin';
-  setNavigation(linkAdmin, "/admin")
-
-  const logoutButton = document.createElement('div');
-  logoutButton.textContent = 'Logout';
-  logoutButton.addEventListener('click', () => {
-    fetch(`http://localhost:3000/api/login/logout`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        // Esta linha verifica se a resposta do servidor é bem-sucedida
-        if (!response.ok) {
-          throw new Error('Falha no logout');
-        }
-        // Esta linha retorna os dados da resposta em formato JSON
-        window.dispatchEvent(createCustomEvent('/login'));
-        return response.json();
-      })
-      .then((data) => {
-        // Esta linha registra os dados recebidos do servidor no console (você pode substituir isso por sua própria lógica para lidar com a resposta)
-        console.log(data);
-      })
-      .catch((error) => {
-        // Esta linha captura qualquer erro que ocorra durante o processo de login
-        console.error('Erro:', error);
-      });
-  });
-
-  menuButton.addEventListener('click', () => {
-    toggleMenu();
-  });
-
-  function toggleMenu() {
-    console.log('Togando Menu');
-  }
+  if (user) {
+    const linkProfile = document.createElement('div');
+    linkProfile.textContent = 'Perfil';
+    setNavigation(linkProfile, "/profile"); 
+    menu.appendChild(linkProfile);
   
-  menu.appendChild(linkProfile);
-  menu.appendChild(linkPost);
-  menu.appendChild(linkFavorites);
-  menu.appendChild(linkDashboard);
-  menu.appendChild(linkAdmin);
-  menu.appendChild(logoutButton);
-  menuButton.appendChild(menuButtonIcon);
-  menuButton.appendChild(menu);
+    const linkDashboard = document.createElement('div');
+    linkDashboard.textContent = 'Dashboard';
+    setNavigation(linkDashboard, "/dashboard");
+    menu.appendChild(linkDashboard);
 
-  return menuButton;
+    if (user.user_type == 'admin' || user.user_type == 'editor') {
+      const linkPost = document.createElement('div');
+      linkPost.textContent = 'Criar Post';
+      setNavigation(linkPost, "/post");
+      menu.appendChild(linkPost);
+    }
+
+    const linkFavorites = document.createElement('div');
+    linkFavorites.textContent = 'Favoritos';
+    setNavigation(linkFavorites, "/favorite");
+    menu.appendChild(linkFavorites);
+
+    if (user.user_type === 'admin') { 
+      const linkAdmin = document.createElement('div');
+      linkAdmin.textContent = 'Admin';
+      setNavigation(linkAdmin, "/admin");
+      menu.appendChild(linkAdmin);
+    }
+
+    const linkLogout = document.createElement('div');
+    linkLogout.textContent = 'Logout';
+    menu.appendChild(linkLogout);
+
+    linkLogout.addEventListener('click', () => {
+      fetch('http://localhost:3000/api/login/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Falha no logout');
+          }
+          window.dispatchEvent(createCustomEvent('/login'));
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error('Erro:', error);
+        });
+    });
+
+  } else {
+    // Se não houver dados de usuário, você pode adicionar algum comportamento alternativo
+    console.log('Não há dados de usuário disponíveis.');
+  }
+
+  return menu;
+}
+
+export default function menu() {
+  const menuContainer = document.createElement('div');
+  menuContainer.classList.add('menu-container');
+
+  const menuButtonIcon = document.createElement('img');
+  menuButtonIcon.classList.add('menu-button-icon');
+  menuButtonIcon.src = '/../../../../assets/images/menu.svg';
+
+  const menuButton = document.createElement('div');
+  menuButton.classList.add('menu-button');
+  menuButton.appendChild(menuButtonIcon);
+
+  menuContainer.appendChild(menuButton);
+
+  getUserData()
+    .then(user => {
+      const menuOpened = renderMenuOpened(user);
+      menuContainer.appendChild(menuOpened);
+    })
+    .catch(error => {
+      console.error('Erro ao carregar menu:', error);
+      // Você pode adicionar um comportamento alternativo aqui se a carga do menu falhar
+    });
+
+  return menuContainer;
 }

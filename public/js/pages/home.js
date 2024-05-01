@@ -23,8 +23,10 @@ async function getFeaturedNews(limit) {
 }
 
 async function getNewsFeed(category) {
-  let url = category ? `http://localhost:3000/api/posts/category/${category}` : `http://localhost:3000/api/posts/all`;
-  
+  if (!category) category = 'latest';
+  console.log(category);
+  //let url = category ? `http://localhost:3000/api/posts/category/${category}` : `http://localhost:3000/api/posts/all`;
+  let url = category === 'latest' ? `http://localhost:3000/api/posts/latest?limit=10` : `http://localhost:3000/api/posts/category/${category}`;
   try {
     const response = await fetch(url);
     
@@ -139,7 +141,7 @@ function renderNewsFeed(news) {
       <div class="filters">
         <label class="checkbox">
           Latest News
-          <input class="filter" type="radio" name="category" value="latest_news">
+          <input class="filter" type="radio" name="category" value="latest">
         </label>
         <label class="checkbox">
           Tips
@@ -150,8 +152,8 @@ function renderNewsFeed(news) {
           <input class="filter" type="radio" name="category" value="stories">
         </label>
         <label class="checkbox">
-          Tendencies
-          <input class="filter" type="radio" name="category" value="tendencies">
+          Trends
+          <input class="filter" type="radio" name="category" value="trends">
         </label>
         <label class="checkbox">
           Interviews
