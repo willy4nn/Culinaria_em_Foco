@@ -10,7 +10,8 @@ function dateFormat(date){
     const minutos = addZero(data.getMinutes());
     const segundos = addZero(data.getSeconds());
 
-    const dataFormatada = `${dia}/${mes}/${ano} ${horas}:${minutos}:${segundos}`;
+    //const dataFormatada = `${dia}/${mes}/${ano} ${horas}:${minutos}:${segundos}`;
+    const dataFormatada = `${dia}/${mes}/${ano} ${horas}:${minutos}`;
 
     return(dataFormatada);
 }
@@ -27,7 +28,8 @@ function dateFormatUS(date){
     const minutos = addZero(data.getMinutes());
     const segundos = addZero(data.getSeconds());
 
-    const dataFormatada = `${ano}/${mes}/${dia} ${horas}:${minutos}:${segundos}`;
+    //const dataFormatada = `${ano}/${mes}/${dia} ${horas}:${minutos}:${segundos}`;
+    const dataFormatada = `${ano}/${mes}/${dia} ${horas}:${minutos}`;
 
     return(dataFormatada);
 }

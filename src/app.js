@@ -64,6 +64,10 @@ app.use((req, res, next) => {
   next();
 });
 
+const bodyParser = require('body-parser');
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+app.use(express.json());
 // Upload com Multer
 app.post("/upload_files", upload.single("files"), uploadFiles);
 

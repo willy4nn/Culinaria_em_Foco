@@ -13,10 +13,32 @@
     width: 100%;
 }
 
+.post-banner {
+    border-radius: 8px;
+    margin: 8px 0;
+    max-width: 600px;
+}
+
+.post-details {
+    display: flex;
+    justify-content: end;
+    padding-bottom: 16px;
+    border-top: 1px solid #cccccc;
+    margin-top: 10px;
+    padding-top: 4px;
+}
+
+.post-created-at {
+    font-size: 14px;
+    color: #515151;
+    font-weight: 600;
+    padding: 0 12px;
+}
+
 /* NEWS POSTS */
 
 #news-container {
-    padding: 8px 0 24px 0;
+    padding: 8px 0 20px 0;
 }
 
 #news-interaction-buttons {
