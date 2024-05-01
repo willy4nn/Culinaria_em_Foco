@@ -89,11 +89,9 @@ export default function dashboard() {
   function renderNews(data){
 
     // For apenas para testar a renderização com mais dados
-    for(let i=0; i<10; i++) {
+    /* for(let i=0; i<10; i++) { */
 
       data.forEach((item, index) => {
-        
-          console.log(item);
           const trableRow = document.createElement('tr');
           const title = document.createElement('td');
           const banner = document.createElement('td');
@@ -124,6 +122,8 @@ export default function dashboard() {
           buttonDelete.innerText = 'Delete';
 
           bannerImg.classList.add('banner-image');
+          buttonEdit.classList.add('table-button', 'button-fill');
+          buttonDelete.classList.add('table-button', 'button-delete');
 
           //div.style.border = 'thin solid #b1b1b1';
 
@@ -146,35 +146,11 @@ export default function dashboard() {
 
           });
       });
-    }
+    /* } */
   }
 
-  const logoutButton = dashboardElement.querySelector('.logout');
-  logoutButton.addEventListener('click', () => {
-    fetch(`/api/login/logout`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        // Esta linha verifica se a resposta do servidor é bem-sucedida
-        if (!response.ok) {
-          throw new Error('Falha no logout');
-        }
-        // Esta linha retorna os dados da resposta em formato JSON
-        window.dispatchEvent(createCustomEvent('/login'));
-        return response.json();
-      })
-      .then((data) => {
-        // Esta linha registra os dados recebidos do servidor no console (você pode substituir isso por sua própria lógica para lidar com a resposta)
-        console.log(data);
-      })
-      .catch((error) => {
-        // Esta linha captura qualquer erro que ocorra durante o processo de login
-        console.error('Erro:', error);
-      });
-  });
+  // const logoutButton = dashboardElement.querySelector('.logout');
+  
 
   // Retorna o elemento principal
   return dashboardElement;

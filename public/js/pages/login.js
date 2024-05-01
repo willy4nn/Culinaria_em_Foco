@@ -11,7 +11,7 @@ export default function login() {
   const loginContentHTML = `
 <header class="header header-login">
   <div class="logo">
-    <img class= "logo-image" src="./assets/images/croissant-logo.svg" alt="Logo Chef's Corner" />
+    <img class= "logo-image" src="/assets/images/croissant-logo.svg" alt="Logo Chef's Corner" />
     <span class="paragraph-medium">Culinária em Foco</span>
   </div>
   <div class="buttons">

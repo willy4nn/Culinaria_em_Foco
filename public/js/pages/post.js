@@ -42,7 +42,7 @@ export default function createPost() {
     <div class="select-banner">
       <label class="paragraph-medium" for='files'>Select Banner</label>
       <input class="paragraph-medium" id='banner' type="file" name="files">
-      <img id="create-post-banner" class="create-post-banner">
+      <img id="banner-preview" class="create-post-banner">
     </div>
 
     <div class="editor input-container">
@@ -136,12 +136,11 @@ export default function createPost() {
   main.insertAdjacentElement("afterend", popupCard);
 
   const titleInput = createPostElement.querySelector('#title');
-  const categoryInputs = createPostElement.querySelectorAll(
-    'input[name="category"]'
-  );
+  const categoryInputs = createPostElement.querySelectorAll('input[name="category"]');
+
   const bannerInput = createPostElement.querySelector('#banner');
   const imageInput = createPostElement.querySelector('#image');
-  const bannerPreview = createPostElement.querySelector('#create-post-banner');
+  const bannerPreview = createPostElement.querySelector('#banner-preview');
   bannerPreview.src = '/assets/images/default_image_banner.png';
 
   const buttonPost = createPostElement.querySelector('#button-post');

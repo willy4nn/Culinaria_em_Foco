@@ -66,7 +66,7 @@ export default function favorite() {
     for(let i=0; i<10; i++) {
 
       data.forEach((item, index) => {
-          console.log(item);
+          // console.log(item);
           const divContainer = document.createElement('div');
           const divDetails = document.createElement('div');
           const divBanner = document.createElement('div');
@@ -100,33 +100,6 @@ export default function favorite() {
       });
     }
   }
-
-  const logoutButton = favoriteElement.querySelector('.logout');
-  logoutButton.addEventListener('click', () => {
-    fetch(`/api/login/logout`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        // Esta linha verifica se a resposta do servidor é bem-sucedida
-        if (!response.ok) {
-          throw new Error('Falha no logout');
-        }
-        // Esta linha retorna os dados da resposta em formato JSON
-        window.dispatchEvent(createCustomEvent('/login'));
-        return response.json();
-      })
-      .then((data) => {
-        // Esta linha registra os dados recebidos do servidor no console (você pode substituir isso por sua própria lógica para lidar com a resposta)
-        console.log(data);
-      })
-      .catch((error) => {
-        // Esta linha captura qualquer erro que ocorra durante o processo de login
-        console.error('Erro:', error);
-      });
-  });
 
   // Retorna o elemento principal
   return favoriteElement;

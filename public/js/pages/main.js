@@ -28,6 +28,7 @@ export default function main() {
   </div>
   <div class="image-container">
     <img src="/assets/images/initial-main-image.jpg" alt="">
+    <img src="/assets/images/initial-main-image.jpg" alt="">
   </div>
 </main>
 <footer class="footer footer-main">
