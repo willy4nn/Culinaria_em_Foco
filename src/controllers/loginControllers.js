@@ -52,10 +52,14 @@ autenticate: async (req, res) => {
 
   const { email, password } = req.body;
 
-  const error = "Usuário e/ou senha inválidos!";
-    if (!email || !password) {
-      return res.status(400).json({ error });
+    if (!email) {
+      return res.status(400).json({ message: "Informe um Email" });
     }
+
+    if (!password) {
+      return res.status(400).json({ message: "Informe a Senha" });
+    }
+
   const result = await loginRepository.autenticate(email, password);
     if(!result.success){
       return res.status(400).json({ message: result.error })
@@ -91,6 +95,8 @@ updateUser: async (req, res) => {
   if (!result.success){
    return res.status(500).json({ message: result.error })
   }
+    res.clearCookie('session_id');
+    res.cookie('session_id', result.sessionToken, { maxAge: 3600000, httpOnly: true })
     res.status(200).json({ message: result.message })
 },
 

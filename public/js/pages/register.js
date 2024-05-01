@@ -17,7 +17,7 @@ export default function register() {
     <span class="paragraph-medium">Chef's Corner</span>
   </div>
   <div class="buttons">
-    <a class="button button-fill signin-button">Sign In </a>
+    <a class="button button-fill signin-button">Entrar</a>
   </div>
 </header>
 <main class="main main-register">
@@ -112,18 +112,15 @@ export default function register() {
   buttonSignUp.addEventListener('click', (event) => {
     event.preventDefault();
 
-    if (inptPassword1.value !== inptPassword2.value){
-      return console.log("As senhas não coincidem")
-    }
-
     const payload = {
       name: inptName.value,
       username: inptUsername.value,
       email: inptEmail.value,
       password: inptPassword1.value,
+      password2: inptPassword2.value,
     };
 
-    fetch('http://localhost:3000/api/login/register', {
+    fetch('/api/login/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -66,7 +66,7 @@ export default function dashboard() {
   const contentTable = dashboardElement.querySelector('#content-table');
 
   
-  fetch(`http://localhost:3000/api/posts/`, {
+  fetch(`/api/posts/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

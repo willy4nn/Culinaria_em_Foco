@@ -9,29 +9,30 @@ export default function main() {
   const mainContentHTML = `
     <header class="header header-main">
   <div class="logo">
-    <img class= "logo-image" src="/assets/images/croissant-logo.svg" alt="Logo Chef's Corner">
-    <span class="paragraph-medium">Chef's Corner</span>
+    <img class= "logo-image" src="/assets/images/croissant-logo.svg" alt="Logo Culinária em Foco">
+    <span class="paragraph-medium">Culinária em Foco</span>
   </div>
   <div class="buttons">
-    <a class="button button-line signin-button">Sign In</a>
-    <a class="button button-fill signup-button">Sign Up</a>
+    <a class="button button-line signin-button">Entrar</a>
+    <a class="button button-fill signup-button">Registrar</a>
   </div>
 </header>
 <main class="main main-main">
   <div class="text-container">
-    <h1 class="primary-heading">Arouse your palate to new culinary experiences.</h1>
-    <p class="paragraph-normal">Discover unique flavors and culinary inspirations in our featured digital magazine. Creative recipes, chef tips, and stories that will transform your kitchen into a true stage of delights. Explore with us the world of gastronomy!</p>
+    <h1 class="primary-heading">Aguçe seu paralar com novas experiências Culinárias.</h1>
+    <p class="paragraph-normal">Descubra sabores únicos e inspirações culinárias em nossa revista digital em destaque. Receitas criativas, dicas de chefs e histórias que vão transformar sua cozinha em um verdadeiro palco de delícias. Explore conosco o mundo da gastronomia!</p>
     <div class="buttons">
-      <a class="button button-line signin-button">Sign In</a>
-      <a class="button button-fill signup-button">Sign Up</a>
+      <a class="button button-line signin-button">Entrar</a>
+      <a class="button button-fill signup-button">Registrar</a>
     </div>
   </div>
   <div class="image-container">
     <img src="/assets/images/initial-main-image.jpg" alt="">
+    <img src="/assets/images/initial-main-image.jpg" alt="">
   </div>
 </main>
 <footer class="footer footer-main">
-    <p class="paragraph-medium">© 2024 Chef's Corner. All rights reserved.</p>
+    <p class="paragraph-medium">© 2024 Culinária em Foco. Todos os direitos reservados.</p>
 </footer>
   `;
 

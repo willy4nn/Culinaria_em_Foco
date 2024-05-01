@@ -6,6 +6,10 @@ import displayModal from '../utils/modal.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
 import menuToggle from './elements/menuToggle.js';
+import { modalError } from './elements/modalError.js';
+
+//Modal de erro
+const { popupCard, showPopup } = modalError();
 
 // Exporta a função que retorna a página de login
 export default function profile() {
@@ -95,6 +99,9 @@ export default function profile() {
   profileElement.insertBefore(header(), main)
   profileElement.append(footer())
   profileElement.append(menuToggle())
+
+  //Modal de erro
+  main.insertAdjacentElement("afterend", popupCard);
 
   const profileContent = profileElement.querySelector('#profile-content');
   const profilePhoto = profileElement.querySelector('#profile-photo');
@@ -203,9 +210,9 @@ export default function profile() {
         currentPasswordInput.value = '';
       });
     
-      confirmButton.addEventListener('click', () => {
+      confirmButton.addEventListener('click', async () => {
         animationClick(confirmButton);
-    
+
         const data = {
           name: nameInput.value,
           username: usernameInput.value,
@@ -217,8 +224,35 @@ export default function profile() {
     
         const erro = validateForm(data);
     
-        if (erro) console.log("erro:", erro);
-        else {
+        if (erro) {
+          showPopup(erro);
+          console.log("erro:", erro);
+          return
+        }
+
+        //Aqui verifica se usuário digitou a senha correta
+        const verify = await fetch(`/api/login/auth`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ 
+            email: emailInput.value,
+            password: currentPasswordInput.value 
+          }),
+        })
+        .then((response) => {
+          if (!response.ok){
+            return { success: false, message: "Senha Incorreta" }
+          }
+          return { success: true }
+        })
+        
+        if(!verify.success){
+          showPopup(verify.message)
+          return
+        }
+
           const newData = formatPasswordData(data);
           updateUser(profileData.username, newData)
           .then((data) => {
@@ -229,7 +263,7 @@ export default function profile() {
             profileOptions.style.display = 'flex';
           })
         }
-      });
+      );
 
       // Upload da foto de perfil
       async function updatePhoto(file){
@@ -250,26 +284,29 @@ export default function profile() {
             if (data) profilePhoto.src = photoURI;
           })
           .catch(error => {
-          console.error('Erro ao atualizar foto:', error);
+            showPopup(error);
+            console.error('Erro ao atualizar foto:', error);
           });
 
-        } else console.error("Erro fazer upload da foto");
+        } else {
+          showPopup("Erro ao fazer upload da foto")
+          console.error("Erro ao fazer upload da foto");
+        }
       };
 
     }).catch(error => {
+      showPopup(error)
       console.error('Erro ao carregar dados do perfil do usuário:', error);
     });
   })();
   
-  
-
   return profileElement;
 }
 
 
 
 async function getUserData() {
-  return fetch('http://localhost:3000/api/login/profile/')
+  return fetch('/api/login/profile/')
   .then((response) => {
       if (response.status !== 200) {
           return response.json().then(errorResponse => {
@@ -283,6 +320,7 @@ async function getUserData() {
       return data;
   })
   .catch((error) => {
+    showPopup(error.error)
       //displayError(error.error);
       console.error('Erro:', error.error);
   });
@@ -290,7 +328,7 @@ async function getUserData() {
 
 async function updateUser(username, data) {
   console.log("updateUser: ", username, data);
-  return fetch('http://localhost:3000/api/login/user/' + username, {
+  return fetch('/api/login/user/' + username, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -299,20 +337,17 @@ async function updateUser(username, data) {
     })
       .then((response) => {
         if (!response.ok) {
-          return response.json().then((error) => {
-            throw new Error(
-              `Não foi possível atualizar o usuário! ${error.message}`
-            );
-          });
+          return response.message
         }
         return response.json();
       })
       .then((data) => {
-        
+        showPopup(data.message, "Sucesso!")
         console.log(data);
         return data;
       })
       .catch((err) => {
+        showPopup(err)
         console.error(err);
       });
 }
@@ -325,7 +360,6 @@ function validateForm(form){
   if (form.email.trim() === '') return 'O E-mail não pode ser nulo';
   if (!emailRegex.test(form.email.trim())) return 'Informe um e-mail válido';
   if (form.currentPassword.trim() === '') return 'Informe a senha atual para confirmar as alterações';
-  if (form.currentPassword.trim().length < 8) return 'Senha atual inválida';
   if (form.firstPassword.trim() !== form.secondPassword.trim()) return 'As senhas são diferentes';
   if (form.firstPassword.trim().length < 8 || form.secondPassword.trim() < 8) {
     if (!(form.firstPassword.trim() === '' && form.secondPassword.trim() === '' )) {
@@ -347,8 +381,8 @@ function formatPasswordData(form) {
       name: form.name,
       username: form.username,
       email: form.email,
-      password: form.secondPassword,
-      // TODO: currentPassword: form.currentPassword,
+      password: form.firstPassword,
+      password2: form.secondPassword
     }
     return data;
   }

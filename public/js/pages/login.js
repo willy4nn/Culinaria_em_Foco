@@ -40,8 +40,6 @@ export default function login() {
 </main>
   `;
 
-  
-
   // Esta linha cria um novo elemento HTML do tipo 'div'
   const loginElement = document.createElement('div');
 
@@ -79,7 +77,7 @@ export default function login() {
     const password = passwordInput.value.toString();
 
     // Esta linha envia uma requisição POST para o servidor com o nome de usuário e senha no corpo da requisição
-    fetch(`http://localhost:3000/api/login/auth`, {
+    fetch(`/api/login/auth`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -89,10 +87,16 @@ export default function login() {
       .then((response) => {
         // Esta linha verifica se a resposta do servidor é bem-sucedida
         if (!response.ok) {
-          throw new Error('Falha no login');
-        }
+          return response.json().then((error) => {
+            throw new Error(error.message)
+          })
+        };
+
         // Esta linha retorna os dados da resposta em formato JSON
-        window.dispatchEvent(createCustomEvent('/home'));
+        setTimeout(() => {
+          window.dispatchEvent(createCustomEvent('/home'));
+        }, 3000); 
+        showPopup("Login efetuado com sucesso!", "Sucesso!")
         return response.json();
       })
       .then((data) => {
