@@ -26,7 +26,7 @@ async function getNewsFeed(category) {
   if (!category) category = 'latest';
   console.log(category);
   //let url = category ? `http://localhost:3000/api/posts/category/${category}` : `http://localhost:3000/api/posts/all`;
-  let url = category === 'latest' ? `http://localhost:3000/api/posts/latest?limit=10` : `http://localhost:3000/api/posts/category/${category}`;
+  let url = category === 'latest' ? `http://localhost:3000/api/posts/latest?limit=9` : `http://localhost:3000/api/posts/category/${category}`;
   try {
     const response = await fetch(url);
     
@@ -185,28 +185,36 @@ function renderNewsFeed(news) {
   const renders = {
     createCardNews : (post) => {
       const cardNews = document.createElement('div');
+      cardNews.classList.add('card-news');
       const details = document.createElement('div');
+      details.classList.add('details')
       const category = document.createElement('span');
       const datePost = document.createElement('span');
       const title = document.createElement('div');
+      const image = document.createElement('img');
 
       category.textContent = post.category;
-      datePost.textContent = post.updated_at;
+      datePost.textContent = getTimeAgo(post.updated_at);
       title.textContent = post.title;
+      title.classList.add('paragraph-bold');
+      image.classList.add('image');
+      image.src = post.banner;
 
       details.appendChild(category);
       details.appendChild(datePost);
       cardNews.appendChild(details);
       cardNews.appendChild(title);
+      cardNews.appendChild(image);
+      
 
       return cardNews;
     },
     default : (news) => {
       const defaultNewsFeedHTML = `
-        <div>
-        <div class="column column-1"></div>
-        <div class="column column-2"></div>
-        <div class="column column-3"></div>
+        <div class="grid">
+          <div class="column column-1"></div>
+          <div class="column column-2"></div>
+          <div class="column column-3"></div>
         </div>
       `
 
@@ -220,10 +228,13 @@ function renderNewsFeed(news) {
       news.forEach((post, index) => {
 
         if (index <= 5) {
+          console.log('Coluna da esquerda');
           firstColumn.appendChild(renders.createCardNews(post));
-        } else if (index = 6) {
+        } else if (index == 6) {
+          console.log('Coluna do meio');
           secondColumn.appendChild(renders.createCardNews(post));
         } else if (index > 6 && index <= 9) {
+          console.log('Coluna da direita');
           thirdColumn.appendChild(renders.createCardNews(post));
         }
       })
@@ -233,7 +244,7 @@ function renderNewsFeed(news) {
     category : (news) => {
       console.log('Teste:', news);
       const defaultNewsFeedHTML = `
-        <div>
+        <div class="category">
 
         </div>
       `
@@ -251,6 +262,7 @@ function renderNewsFeed(news) {
   }
 
   function renderNews(filter, news){
+    console.log('Notícias:', news);
     newsFeedContent.innerHTML = '';
     if (!filter) {
       newsFeedContent.appendChild(renders.default(news));
