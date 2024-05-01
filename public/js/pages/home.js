@@ -6,7 +6,7 @@ import header from './elements/header.js'
 import menuToggle from './elements/menuToggle.js';
 
 async function getFeaturedNews(limit) {
-  let url = limit ? `http://localhost:3000/api/posts/like?limit=${limit}` : `http://localhost:3000/api/posts/like?limit=1`;
+  let url = limit ? `/api/posts/like?limit=${limit}` : `/api/posts/like?limit=1`;
 
   try {
     const response = await fetch(url);
@@ -25,8 +25,8 @@ async function getFeaturedNews(limit) {
 async function getNewsFeed(category) {
   if (!category) category = 'latest';
   console.log(category);
-  //let url = category ? `http://localhost:3000/api/posts/category/${category}` : `http://localhost:3000/api/posts/all`;
-  let url = category === 'latest' ? `http://localhost:3000/api/posts/latest?limit=9` : `http://localhost:3000/api/posts/category/${category}`;
+  //let url = category ? `/api/posts/category/${category}` : `/api/posts/all`;
+  let url = category === 'latest' ? `/api/posts/latest?limit=9` : `/api/posts/category/${category}`;
   try {
     const response = await fetch(url);
     

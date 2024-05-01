@@ -3,7 +3,7 @@ import setNavigation from "../../setNavigation.js";
 import createCustomEvent from "../../eventModule.js";
 
 function getUserData() {
-  return fetch('http://localhost:3000/api/login/profile/')
+  return fetch('/api/login/profile/')
     .then((response) => {
       if (!response.ok) {
         return response.json().then(errorResponse => {
@@ -60,7 +60,7 @@ function renderMenuOpened(user) {
     menu.appendChild(linkLogout);
 
     linkLogout.addEventListener('click', () => {
-      fetch('http://localhost:3000/api/login/logout', {
+      fetch('/api/login/logout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -252,7 +252,7 @@ export default function admin() {
 
   // const logoutButton = adminElement.querySelector('.logout');
   // logoutButton.addEventListener('click', () => {
-  //   fetch(`http://localhost:3000/api/login/logout`, {
+  //   fetch(`/api/login/logout`, {
   //     method: 'POST',
   //     headers: {
   //       'Content-Type': 'application/json',
