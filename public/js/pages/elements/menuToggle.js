@@ -1,59 +1,39 @@
 import setNavigation from "../../setNavigation.js";
 import createCustomEvent from "../../eventModule.js";
 
-export default function menuToggle() {
-  const menuToggle = document.createElement('div');
-  menuToggle.className = 'menu-toggle';
-  menuToggle.id = 'menuToggle';
-  menuToggle.textContent = '☰';
+export default function menuButton() {
+  const menuButton = document.createElement('div');
+  menuButton.classList.add('menu-toggle');
 
-  const sidebar = document.createElement('div');
-  sidebar.className = 'sidebar';
-  sidebar.id = 'sidebar';
+  const menuButtonIcon = document.createElement('img');
+  menuButtonIcon.src = '/../../../../assets/images/menu.svg'
+  console.log(menuButtonIcon.src);
 
-  const divButtons = document.createElement('div');
-  divButtons.classList.add('buttons');
-  
-  const buttonProfile = document.createElement('a');
-  buttonProfile.classList.add("button");
-  buttonProfile.classList.add("button-fill");
-  buttonProfile.textContent = "Perfil";
-  setNavigation(buttonProfile, "/profile")
+  const menu = document.createElement('div');
 
-  const buttonPost = document.createElement('a');
-  buttonPost.classList.add("button");
-  buttonPost.classList.add("button-fill");
-  buttonPost.textContent = "Postar";
-  setNavigation(buttonPost, "/post")
+  const linkProfile = document.createElement('div');
+  linkProfile.textContent = 'Perfil';
+  setNavigation(linkProfile, "/profile")
 
-  const buttonDashboard = document.createElement('a');
-  buttonDashboard.classList.add("button");
-  buttonDashboard.classList.add("button-fill");
-  buttonDashboard.textContent = "Dashboard";
-  setNavigation(buttonDashboard, "/dashboard")
+  const linkPost = document.createElement('div');
+  linkPost.textContent = 'Criar Post';
+  setNavigation(linkPost, "/post")
 
-  const buttonFavorite = document.createElement('a');
-  buttonFavorite.classList.add("button");
-  buttonFavorite.classList.add("button-fill");
-  buttonFavorite.textContent = "Favoritos";
-  setNavigation(buttonFavorite, "/favorite")
-  
-  const buttonAdmin = document.createElement('a');
-  buttonAdmin.classList.add("button");
-  buttonAdmin.classList.add("button-fill");
-  buttonAdmin.textContent = "Administrador";
-  setNavigation(buttonAdmin, "/admin")
+  const linkFavorites = document.createElement('div');
+  linkFavorites.textContent = 'Favoritos';
+  setNavigation(linkFavorites, "/favorite")
 
-  const buttonLogout = document.createElement('a');
-  buttonLogout.classList.add("button");
-  buttonLogout.classList.add("button-fill");
-  buttonLogout.classList.add("logout");
-  buttonLogout.textContent = 'Logout';
+  const linkDashboard = document.createElement('div');
+  linkDashboard.textContent = 'Dashboard';
+  setNavigation(linkDashboard, "/dashboard")
 
-  // Adiciona um ouvinte de eventos para o botão de logout
-  buttonLogout.addEventListener('click', (event) => {
-    event.preventDefault();
+  const linkAdmin = document.createElement('div');
+  linkAdmin.textContent = 'Admin';
+  setNavigation(linkAdmin, "/admin")
 
+  const logoutButton = document.createElement('div');
+  logoutButton.textContent = 'Logout';
+  logoutButton.addEventListener('click', () => {
     fetch(`http://localhost:3000/api/login/logout`, {
       method: 'POST',
       headers: {
@@ -61,35 +41,40 @@ export default function menuToggle() {
       },
     })
       .then((response) => {
+        // Esta linha verifica se a resposta do servidor é bem-sucedida
         if (!response.ok) {
           throw new Error('Falha no logout');
         }
-        
-        window.dispatchEvent(createCustomEvent('/'));
+        // Esta linha retorna os dados da resposta em formato JSON
+        window.dispatchEvent(createCustomEvent('/login'));
         return response.json();
       })
       .then((data) => {
+        // Esta linha registra os dados recebidos do servidor no console (você pode substituir isso por sua própria lógica para lidar com a resposta)
         console.log(data);
       })
       .catch((error) => {
+        // Esta linha captura qualquer erro que ocorra durante o processo de login
         console.error('Erro:', error);
       });
   });
 
-  sidebar.appendChild(buttonProfile)
-  sidebar.appendChild(buttonDashboard)
-  sidebar.appendChild(buttonFavorite)
-  sidebar.appendChild(buttonAdmin)
-  sidebar.appendChild(buttonProfile)
-  sidebar.appendChild(buttonLogout)
-
-  //sidebar.appendChild(divButtons);
-
-  menuToggle.appendChild(sidebar);
-
-  menuToggle.addEventListener('click', () => {
-    sidebar.classList.toggle('show');
+  menuButton.addEventListener('click', () => {
+    toggleMenu();
   });
+
+  function toggleMenu() {
+    console.log('Togando Menu');
+  }
   
-  return menuToggle;
+  menu.appendChild(linkProfile);
+  menu.appendChild(linkPost);
+  menu.appendChild(linkFavorites);
+  menu.appendChild(linkDashboard);
+  menu.appendChild(linkAdmin);
+  menu.appendChild(logoutButton);
+  menuButton.appendChild(menuButtonIcon);
+  menuButton.appendChild(menu);
+
+  return menuButton;
 }
