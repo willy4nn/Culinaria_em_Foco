@@ -19,7 +19,7 @@ export default function main() {
 </header>
 <main class="main main-main">
   <div class="text-container">
-    <h1 class="primary-heading">Aguçe seu paralar com novas experiências Culinárias.</h1>
+    <h1 class="primary-heading">Aguçe seu paladar com novas experiências Culinárias.</h1>
     <p class="paragraph-normal">Descubra sabores únicos e inspirações culinárias em nossa revista digital em destaque. Receitas criativas, dicas de chefs e histórias que vão transformar sua cozinha em um verdadeiro palco de delícias. Explore conosco o mundo da gastronomia!</p>
     <div class="buttons">
       <a class="button button-line signin-button">Entrar</a>
