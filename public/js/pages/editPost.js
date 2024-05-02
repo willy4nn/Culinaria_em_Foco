@@ -245,7 +245,7 @@ export default function editPost(postId) {
 
   async function bannerChange(newBannerFile, oldBannerURI) {
     if (newBannerFile) {
-      return await importLocalFile(newBannerFile);
+      return await importLocalFile(newBannerFile, 'banner');
     } else {
       return oldBannerURI
     }

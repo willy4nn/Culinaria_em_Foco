@@ -63,7 +63,7 @@ export default function favorite() {
 
   function renderNews(data){
     // For apenas para testar a renderização com mais dados
-    for(let i=0; i<10; i++) {
+    //for(let i=0; i<10; i++) {
 
       data.forEach((item, index) => {
           // console.log(item);
@@ -105,7 +105,7 @@ export default function favorite() {
 
           setNavigation(divContainer, `/post/${item.id}`);
       });
-    }
+   // }
   }
 
   // Retorna o elemento principal

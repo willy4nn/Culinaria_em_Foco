@@ -361,7 +361,6 @@ export default function getPost(postId) {
       div.appendChild(newReplies);
       // Mostrar respostas
       showRepliesButton.addEventListener('click', async () => {
-        showPopup();
         if (newReplies.childNodes.length === 0) {
           newReplies.appendChild( await renderRepliesByCommentId(div, comment.id));
           shownReply = true;

@@ -5,49 +5,16 @@ const cors = require('cors');
 const path = require('path');
 
 const https = require('https');
-const http = require('http');
-const axios = require('axios');
 const fs = require('fs');
 
 const options = {
-    key: fs.readFileSync('/etc/letsencrypt/live/alpha04.alphaedtech.org.br/privkey.pem'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/alpha04.alphaedtech.org.br/fullchain.pem')
+    key: fs.readFileSync(config.SSL_KEY),
+    cert: fs.readFileSync(config.SSL_CERT)
 };
-
-// Manipulador de media
-const multer = require("multer");
-/* const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './src/uploads/posts_media');
-  },
-  filename: function (req, file, cb) {
-    //const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    //cb(null, file.fieldname + '-' + uniqueSuffix);
-    cb(null, file.originalname);
-  },
-}); */
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    console.log("aqui:", req.body.type);
-    try {
-      if (req.body.type === 'banner') cb(null, './public/uploads/posts_banner');
-      else if (req.body.type === 'photo')cb(null, './public/uploads/profile_photo');
-      else throw Error('Tipo de upload inválido (banner | photo)');
-    } catch (error) {
-      console.error('Erro :', error)
-    }
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-    cb(null, file.fieldname + '-' + uniqueSuffix)
-  }
-});
-const upload = multer({ storage });
-//const upload = multer({ dest: "./src/uploads/posts_media" });
-//const upload = multer({ storage });
 
 const app = express();
 const port = config.PORT;
+const port_ssl = config.PORT_SSL;
 const ip = config.HOST;
 
 // Define o caminho absoluto para a pasta "public"
@@ -71,30 +38,47 @@ app.use((req, res, next) => {
   next();
 });
 
+//Middleware Body parser
 const bodyParser = require('body-parser');
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(express.json());
+
+// Manipulador de media
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    try {
+      if (req.body.type === 'banner') cb(null, './public/uploads/posts_banner');
+      else if (req.body.type === 'photo')cb(null, './public/uploads/profile_photo');
+      else throw Error('Tipo de upload inválido (banner | photo)');
+    } catch (error) {
+      console.error('Erro :', error)
+    }
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+    cb(null, file.fieldname + '-' + uniqueSuffix)
+  }
+});
+const upload = multer({ storage });
+
 // Upload com Multer
 app.post("/upload_files", upload.single("files"), uploadFiles);
 
 function uploadFiles(req, res) {
-    console.log("upload");
-    console.log(req.body);
-    console.log(req.file);
-    console.log(req.file.destination);
-    console.log(req.file.filename);
-    console.log(req.file.filename);
+
     res.json({ message: "Successfully uploaded files", data: { 
       'destination': req.file.destination,
       'filename': req.file.filename 
     }});
 }
 
+const axios = require('axios');
 // Upload com Axios
 app.post('/upload', async (req, res) => {
   const { imageUrls, imageUris } = req.body;
-  console.log("passou aqui");
 
   // Iterar sobre as URLs das imagens e fazer o download e salvar localmente
   for (let i = 0; i < imageUrls.length; i++) {
@@ -148,14 +132,21 @@ app.get('*', permissionVerify, (req, res) => {
 });
 
 
-https.createServer(options, app).listen(443);
+// Middleware de redirecionamento
+app.use((req, res, next) => {
+  if (req.secure) {
+    next();
+  } else {
+    res.redirect(`https://${req.headers.host}${req.url}`);
+  }
+});
 
-// Redireciona todas as solicitações HTTP para HTTPS
-http.createServer((req, res) => {
-  res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
-  res.end();
-}).listen(80);
+// Inicie o servidor HTTPS
+https.createServer(options, app).listen(config.PORT_SSL, () => {
+  console.log(`Servidor HTTPS iniciado em ${ip} na porta: ${port_ssl}`);
+});
 
-// app.listen(port, ip, () => {
-//   console.log(`Servidor rodando em http://${ip}:${port}`);
-// });
+// Inicie o servidor HTTP na porta 80
+app.listen(config.PORT, () => {
+  console.log(`Servidor HTTP iniciado em ${ip} na porta: ${port}`);
+});

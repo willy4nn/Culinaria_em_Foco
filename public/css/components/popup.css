@@ -4,7 +4,7 @@
     display: flex;
     align-items: flex-start;
     gap: 1rem;
-    background-color: #FFDDDE;
+    background-color: #8180808e;
     border-radius: 0.2rem;
     padding: 2rem 1.5rem;
     /* position: relative; */
@@ -23,21 +23,21 @@
     align-items: center;
     justify-content: center;
     background-color: #f9ffff;
-    color: #e6153d;
+    color: #0f0f0f;
     border-radius: 50%;
 }
 
 .popup-content>h3 {
     font-size: 1.1rem;
     font-weight: 600;
-    color: #404656;
+    color: #464444;
 }
 
 .popup-content>p {
     font-size: 1rem;
     font-weight: 500;
     line-height: 1.2rem;
-    color: #666b78;
+    color: #6a6a6b;
     margin-top: 0.5rem;
 }
 
@@ -48,7 +48,7 @@
     align-items: center;
     justify-content: center;
     color: #ffffff;
-    background-color: #e6153d;
+    background-color: #302e2f;
     cursor: pointer;
     border: none;
     border-radius: 50%;

@@ -143,7 +143,7 @@ export default function dashboard() {
           });
           
           buttonDelete.addEventListener('click', (e) => {
-
+            deletePost(item.id);
           });
       });
     /* } */
@@ -155,3 +155,29 @@ export default function dashboard() {
   // Retorna o elemento principal
   return dashboardElement;
 }
+
+async function deletePost(id) {
+  return fetch('/api/posts/' + id, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((error) => {
+            throw new Error(
+              `Não foi possível deletar o post! ${error.message}`
+            );
+          });
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        return data;
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+    };

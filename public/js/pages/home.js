@@ -4,6 +4,7 @@ import createCustomEvent from '../eventModule.js';
 import footer from './elements/footer.js'
 import header from './elements/header.js'
 import menuToggle from './elements/menuToggle.js';
+import setNavigation from "../setNavigation.js";
 
 async function getFeaturedNews(limit) {
   let url = limit ? `/api/posts/like?limit=${limit}` : `/api/posts/like?limit=1`;
@@ -49,7 +50,7 @@ function renderFeaturedNewsSection(news) {
         <div class="carousel-container">
           <div class="banner-container">
             <div class="banner">
-              <img class="banner-image">
+              <img class="home-banner-image">
             </div>
             <div class="featured-news-navigation">
               <input class="item-navigation" type="radio" name="page">
@@ -72,7 +73,7 @@ function renderFeaturedNewsSection(news) {
   const featuredNewsSection = document.createElement('section');
   featuredNewsSection.innerHTML = featuredNewsSectionHTML;
 
-  const banner = featuredNewsSection.querySelector('.banner-image');
+  const banner = featuredNewsSection.querySelector('.home-banner-image');
   const category = featuredNewsSection.querySelector('.category');
   const posted = featuredNewsSection.querySelector('.posted');
   const title = featuredNewsSection.querySelector('.featured-news-info-title');
@@ -200,6 +201,7 @@ function renderNewsFeed(news) {
       image.classList.add('image');
       image.src = post.banner;
 
+      setNavigation(cardNews,`/post/${post.id}`)
       details.appendChild(category);
       details.appendChild(datePost);
       cardNews.appendChild(details);
