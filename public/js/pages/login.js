@@ -19,24 +19,33 @@ export default function login() {
   </div>
 </header>
 <main class="main main-login">
-  <h1 class="primary-heading">Login</h1>
-  <div>
-    <form class="form">
-      <div class="inputs-container">
-        <div>
-          <input class="input paragraph-normal" id="email" type="text" name="email" placeholder="Email Address" />
-        </div>
-        <div>
-          <input class="input paragraph-normal" id="password" type="password" name="password" placeholder="Password"/>
-        </div>
+  <div class="container login">
+    <div class="left-content">
+      <h1 class="secondary-heading">Aguçe seu paralar com novas experiências Culinárias.</h1>
+      <p class="paragraph-normal">Descubra sabores únicos e inspirações culinárias em nossa revista digital em destaque. Receitas criativas, dicas de chefs e histórias que vão transformar sua cozinha em um verdadeiro palco de delícias. Explore conosco o mundo da gastronomia!</p>
+    </div>
+
+    <div class="right-content">
+      <h1 class="primary-heading">Login</h1>
+      <div>
+        <form class="form">
+          <div class="inputs-container">
+            <div>
+              <input class="input paragraph-normal" id="email" type="text" name="email" placeholder="Email Address" />
+            </div>
+            <div>
+              <input class="input paragraph-normal" id="password" type="password" name="password" placeholder="Password"/>
+            </div>
+          </div>
+          <!-- <a class="paragraph-normal">Forgot you password?</a> -->
+          <button class="button button-fill" id="buttonSignIn">Sign In</button>
+        </form>
       </div>
-      <!-- <a class="paragraph-normal">Forgot you password?</a> -->
-      <button class="button button-fill" id="buttonSignIn">Sign In</button>
-    </form>
+      <p class="signup-link paragraph-medium">
+        <a id="signup-span" class="interact-span">Não possui uma Conta? Cadastre-se</a>
+      </p>
+    </div>
   </div>
-  <p class="signup-link paragraph-medium">
-    <a id="signup-span" class="interact-span">Não possui uma Conta? Cadastre-se</a>
-  </p>
 </main>
   `;
 

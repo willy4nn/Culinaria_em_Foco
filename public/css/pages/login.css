@@ -1,6 +1,27 @@
 /* login.css */
 
 /* ########## LOGIN PAGE ########## */
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container .login {
+  background-image: url('/assets/images/login_bg.jpg');
+  background-size: auto;
+  max-width: 1280px;
+  background-size: cover;
+  height: 100%;
+}
+
+.left-content,
+.right-content {
+  max-width: 30%;
+}
+
+
 .login-container {
   height: 100vh;
   display: flex;

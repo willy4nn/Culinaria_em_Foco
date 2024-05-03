@@ -13,36 +13,34 @@ export default function dashboard() {
   // HTML do elemento principal
   const dashboardContentHTML = `
 
-    <main>
+    <main class="profile-bg">
       
       <div id="container-dashboard">
 
         <div id="container-header">
-            <h1 class="secondary-heading">Dashboard</h1>
+            <h1 class="secondary-heading">Painel do Editor</h1>
         </div>
 
         <div id="dashboard-content">
         <div class="table-header">
-          <table cellpadding="0" cellspacing="0" border="0">
-            <thead>
+          <table cellpadding="0" cellspacing="0" border="0" class="dashboard-format">
               <tr>
-                <th>Title</th>
+                <th>Título</th>
                 <th>Banner</th>
-                <th>Category</th>
-                <th>Created At</th>
-                <th>Updated At</th>
-                <th>Posted</th>
+                <th>Categoria</th>
+                <th>Data</th>
+              <!-- <th>Updated At</th> -->
+                <th>Exibição</th>
                 <th>Status</th>
-                <th>Comments</th>
+                <th>Comentários</th>
                 <th>Likes</th>
-                <th>Edit</th>
-                <th>Delete</th>
+                <th>Editar</th>
+                <th>Deletar</th>
               </tr>
-            </thead>
           </table>
         </div>
         <div class="table-content">
-          <table id="content-table">
+          <table id="content-table" class="dashboard-format">
           </table>
         </div>
 
@@ -87,18 +85,17 @@ export default function dashboard() {
 
 
   function renderNews(data){
-
     // For apenas para testar a renderização com mais dados
     /* for(let i=0; i<10; i++) { */
 
       data.forEach((item, index) => {
-          const trableRow = document.createElement('tr');
+          const tableRow = document.createElement('tr');
           const title = document.createElement('td');
           const banner = document.createElement('td');
           const bannerImg = document.createElement('img');
           const category = document.createElement('td');
           const created_at = document.createElement('td');
-          const updated_at = document.createElement('td');
+          //const updated_at = document.createElement('td');
           const posted = document.createElement('td');
           const status = document.createElement('td');
           const commentsQuantity = document.createElement('td');
@@ -113,7 +110,7 @@ export default function dashboard() {
           bannerImg.src = item.banner;
           category.innerText = item.category.charAt(0).toUpperCase() + item.category.slice(1);
           created_at.innerText = dateFormat(item.created_at);
-          updated_at.innerText = dateFormat(item.updated_at);
+          /* updated_at.innerText = dateFormat(item.updated_at); */
           posted.innerText = item.posted_draft ? 'Posted' : 'Draft';
           status.innerText = item.status.charAt(0).toUpperCase() + item.status.slice(1);
           commentsQuantity.innerText = item.comments_quantity;
@@ -131,11 +128,11 @@ export default function dashboard() {
           tdEdit.appendChild(buttonEdit);
           tdDelete.appendChild(buttonDelete);
 
-          trableRow.append(title, banner, category, created_at, updated_at, posted, 
+          tableRow.append(title, banner, category, created_at, posted, 
                             status, commentsQuantity, likesQuantity, tdEdit, tdDelete
           );
             
-          contentTable.appendChild(trableRow);
+          contentTable.appendChild(tableRow);
 
           buttonEdit.addEventListener('click', (e) => {
             //setNavigation("colocar um icon edit", `/post/${item.id}`);
@@ -143,7 +140,8 @@ export default function dashboard() {
           });
           
           buttonDelete.addEventListener('click', (e) => {
-            deletePost(item.id);
+            console.log("delete");
+            deletePost(item.id).then(data => { if (data) tableRow.remove(); })
           });
       });
     /* } */

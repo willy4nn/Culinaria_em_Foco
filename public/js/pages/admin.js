@@ -24,7 +24,7 @@ export default function admin() {
 
         <div id="admin-content">
         <div class="table-header">
-          <table cellpadding="0" cellspacing="0" border="0">
+          <table cellpadding="0" cellspacing="0" border="0" class="admin-format">
             <thead>
               <tr>
                 <th>Id</th>
@@ -44,7 +44,7 @@ export default function admin() {
           </table>
         </div>
         <div class="table-content">
-          <table id="content-table">
+          <table id="content-table" class="admin-format">
           </table>
         </div>
 

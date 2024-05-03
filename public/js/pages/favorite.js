@@ -82,8 +82,8 @@ export default function favorite() {
           title.innerText = item.title;
           category.innerText = item.category.charAt(0).toUpperCase() + item.category.slice(1);
           created_at.innerText = dateFormat(item.created_at);
-          commentsQuantity.innerText = item.comments_quantity;
-          likesQuantity.innerText = item.likes_quantity;
+          commentsQuantity.innerText = `${item.comments_quantity} comentários`;
+          likesQuantity.innerText = `${item.likes_quantity} likes`;
           console.log("category", category.innerText);
 
           if (category.innerText == 'Trends') category.style.backgroundColor = '#1f7e93';

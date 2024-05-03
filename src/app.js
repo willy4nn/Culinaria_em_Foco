@@ -4,6 +4,8 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 
+const bodyParser = require('body-parser');
+
 const https = require('https');
 const fs = require('fs');
 
@@ -21,7 +23,9 @@ const ip = config.HOST;
 const publicPath = path.join(__dirname, '../public');
 
 // Middleware para analisar o corpo das requisições JSON
-app.use(express.json());
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+//app.use(express.json({verify: (req, res, buf) => { req.rawBody = buf.toString()},limit: '50mb'}));
 
 // Configura o middleware para servir arquivos estáticos
 app.use(express.static(publicPath));
@@ -39,10 +43,7 @@ app.use((req, res, next) => {
 });
 
 //Middleware Body parser
-const bodyParser = require('body-parser');
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
-app.use(express.json());
+
 
 // Manipulador de media
 const multer = require("multer");
@@ -75,22 +76,22 @@ function uploadFiles(req, res) {
     }});
 }
 
-const axios = require('axios');
-// Upload com Axios
 app.post('/upload', async (req, res) => {
   const { imageUrls, imageUris } = req.body;
 
   // Iterar sobre as URLs das imagens e fazer o download e salvar localmente
   for (let i = 0; i < imageUrls.length; i++) {
     try {
-      const response = await axios.get(imageUrls[i], { responseType: 'arraybuffer' });
+      const response = await fetch(imageUrls[i]);
+      const imageData = await response.arrayBuffer();
+      
       //const directory = './src/uploads/posts_media';
       const directory = './public/uploads/posts_media';
 
       //const ext = path.extname(imageUrls[i]);
       //const filename = path.join(directory, `image_${i}${ext}`);
       const filename = path.join(directory, imageUris[i]);
-      fs.writeFileSync(filename, Buffer.from(response.data, 'binary'));
+      fs.writeFileSync(filename, Buffer.from(imageData));
     } catch (error) {
       console.error('Erro ao fazer download da imagem:', error);
     }

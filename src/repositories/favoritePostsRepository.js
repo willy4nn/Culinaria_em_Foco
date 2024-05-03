@@ -51,7 +51,8 @@ const favoritePostsRepository = {
     // GET ALL
     getFavoritePosts: async function () {
 
-        const query = "SELECT * FROM favorite_posts";
+        //const query = "SELECT * FROM favorite_posts";
+        const query = "SELECT fp.* FROM favorite_posts fp JOIN posts p ON fp.posts_id = p.id WHERE p.status != 'deleted';";
 
         try {
             const result = await pool.query(query);
@@ -85,7 +86,8 @@ const favoritePostsRepository = {
     // GET ALL POSTS FAVORITED BY A USER
     getPostsFavorited: async function (users_id) {
 
-        const query = "SELECT p.* FROM posts p INNER JOIN favorite_posts fp ON p.id = fp.posts_id WHERE fp.users_id = $1;"
+        //const query = "SELECT p.* FROM posts p INNER JOIN favorite_posts fp ON p.id = fp.posts_id WHERE fp.users_id = $1;"
+        const query = "SELECT p.* FROM posts p INNER JOIN favorite_posts fp ON p.id = fp.posts_id WHERE fp.users_id = $1 AND p.status != 'deleted';"
 
         try {
             const result = await pool.query(query, [users_id]);
