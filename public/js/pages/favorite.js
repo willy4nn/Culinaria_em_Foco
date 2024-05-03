@@ -17,7 +17,7 @@ export default function favorite() {
       
       <div id="container-favorite">
         <div id="container-header">
-            <h1>Favorites</h1>
+            <h1 class="primary-heading">Favorites</h1>
         </div>
         <div id="favorite-content">
         </div>

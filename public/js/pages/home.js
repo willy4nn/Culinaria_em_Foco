@@ -167,8 +167,6 @@ function renderNewsFeed(news) {
   filters.forEach((filter) => {
     filter.addEventListener('click', () => {
       getNewsFeed(filter.value).then(news => {
-        console.log(news);
-        console.log(filter.value);
         renderNews(filter.value, news);
       });
     })
@@ -222,13 +220,10 @@ function renderNewsFeed(news) {
       news.forEach((post, index) => {
 
         if (index <= 5) {
-          console.log('Coluna da esquerda');
           firstColumn.appendChild(renders.createCardNews(post));
         } else if (index == 6) {
-          console.log('Coluna do meio');
           secondColumn.appendChild(renders.createCardNews(post));
         } else if (index > 6 && index <= 9) {
-          console.log('Coluna da direita');
           thirdColumn.appendChild(renders.createCardNews(post));
         }
       })
@@ -236,7 +231,6 @@ function renderNewsFeed(news) {
       return defaultNewsFeed;
     },
     category : (news) => {
-      console.log('Teste:', news);
       const defaultNewsFeedHTML = `
         <div class="category">
 
@@ -256,7 +250,6 @@ function renderNewsFeed(news) {
   }
 
   function renderNews(filter, news){
-    console.log('Notícias:', news);
     newsFeedContent.innerHTML = '';
     if (!filter) {
       newsFeedContent.appendChild(renders.default(news));

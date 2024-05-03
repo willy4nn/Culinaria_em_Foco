@@ -1,6 +1,25 @@
 import createCustomEvent from "../../eventModule.js";
 import setNavigation from "../../setNavigation.js";
 
+function getUserData() {
+  return fetch('/api/login/profile/')
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then(errorResponse => {
+          throw errorResponse;
+        });
+      }
+      return response.json();
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      console.error('Erro:', error);
+      throw error; // Propague o erro para quem chamar essa função
+    });
+}
+
 function logo() {
   const logo = document.createElement('div');
   logo.classList.add('logo');
@@ -19,14 +38,14 @@ function logo() {
   return logo;
 }
 
-function navigation() {
+function navigation(user) {
+  console.log('Usuário:', user)
   function createLink(text, adress){
     const link = document.createElement('li');
     link.classList.add('link');
     link.textContent = text;
 
     setNavigation(link, adress);
-
     return link;
   }
 
@@ -44,24 +63,34 @@ function navigation() {
 
   const links = [
     {
+      user: 'user',
       text: 'Home',
       address: '/home'
     },
     {
+      user: 'user',
       text: 'Perfil',
       address: '/profile'
     },
     {
+      user: 'admin',
       text: 'Postagens',
       address: '/dashboard'
     },
     {
+      user: 'user',
       text: 'Favoritos',
       address: '/favorite'
     },
     {
-      text: 'Usuários',
+      user: 'admin',
+      text: 'Admin',
       address: '/admin'
+    },
+    {
+      user: 'editor',
+      text: 'Postar',
+      address: '/post'
     }
   ]
 
@@ -100,6 +129,12 @@ function navigation() {
   });
 
   links.forEach((link) => {
+    if (link.user == 'admin' && user.user_type == 'user' || link.user == 'admin' && user.user_type == 'editor') {
+      return;
+    }
+    if (link.user == 'editor' && user.user_type == 'user') {
+      return;
+    }
     const item = createLink(link.text, link.address);
     item.classList.add('item');
     list.appendChild(item);
@@ -117,13 +152,23 @@ export default function header() {
   const header = document.createElement('header');
   header.classList.add('header');
 
+ 
+  let navigationElement = document.createElement('div');
   const logoElement = logo();
-  const navigationElement = navigation();
+
+  header.appendChild(logoElement);
+
+  getUserData()
+  .then(userInfo => {
+    navigationElement = navigation(userInfo);
+    header.appendChild(navigationElement);
+  })
+  .catch(error => {
+    console.error('Erro ao carregar menu:', error);
+  });
 
   setNavigation(logoElement, "/home")
 
-  header.appendChild(logoElement);
-  header.appendChild(navigationElement);
 
   return header;
 }
