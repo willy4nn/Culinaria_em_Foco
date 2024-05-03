@@ -1,13 +1,23 @@
+/* MAIN */
+
+.profile-bg {
+    background-image: url("/assets/images/profile_background.webp");
+}
+
 #profile-container {
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
     align-items: center;
     border: 1px solid #cccccc;
-    border-radius: 8px;
+    border-radius: 16px;
     padding: 8px 20px;
-    min-width: 360px;
-    box-shadow: 0px 0px 4px #9e9e9e;
+    width: 800px;
+    box-shadow: 0px 0px 12px #9e9e9e;
+    background-color: #f0f8ff00;
+    margin: 40px;
+    backdrop-filter: blur(20px);
 }
+
 
 /* HEADER */
 
@@ -15,16 +25,17 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-bottom: 1px solid #cccccc;
-    padding: 16px 0 24px 0;
-    width: 100%;
+    /* border-bottom: 1px solid #cccccc; */
+    padding: 16px 16px 24px 16px;
+    width: 50%;
+    color: white;
 }
 
 .my-profile-photo {
     border-radius: 50%;
     border-style: solid;
-    min-width: 50px;
-    min-height: 50px;
+    min-width: 250px;
+    min-height: 250px;
     max-width: 80px;
     max-height: 80px;
     border-color: #74c69d;
@@ -39,12 +50,24 @@
 
 /* CONTENT */
 
+.wrapper {
+    padding: 20px;
+    color: black;
+}
+
 .profile-content {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     padding: 12px 0px 4px 0px;
     width: 100%;
+    font-size: 20px;
+
+    display: flex;
+    border: 1px solid rgb(204, 204, 204);
+    border-radius: 16px;
+    box-shadow: rgb(182, 174, 174) 0px 0px 4px;
+    background-color: rgb(255, 255, 255);
 }
 
 .profile-group {
@@ -52,11 +75,12 @@
     flex-direction: column;
     padding: 10px 0;
     width: 100%;
+    align-items: center;
 }
 
 .profile-group .label {
-    color: #bbbbbb;
-    font-size: 14px;
+    color: #a4a0a0;
+    font-size: 18px;
 }
 
 
@@ -102,22 +126,35 @@
 #profile-edit,
 #edit-options {
     display: none;
+    padding-left: 40px;
+}
+
+#profile-edit {
+    background-color: #00000000;
+    border: none;
+    box-shadow: none;
 }
 
 .label-edit {
-    color: #2c2c2c;
+    color: #c7c7c7;
     font-size: 13px;
 }
+
+/* .label-edit {
+    padding-left: 30px;
+    align-self: flex-start;
+} */
 
 .profile-group input {
     font-family: 'Nunito', sans-serif;
     border: none;
     border-bottom: 2px solid #aaaaaa;
     outline: none;
-    background-color: #0000000a;
+    background-color: #fefefe;
     border-radius: 2px;
-    padding: 4px 4px 2px 4px;
+    padding: 4px 4px 2px 6px;
     font-weight: 600;
+    width: 240px;
 }
 
 .profile-group input::placeholder {
@@ -126,10 +163,18 @@
 }
 
 .profile-group input:focus {
-    background-color: #00000015;
+    background-color: aliceblue;
+    border-bottom: 2px solid #74c69d;
+
 }
 
+#profile-edit .profile-group {
+    align-items: start;
+}
 
+#profile-edit .profile-group input {
+    font-size: 14px;
+}
 
 /* ANIMATION */
 

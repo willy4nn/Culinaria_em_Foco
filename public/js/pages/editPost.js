@@ -2,7 +2,7 @@ import createCustomEvent from '../eventModule.js';
 import { importHTMLContentFiles, importHTMLContentFilesWithFetch, importLocalFile } from '../multer/index.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
-import menuToggle from './elements/menuToggle.js';
+// import menuToggle from './elements/menuToggle.js';
 
 // Exporta a função que retorna a página de login
 export default function editPost(postId) {
@@ -245,7 +245,7 @@ export default function editPost(postId) {
 
   async function bannerChange(newBannerFile, oldBannerURI) {
     if (newBannerFile) {
-      return await importLocalFile(newBannerFile);
+      return await importLocalFile(newBannerFile, 'banner');
     } else {
       return oldBannerURI
     }

@@ -2,19 +2,18 @@
 
 /* ########## FORM ########## */
 .form {
-  border: 1px solid #c6ccd2;
+  border: 1px solid var(--c4);
   display: flex;
   flex-direction: column;
   padding: 24px;
   border-radius: 24px;
-  background: var(--c4);
+  background: var(--c3);
   gap: 1rem;
   align-items: start;
-  color: var(--c1);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shd-default);
 }
 
-/* ########## INPUT ########## */
+/* ########## INPUT ########## */ 
 .inputs-container {
   display: flex;
   flex-direction: column;
@@ -30,18 +29,18 @@
   width: 100%;
   padding: 1rem 2rem;
   border-radius: 24px;
-  border: 1px solid #a3abb3;
-  background: var(--c5);
-  color: var(--c9);
+  border: 1px solid var(--c5);
+  background: var(--c4);
+  color: var(--c10);
   outline: none;
   font-size: 1rem;
   transition: background-color 0.3s ease, color 0.3s ease,
     border-color 0.3s ease;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shd-default);
 }
 
 .input:focus {
-  background: #9ca5ae;
-  border: 1px solid #8f99a2;
-  color: var(--c10);
+  background: var(--c5);
+  border: 1px solid var(--c6);
+  color: var(--c12);
 }

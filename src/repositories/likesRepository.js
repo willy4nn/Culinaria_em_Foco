@@ -70,7 +70,8 @@ const likesRepository = {
     // GET BY POST ID AND USER ID
     getPostsIsLiked: async function (posts_id, users_id) {
 
-        const query = "SELECT * FROM posts_likes WHERE posts_id = $1 AND users_id = $2";
+        //const query = "SELECT * FROM posts_likes WHERE posts_id = $1 AND users_id = $2";
+        const query = "SELECT pl.* FROM posts_likes pl INNER JOIN posts p ON pl.posts_id = p.id WHERE p.status != 'deleted' AND pl.posts_id = $1 AND pl.users_id = $2;";
 
         try {
             const result = await pool.query(query, [posts_id, users_id]);

@@ -6,7 +6,7 @@ import createCustomEvent from '../eventModule.js';
 import setNavigation from '../setNavigation.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
-import menuToggle from './elements/menuToggle.js';
+// import menuToggle from './elements/menuToggle.js';
 
 // Exporta a função principal que retorna a página principal
 export default function favorite() {
@@ -35,7 +35,6 @@ export default function favorite() {
   const main = favoriteElement.querySelector("main") 
   favoriteElement.insertBefore(header(), main)
   favoriteElement.append(footer())
-  favoriteElement.append(menuToggle())
 
   const containerFavorite = favoriteElement.querySelector('#container-favorite');
   const favoriteContent = favoriteElement.querySelector('#favorite-content');
@@ -63,7 +62,7 @@ export default function favorite() {
 
   function renderNews(data){
     // For apenas para testar a renderização com mais dados
-    for(let i=0; i<10; i++) {
+    //for(let i=0; i<10; i++) {
 
       data.forEach((item, index) => {
           // console.log(item);
@@ -82,8 +81,8 @@ export default function favorite() {
           title.innerText = item.title;
           category.innerText = item.category.charAt(0).toUpperCase() + item.category.slice(1);
           created_at.innerText = dateFormat(item.created_at);
-          commentsQuantity.innerText = item.comments_quantity;
-          likesQuantity.innerText = item.likes_quantity;
+          commentsQuantity.innerText = `${item.comments_quantity} comentários`;
+          likesQuantity.innerText = `${item.likes_quantity} likes`;
           console.log("category", category.innerText);
 
           if (category.innerText == 'Trends') category.style.backgroundColor = '#1f7e93';
@@ -105,7 +104,7 @@ export default function favorite() {
 
           setNavigation(divContainer, `/post/${item.id}`);
       });
-    }
+   // }
   }
 
   // Retorna o elemento principal

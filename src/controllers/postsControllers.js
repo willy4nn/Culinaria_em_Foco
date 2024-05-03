@@ -93,12 +93,14 @@ const postsController = {
         }
     },
     
-    // GET ALL BY CATEGORY
+    // GET ALL BY USER ID
     getPostsByUserId: async (req, res) => {
+        console.log(req.user);
         const created_by = req.user.id;
+        const userType = req.user.userType;
 
         try {
-            const response = await postsRepository.getPostsByUserId(created_by);
+            const response = await postsRepository.getPostsByUserId(created_by, userType);
 
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {

@@ -3,10 +3,10 @@ import getTimeAgo from "../utils/getTimeAgo.js";
 import createCustomEvent from '../eventModule.js';
 import footer from './elements/footer.js'
 import header from './elements/header.js'
-import menuToggle from './elements/menuToggle.js';
+import setNavigation from "../setNavigation.js";
 
 async function getFeaturedNews(limit) {
-  let url = limit ? `http://localhost:3000/api/posts/like?limit=${limit}` : `http://localhost:3000/api/posts/like?limit=1`;
+  let url = limit ? `/api/posts/like?limit=${limit}` : `/api/posts/like?limit=1`;
 
   try {
     const response = await fetch(url);
@@ -24,9 +24,7 @@ async function getFeaturedNews(limit) {
 
 async function getNewsFeed(category) {
   if (!category) category = 'latest';
-  console.log(category);
-  //let url = category ? `http://localhost:3000/api/posts/category/${category}` : `http://localhost:3000/api/posts/all`;
-  let url = category === 'latest' ? `http://localhost:3000/api/posts/latest?limit=9` : `http://localhost:3000/api/posts/category/${category}`;
+  let url = category === 'latest' ? `/api/posts/latest?limit=9` : `/api/posts/category/${category}`;
   try {
     const response = await fetch(url);
     
@@ -49,7 +47,7 @@ function renderFeaturedNewsSection(news) {
         <div class="carousel-container">
           <div class="banner-container">
             <div class="banner">
-              <img class="banner-image">
+              <img class="home-banner-image">
             </div>
             <div class="featured-news-navigation">
               <input class="item-navigation" type="radio" name="page">
@@ -72,7 +70,7 @@ function renderFeaturedNewsSection(news) {
   const featuredNewsSection = document.createElement('section');
   featuredNewsSection.innerHTML = featuredNewsSectionHTML;
 
-  const banner = featuredNewsSection.querySelector('.banner-image');
+  const banner = featuredNewsSection.querySelector('.home-banner-image');
   const category = featuredNewsSection.querySelector('.category');
   const posted = featuredNewsSection.querySelector('.posted');
   const title = featuredNewsSection.querySelector('.featured-news-info-title');
@@ -139,26 +137,20 @@ function renderNewsFeed(news) {
     <div class="news-feed-container">
       <h1 class="primary-heading">News Feed</h1>
       <div class="filters">
-        <label class="checkbox">
-          Latest News
-          <input class="filter" type="radio" name="category" value="latest">
-        </label>
-        <label class="checkbox">
-          Tips
-          <input class="filter" type="radio" name="category" value="tips">
-        </label>
-        <label class="checkbox">
-          Stories
-          <input class="filter" type="radio" name="category" value="stories">
-        </label>
-        <label class="checkbox">
-          Trends
-          <input class="filter" type="radio" name="category" value="trends">
-        </label>
-        <label class="checkbox">
-          Interviews
-          <input class="filter" type="radio" name="category" value="interviews">
-        </label>
+      <input class="filter" type="radio" id="interviews" name="category" value="interviews">
+      <label class="checkbox" for="interviews">Interviews</label><br>
+
+      <input class="filter" type="radio" id="reviews" name="category" value="reviews">
+      <label class="checkbox" for="reviews">Reviews</label><br>
+
+      <input class="filter" type="radio" id="stories" name="category" value="stories">
+      <label class="checkbox" for="stories">Stories</label><br>
+
+      <input class="filter" type="radio" id="tips" name="category" value="tips">
+      <label class="checkbox" for="tips">Tips</label><br>
+
+      <input class="filter" type="radio" id="trends" name="category" value="trends">
+      <label class="checkbox" for="trends">Trends</label><br>
       </div>
       <div class="news-feed-content">
 
@@ -200,6 +192,7 @@ function renderNewsFeed(news) {
       image.classList.add('image');
       image.src = post.banner;
 
+      setNavigation(cardNews,`/post/${post.id}`)
       details.appendChild(category);
       details.appendChild(datePost);
       cardNews.appendChild(details);
@@ -219,6 +212,7 @@ function renderNewsFeed(news) {
       `
 
       const defaultNewsFeed = document.createElement('div');
+      defaultNewsFeed.classList.add('default-news-feed');
       defaultNewsFeed.innerHTML = defaultNewsFeedHTML;
 
       const firstColumn = defaultNewsFeed.querySelector('.column-1');
@@ -297,7 +291,6 @@ export default function home() {
 
   homeElement.insertBefore(header(), main)
   homeElement.append(footer())
-  homeElement.append(menuToggle())
 
   // Chama a função getFeaturedNews() para obter as notícias em destaque
   getFeaturedNews(3).then(news => {

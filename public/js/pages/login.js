@@ -68,6 +68,8 @@ export default function login() {
   const buttonSignIn = loginElement.querySelector('#buttonSignIn');
   const signUpSpan = loginElement.querySelector('#signup-span');
 
+  const logoImage = loginElement.querySelector('.logo-image');
+
   // Esta função adiciona um ouvinte de evento ao elemento buttonSignIn. Quando o botão é clicado, o código dentro da função será executado
   buttonSignIn.addEventListener('click', (event) => {
     // Esta linha evita o comportamento padrão do botão, que é enviar o formulário
@@ -75,6 +77,8 @@ export default function login() {
     // Esta linha define duas variáveis com nome de usuário e senha (altere-as para suas credenciais reais)
     const email = emailInput.value.toString();
     const password = passwordInput.value.toString();
+
+    
 
     // Esta linha envia uma requisição POST para o servidor com o nome de usuário e senha no corpo da requisição
     fetch(`/api/login/auth`, {
@@ -96,7 +100,7 @@ export default function login() {
         setTimeout(() => {
           window.dispatchEvent(createCustomEvent('/home'));
         }, 3000); 
-        showPopup("Login efetuado com sucesso!", "Sucesso!")
+        showPopup("Login efetuado com sucesso!", "Sucesso!", true);
         return response.json();
       })
       .then((data) => {
@@ -117,6 +121,9 @@ export default function login() {
   const signupButton = loginElement.querySelector('.signup-button');
   setNavigation(signupButton, '/register');
 
+  logoImage.addEventListener("click", () => {
+    window.dispatchEvent(createCustomEvent(`/`));
+  })
   // Esta linha retorna o loginElement que contém todo o layout da página de login
   return loginElement;
 }

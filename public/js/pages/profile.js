@@ -5,7 +5,7 @@ import { renewDate } from '../utils/dateFormat.js';
 import displayModal from '../utils/modal.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
-import menuToggle from './elements/menuToggle.js';
+// import menuToggle from './elements/menuToggle.js';
 import { modalError } from './elements/modalError.js';
 
 //Modal de erro
@@ -16,74 +16,74 @@ export default function profile() {
   // HTML do elemento de login
   const profileContentHTML = `
 
-    <main class=""> 
+    <main class="profile-bg"> 
 
       <div id="profile-container">
 
         <div id="profile-header">
           <img id="profile-photo" class="my-profile-photo"></img>
-          <h1 id="profile-username">Username</h1>
-          <p id="profile-name">Nome Sobrenome</p>
+          <h1 id="profile-name">Nome Sobrenome</h1>
+          <p id="profile-username">Username</p>
         </div>
+        <div id="profile-wrapper" class="wrapper">
+          <div id="profile-content" class="profile-content">
+            <div class="profile-group">
+              <span class="label">E-mail</span>
+              <span id="profile-email"></span>
+            </div>
+            <div class="profile-group">
+              <span class="label">Tipo de usuário</span>
+              <span id="profile-user-type"></span>
+            </div>
+            <div class="profile-group">
+              <span class="label">Premium</span>
+              <span id="profile-premium-active"></span>
+            </div>
+            <div class="profile-group">
+              <span class="label">Renovação da assinatura</span>
+              <span id="profile-premium-date"></span>
+            </div>
+          </div>
 
-        <div id="profile-content" class="profile-content">
-          <div class="profile-group">
-            <span class="label">E-mail</span>
-            <span id="profile-email"></span>
+          <div id="profile-edit" class="profile-content">
+            <div class="profile-group">
+              <span class="label-edit">Nome</span>
+              <input id="name-input" placeholder="Nome"></input>
+            </div>
+            <div class="profile-group">
+              <span class="label-edit">Username</span>
+              <input id="username-input" placeholder="Username"></input>
+            </div>
+            <div class="profile-group">
+              <span class="label-edit">E-mail</span>
+              <input id="email-input" placeholder="E-mail"></input>
+            </div>
+            <div class="profile-group">
+              <span class="label-edit">Senha</span>
+              <input id="first-password-input" placeholder="Nova senha" type="password"></input>
+              <input id="second-password-input" placeholder="Repita a nova senha" type="password"></input>
+            </div>
+            <div class="profile-group">
+              <span class="label-edit">Informe a senha atual para confirmar as alterações*</span>
+              <input id="current-password-input" placeholder="Senha atual" type="password"></input>
+            </div>
           </div>
-          <div class="profile-group">
-            <span class="label">Tipo de usuário</span>
-            <span id="profile-user-type"></span>
+
+          <div id="profile-options">
+            <div class="options-group">
+              <button id="edit-button">Editar Perfil</button>
+              <button id="favorite-button">Favoritos</button>
+              <button id="premium-button">Assinar Premium</button>
+            </div>
           </div>
-          <div class="profile-group">
-            <span class="label">Premium</span>
-            <span id="profile-premium-active"></span>
-          </div>
-          <div class="profile-group">
-            <span class="label">Renovação da assinatura</span>
-            <span id="profile-premium-date"></span>
+
+          <div id="edit-options">
+            <div class="options-group">
+              <button id="cancel-button">Cancelar</button>
+              <button id="confirm-button">Confirmar</button>
+            </div>
           </div>
         </div>
-
-        <div id="profile-edit" class="profile-content">
-          <div class="profile-group">
-            <span class="label-edit">Nome</span>
-            <input id="name-input" placeholder="Nome"></input>
-          </div>
-          <div class="profile-group">
-            <span class="label-edit">Username</span>
-            <input id="username-input" placeholder="Username"></input>
-          </div>
-          <div class="profile-group">
-            <span class="label-edit">E-mail</span>
-            <input id="email-input" placeholder="E-mail"></input>
-          </div>
-          <div class="profile-group">
-            <span class="label-edit">Senha</span>
-            <input id="first-password-input" placeholder="Nova senha" type="password"></input>
-            <input id="second-password-input" placeholder="Repita a nova senha" type="password"></input>
-          </div>
-          <div class="profile-group">
-            <span class="label-edit">Informe a senha atual para confirmar as alterações*</span>
-            <input id="current-password-input" placeholder="Senha atual" type="password"></input>
-          </div>
-        </div>
-
-        <div id="profile-options">
-          <div class="options-group">
-            <button id="edit-button">Editar Perfil</button>
-            <button id="favorite-button">Favoritos</button>
-            <button id="premium-button">Assinar Premium</button>
-          </div>
-        </div>
-
-        <div id="edit-options">
-          <div class="options-group">
-            <button id="cancel-button">Cancelar</button>
-            <button id="confirm-button">Confirmar</button>
-          </div>
-        </div>
-
       </div>
 
     </main>
@@ -98,7 +98,7 @@ export default function profile() {
   const main = profileElement.querySelector("main") 
   profileElement.insertBefore(header(), main)
   profileElement.append(footer())
-  profileElement.append(menuToggle())
+  // profileElement.append(menuToggle())
 
   //Modal de erro
   main.insertAdjacentElement("afterend", popupCard);
@@ -108,6 +108,7 @@ export default function profile() {
   const profileUsername = profileElement.querySelector('#profile-username');
   const profileName = profileElement.querySelector('#profile-name');
 
+  const profileWrapper = profileElement.querySelector('#profile-wrapper');
   const profileEmail = profileElement.querySelector('#profile-email');
   const profileUserType = profileElement.querySelector('#profile-user-type');
   const profilePremiumActive = profileElement.querySelector('#profile-premium-active');
@@ -137,7 +138,7 @@ export default function profile() {
     getUserData().then(profileData => {
       console.log("renderProfile: ", profileData);
       profilePhoto.src = profileData.profile_photo || "/assets/images/default_profile_normal.png";
-      profileUsername.innerText = profileData.username || "none";
+      profileUsername.innerText = `@${profileData.username}` || "@none";
       profileName.innerText = profileData.name || "none";
   
       profileEmail.innerText = profileData.email;

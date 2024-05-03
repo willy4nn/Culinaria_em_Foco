@@ -1,8 +1,7 @@
 import createCustomEvent from '../eventModule.js';
-import { importHTMLContentFiles, importLocalFile } from '../multer/index.js';
+import { importHTMLContentFiles, importHTMLContentFilesWithFetch, importLocalFile } from '../multer/index.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
-import menuToggle from './elements/menuToggle.js';
 import { modalError } from './elements/modalError.js';
 
 // Exporta a função que retorna a página de login
@@ -129,7 +128,6 @@ export default function createPost() {
   const main = createPostElement.querySelector("main") 
   createPostElement.insertBefore(header(), main)
   createPostElement.append(footer())
-  createPostElement.append(menuToggle())
   
   //Modal de erro
   const { popupCard, showPopup } = modalError();
@@ -180,7 +178,7 @@ export default function createPost() {
         event.preventDefault();
 
         // Trata o conteúdo princial da postagem e salva as imagens no storage
-        const content = importHTMLContentFiles(editor.root.innerHTML);
+        const content = importHTMLContentFilesWithFetch(editor.root.innerHTML);
 
         // Efetua a postagem
         submitPost(true, content, userData.id);

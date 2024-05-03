@@ -7,7 +7,8 @@ import setNavigation from '../setNavigation.js';
 import displayModal from '../utils/modal.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
-import menuToggle from './elements/menuToggle.js';
+import { modalError } from './elements/modalError.js';
+// import menuToggle from './elements/menuToggle.js';
 
 // Exporta a função principal que retorna a página principal
 export default function admin() {
@@ -24,7 +25,7 @@ export default function admin() {
 
         <div id="admin-content">
         <div class="table-header">
-          <table cellpadding="0" cellspacing="0" border="0">
+          <table cellpadding="0" cellspacing="0" border="0" class="admin-format">
             <thead>
               <tr>
                 <th>Id</th>
@@ -32,6 +33,7 @@ export default function admin() {
                 <th>Username</th>
                 <th>E-mail At</th>
                 <th>User Type</th>
+                <th>Status</th>
                 <th>Premium Active</th>
                 <th>Premium Date</th>
                 <th>Profile Photo</th>
@@ -44,7 +46,7 @@ export default function admin() {
           </table>
         </div>
         <div class="table-content">
-          <table id="content-table">
+          <table id="content-table" class="admin-format">
           </table>
         </div>
 
@@ -63,7 +65,11 @@ export default function admin() {
   const main = adminElement.querySelector("main") 
   adminElement.insertBefore(header(), main)
   adminElement.append(footer())
-  adminElement.append(menuToggle())
+  // adminElement.append(menuToggle())
+
+  //Modal de erro
+  const { popupCard, showPopup } = modalError();
+  main.insertAdjacentElement("afterend", popupCard);
 
   getUsers();
 
@@ -78,6 +84,7 @@ export default function admin() {
           const username = document.createElement('td');
           const email = document.createElement('td');
           const userType = document.createElement('td');
+          const status = document.createElement('td');
           const premiumActive = document.createElement('td');
           const premiumDate = document.createElement('td');
           const profilePhoto = document.createElement('td');
@@ -98,6 +105,7 @@ export default function admin() {
           username.innerText = item.username;
           email.innerText = item.email;
           userType.innerText = item.user_type.toUpperCase();
+          status.innerText = item.status.toUpperCase();
           premiumActive.innerText = item.premium_active;
           premiumDate.innerText = dateFormat(item.premium_date);
           profilePhotoImg.src = item.profile_photo || '/assets/images/default_profile_normal.png';
@@ -127,7 +135,7 @@ export default function admin() {
           tdEdit.append(buttonEdit, buttonConfirm);
           tdDelete.appendChild(buttonDelete);
 
-          tableRow.append(id, name, username, email, userType, premiumActive, 
+          tableRow.append(id, name, username, email, userType, status, premiumActive, 
             premiumDate, profilePhoto, createdAt, tdEdit, tdDelete
           );
             
@@ -138,10 +146,10 @@ export default function admin() {
 
             // Se já tiver aberto, fecha a edição
             if (editOpened) {
-              [name, username, email, userType, premiumActive, premiumDate].forEach((element) => {
+              [name, username, email, userType, status, premiumActive, premiumDate].forEach((element) => {
                 element.classList.remove('editing');
               });
-              [name, username, email, userType, premiumActive, premiumDate].forEach((element) => {
+              [name, username, email, userType, status, premiumActive, premiumDate].forEach((element) => {
                 const lastChild = element.lastChild;
                 if (lastChild) {
                     element.removeChild(lastChild);
@@ -149,7 +157,7 @@ export default function admin() {
               });
               editOpened = false;
               buttonEdit.innerText = 'Editar';
-              buttonEdit.style.backgroundColor = '#414833';
+              buttonEdit.style.backgroundColor = '#FBBB50';
               buttonConfirm.style.display = 'none';
               return;
             }
@@ -161,7 +169,7 @@ export default function admin() {
             
             buttonConfirm.style.display = 'block';
 
-            [name, username, email, userType, premiumActive, premiumDate].forEach((element) => {
+            [name, username, email, userType, status, premiumActive, premiumDate].forEach((element) => {
               element.classList.add('editing');
             })
 
@@ -169,10 +177,11 @@ export default function admin() {
             const inputUsername = document.createElement('input');
             const inputEmail = document.createElement('input');
             const inputUserType = document.createElement('input');
+            const inputStatus = document.createElement('input');
             const inputPremiumActive = document.createElement('input');
             const inputPremiumDate = document.createElement('input');
 
-            [inputName, inputUsername, inputEmail, inputUserType, inputPremiumActive, inputPremiumDate].forEach((element) => {
+            [inputName, inputUsername, inputEmail, inputUserType, inputStatus, inputPremiumActive, inputPremiumDate].forEach((element) => {
               element.classList.add('edit-input');
             })
 
@@ -182,6 +191,7 @@ export default function admin() {
             inputUsername.value = item.username;
             inputEmail.value = item.email;
             inputUserType.value = item.user_type;
+            inputStatus.value = item.status;
             inputPremiumActive.value = item.premium_active;
             inputPremiumDate.value = item.premium_date.slice(0, 10); //dateFormat(item.premium_date);
 
@@ -189,6 +199,7 @@ export default function admin() {
             username.appendChild(inputUsername);
             email.appendChild(inputEmail);
             userType.appendChild(inputUserType);
+            status.appendChild(inputStatus);
             premiumActive.appendChild(inputPremiumActive);
             premiumDate.appendChild(inputPremiumDate);
 
@@ -198,9 +209,12 @@ export default function admin() {
                 username: inputUsername.value,
                 email: inputEmail.value,
                 user_type: inputUserType.value,
+                status: inputStatus.value,
                 premium_active: inputPremiumActive.value,
                 premium_date: inputPremiumDate.value,
               }
+
+              console.log("datou:",data);
               
               updateUser(item.username, data)
               .then(() => {
@@ -208,6 +222,7 @@ export default function admin() {
                 getUsers();
               })
               .catch(error => {
+                showPopup(error, 'Erro!', false);
                 console.error('Erro ao carregar dados página:', error);
               });
             })
@@ -220,7 +235,11 @@ export default function admin() {
             contentTable.appendChild(displayModal(message, async () => {
               deleteUser(item.id)
               .then((data) => {
-                if (data.result.success) contentTable.removeChild(tableRow);
+                if (data.result.success) {
+                  contentTable.innerHTML = '';
+                  getUsers();
+                  showPopup(data.result.message, 'Sucesso!', data.result.success);
+                }
               })
             }));
           });
@@ -237,7 +256,7 @@ export default function admin() {
     })
     .then((response) => {
       if (!response.ok) {
-        throw new Error('Falha carregar postagens');
+        throw new Error('Falha carregar dados do usuário');
       }
       return response.json();
     })
@@ -252,7 +271,7 @@ export default function admin() {
 
   // const logoutButton = adminElement.querySelector('.logout');
   // logoutButton.addEventListener('click', () => {
-  //   fetch(`http://localhost:3000/api/login/logout`, {
+  //   fetch(`/api/login/logout`, {
   //     method: 'POST',
   //     headers: {
   //       'Content-Type': 'application/json',

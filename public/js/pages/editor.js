@@ -1,7 +1,7 @@
 import createCustomEvent from '../eventModule.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
-import menuToggle from './elements/menuToggle.js';
+// import menuToggle from './elements/menuToggle.js';
 import { modalError } from './elements/modalError.js';
 
 // Exporta a função que retorna a página de login

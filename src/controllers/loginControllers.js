@@ -95,8 +95,6 @@ updateUser: async (req, res) => {
   if (!result.success){
    return res.status(500).json({ message: result.error })
   }
-    res.clearCookie('session_id');
-    res.cookie('session_id', result.sessionToken, { maxAge: 3600000, httpOnly: true })
     res.status(200).json({ message: result.message })
 },
 

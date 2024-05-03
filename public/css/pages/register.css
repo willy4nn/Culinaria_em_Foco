@@ -22,9 +22,9 @@
 .main-register .signin-link {
   cursor: pointer;
   transition: color 0.3s ease;
-  color: var(--c8);
+  color: var(--c11);
 }
 
 .main-register .signin-link:hover {
-  color: var(--c9);
+  color: var(--c12);
 }

@@ -2,7 +2,7 @@
 import getTimeAgo from "../utils/getTimeAgo.js";
 
 function getFeaturedNews() {
-  return fetch('http://localhost:3000/api/posts/like?limit=3')
+  return fetch('/api/posts/like?limit=3')
     .then(response => {
       if (!response.ok) {
         throw new Error('Failed to fetch featured news');
@@ -16,7 +16,7 @@ function getFeaturedNews() {
 }
 
 function getNewsFeed() {
-return fetch('http://localhost:3000/api/posts/all')
+return fetch('/api/posts/all')
   .then(response => {
     if (!response.ok) {
       throw new Error('Failed to fetch featured news');

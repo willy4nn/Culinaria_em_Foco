@@ -21,7 +21,8 @@ const commentsRepository = {
     // GET all comments by post ID and JOIN with users name and profile_photo
     getCommentsByPostId: async function (posts_id) {
 
-        const query = "SELECT posts_comments.*, users.name, users.profile_photo FROM posts_comments JOIN users ON posts_comments.users_id = users.id WHERE posts_comments.posts_id = $1";
+        //const query = "SELECT posts_comments.*, users.name, users.profile_photo FROM posts_comments JOIN users ON posts_comments.users_id = users.id WHERE posts_comments.posts_id = $1";
+        const query = "SELECT pc.*, u.name, u.profile_photo FROM posts_comments pc JOIN users u ON pc.users_id = u.id JOIN posts p ON pc.posts_id = p.id WHERE p.status != 'deleted' AND pc.posts_id = $1;";
 
         try {
             const result = await pool.query(query, [posts_id]);

@@ -2,17 +2,26 @@
 
 /* ########## COLORS ########## */
 :root {
-  --c1: #f8f9fa;
-  --c2: #e9ecef;
-  --c3: #dee2e6;
-  --c4: #ced4da;
-  --c5: #adb5bd;
-  --c6: #6c757d;
-  --c7: #495057;
-  --c8: #343a40;
-  --c9: #212529;
-  --c10: #0b0d0f;
-  --p1: #656d4a;
-  --p2: #414833;
-  --p3: #111D13;
+  --c1: #FFFFFF;
+  --c2: #F2F2F2;
+  --c3: #E5E5E5;
+  --c4: #D9D9D9;
+  --c5: #CCCCCC;
+  --c6: #BFBFBF;
+  --c7: #B3B3B3;
+  --c8: #A6A6A6;
+  --c9: #999999;
+  --c10: #8C8C8C;
+  --c11: #808080;
+  --c12: #000000;
+
+  --bg-yellow: #FBBB50;
+  --bgh-yellow: #FEB843;
+  --dark-yellow: #221500;
+
+  --bg-gray: #F2F2F2;
+  --bgh-gray: #EEEBEB;
+
+  --shd-default: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shdh-default:  0 1px 3px rgba(0, 0, 0, 0.3);
 }

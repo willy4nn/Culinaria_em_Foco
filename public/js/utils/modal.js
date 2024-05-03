@@ -10,8 +10,9 @@ function displayModal(content, callback) {
     modal.classList.add("modal");
     div.classList.add("modal-content");
     description.classList.add("modal-description");
-    buttonCancel.classList.add("modal-button");
-    buttonConfirm.classList.add("modal-button");
+    buttonsdiv.classList.add("modal-container-button");
+    buttonCancel.classList.add("table-button");
+    buttonConfirm.classList.add("table-button", "button-fill");
     
     modal.style.display = 'flex';
 
