@@ -6,17 +6,10 @@ const path = require('path');
 
 const bodyParser = require('body-parser');
 
-const https = require('https');
 const fs = require('fs');
-
-const options = {
-    key: fs.readFileSync(config.SSL_KEY),
-    cert: fs.readFileSync(config.SSL_CERT)
-};
 
 const app = express();
 const port = config.PORT;
-const port_ssl = config.PORT_SSL;
 const ip = config.HOST;
 
 // Define o caminho absoluto para a pasta "public"
@@ -42,10 +35,6 @@ app.use((req, res, next) => {
   next();
 });
 
-//Middleware Body parser
-
-
-// Manipulador de media
 const multer = require("multer");
 
 const storage = multer.diskStorage({
@@ -84,12 +73,7 @@ app.post('/upload', async (req, res) => {
     try {
       const response = await fetch(imageUrls[i]);
       const imageData = await response.arrayBuffer();
-      
-      //const directory = './src/uploads/posts_media';
       const directory = './public/uploads/posts_media';
-
-      //const ext = path.extname(imageUrls[i]);
-      //const filename = path.join(directory, `image_${i}${ext}`);
       const filename = path.join(directory, imageUris[i]);
       fs.writeFileSync(filename, Buffer.from(imageData));
     } catch (error) {
@@ -108,46 +92,19 @@ const editorPermissionVerify = require("./middlewares/editorPermissionVerify.js"
 const routes = require('./routes');
 app.use('/api', routes);
 
-//Base de rotas das páginas
-//As que não requer verificação passam primeiro
-app.get('/register', (req, res) => {
-  res.sendFile(path.join(publicPath, 'index.html'));
+app.get('/verifica-token-jwt', permissionVerify, (req, res) => {
+    res.sendStatus(200); // Token válido
 });
 
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(publicPath, 'index.html'));
+app.get('/verifica-token-jwt-admin', adminPermissionVerify, (req, res) => {
+  res.sendStatus(200); // Token válido
 });
 
-//As que precisam de verificação especial recebem seu middleware específico
-app.get('/admin', adminPermissionVerify, (req, res) => {
-  res.sendFile(path.join(publicPath, 'index.html'));
+app.get('/verifica-token-jwt-editor', editorPermissionVerify, (req, res) => {
+  res.sendStatus(200); // Token válido
 });
 
-app.get('/editor', editorPermissionVerify, (req, res) => {
-  res.sendFile(path.join(publicPath, 'index.html'));
-});
-
-//Aqui é onde chama todas as outras rotas que não precisam de verificação especial
-app.get('*', permissionVerify, (req, res) => {
-  res.sendFile(path.join(publicPath, 'index.html'));
-});
-
-
-// Middleware de redirecionamento
-app.use((req, res, next) => {
-  if (req.secure) {
-    next();
-  } else {
-    res.redirect(`https://${req.headers.host}${req.url}`);
-  }
-});
-
-// Inicie o servidor HTTPS
-https.createServer(options, app).listen(config.PORT_SSL, () => {
-  console.log(`Servidor HTTPS iniciado em ${ip} na porta: ${port_ssl}`);
-});
-
-// Inicie o servidor HTTP na porta 80
+// Inicie o servidor HTTP na porta 3000
 app.listen(config.PORT, () => {
   console.log(`Servidor HTTP iniciado em ${ip} na porta: ${port}`);
 });

@@ -1,4 +1,5 @@
 import setNavigation from "../../setNavigation.js";
+import createCustomEvent from "../../eventModule.js";
 
 function logo() {
   const logo = document.createElement('div');
