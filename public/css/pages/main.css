@@ -60,3 +60,20 @@ main {
   font-family: 'Nunito', sans-serif;
   flex: 1;
 }
+
+@media (max-width: 1200px) {
+  .main-main>.text-container h1 {
+    font-size: 3rem;
+    line-height: 3rem;
+  }
+}
+
+@media (max-width: 850px) {
+  .main-main {
+    padding: 1rem 2rem;
+  }
+
+  .main-main .image-container {
+    display: none;
+  }
+}

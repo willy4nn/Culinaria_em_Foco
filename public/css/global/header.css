@@ -54,13 +54,14 @@
 .header .navigation .list .item:hover {
   background: var(--c2);
   box-shadow: var(--shdh-default);
-  transition-duration: 0s; /* Removendo a transição ao retirar o mouse */
+  transition-duration: 0s;
 }
 
 .logout {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  border: 1px solid transparent;
 }
 
 .logout img {
@@ -82,31 +83,41 @@
 
   .header .navigation .list {
     flex-direction: column;
-    border: 1px solid var(--dark-yellow);
+    border: 1px solid var(--c4);
     height: 100%;
-    position: fixed; /* Alterado para position: fixed */
+    position: fixed;
     top: 0;
-    right: -100%; /* Alterado para right: -100% */
+    right: -100%;
     opacity: 0;
     height: 100vh;
     justify-content: center;
     z-index: 5;
     padding-inline: 3rem;
     align-items: center;
-    background: #bababa;
-
-    /* Adicionando a transição */
-    transition: right 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Transição de propriedades */
+    background: var(--c3);
+    transition: right 0.5s ease-in-out, opacity 0.5s ease-in-out;
   }
 
   .header .navigation .list.show {
-    right: 0; /* Mostra o menu deslizando para a esquerda */
-    opacity: 1; /* Torna o menu visível */
+    right: 0;
+    opacity: 1;
   }
 
   .header .navigation {
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+}
+
+@media (max-width: 850px) {
+  .header {
+    padding: 1rem 2rem;
+  }
+
+  .header {
+    .buttons {
+      display: none;
+    }
   }
 }
