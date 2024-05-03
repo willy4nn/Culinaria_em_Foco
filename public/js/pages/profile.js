@@ -5,7 +5,7 @@ import { renewDate } from '../utils/dateFormat.js';
 import displayModal from '../utils/modal.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
-import menuToggle from './elements/menuToggle.js';
+// import menuToggle from './elements/menuToggle.js';
 import { modalError } from './elements/modalError.js';
 
 //Modal de erro
@@ -98,7 +98,7 @@ export default function profile() {
   const main = profileElement.querySelector("main") 
   profileElement.insertBefore(header(), main)
   profileElement.append(footer())
-  profileElement.append(menuToggle())
+  // profileElement.append(menuToggle())
 
   //Modal de erro
   main.insertAdjacentElement("afterend", popupCard);

@@ -2,8 +2,9 @@
 
 /* ########## HEADER ########## */
 .header {
-  padding: 3rem 5rem;
   display: flex;
+  padding-inline: 5rem;
+  height: 10rem;
   justify-content: space-between;
   align-items: center;
 }
@@ -17,13 +18,95 @@
   line-height: 1rem;
 }
 
-.header .logo-image {
+.header .logo-icon {
   width: 35px;
   cursor: pointer;
 }
 
-.header .buttons {
-  display: flex;
-  gap: 16px;
+.header .navigation .toggle {
+  display: none;
+  height: 3rem;
+  width: 3rem;
+  justify-content: center;
   align-items: center;
+  background: none;
+  border: none;
+}
+
+.header .navigation .list {
+  gap: 1rem;
+  display: flex;
+}
+
+.header .navigation .list .item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  list-style: none;
+  background: var(--c2);
+  border: 0.5px solid transparent;
+  border-radius: 10rem;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.header .navigation .list .item:hover {
+  background: var(--c2);
+  box-shadow: var(--shdh-default);
+  transition-duration: 0s; /* Removendo a transição ao retirar o mouse */
+}
+
+.logout {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logout img {
+  width: 1rem;
+}
+
+@media (max-width: 1000px) {
+  .header .navigation .toggle {
+    display: flex;
+    position: fixed;
+    z-index: 10;
+    top: 3rem;
+    right: 5rem;
+  }
+
+  .no-scroll {
+    overflow: hidden;
+  }
+
+  .header .navigation .list {
+    flex-direction: column;
+    border: 1px solid var(--dark-yellow);
+    height: 100%;
+    position: fixed; /* Alterado para position: fixed */
+    top: 0;
+    right: -100%; /* Alterado para right: -100% */
+    opacity: 0;
+    height: 100vh;
+    justify-content: center;
+    z-index: 5;
+    padding-inline: 3rem;
+    align-items: center;
+    background: #bababa;
+
+    /* Adicionando a transição */
+    transition: right 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Transição de propriedades */
+  }
+
+  .header .navigation .list.show {
+    right: 0; /* Mostra o menu deslizando para a esquerda */
+    opacity: 1; /* Torna o menu visível */
+  }
+
+  .header .navigation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 }

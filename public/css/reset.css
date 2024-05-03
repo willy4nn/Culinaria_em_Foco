@@ -9,8 +9,15 @@
 
 body {
   width: 100%;
-  height: 100vh;
-  background: #f9ffff;
+  min-height: 100vh;
+  height: auto;
+  position: relative;
+  background: var(--c2);
+  background-image: url('../../assets/images/texture.png');
+  background-size: cover;
+  background-repeat: repeat;
+  /* background-position: center; */
+
 }
 
 #root {

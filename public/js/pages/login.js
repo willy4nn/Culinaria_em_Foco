@@ -96,7 +96,7 @@ export default function login() {
         setTimeout(() => {
           window.dispatchEvent(createCustomEvent('/home'));
         }, 3000); 
-        showPopup("Login efetuado com sucesso!", "Sucesso!")
+        showPopup("Login efetuado com sucesso!", "Sucesso!", true)
         return response.json();
       })
       .then((data) => {
