@@ -1,5 +1,6 @@
 import createCustomEvent from "../../eventModule.js";
 import setNavigation from "../../setNavigation.js";
+import createCustomEvent from "../../eventModule.js";
 
 function getUserData() {
   return fetch('/api/login/profile/')
