@@ -39,15 +39,7 @@
   padding: 2rem 5rem;
   gap: 2rem;
   overflow: hidden;
-}
 
-.form a {
-  color: var(--c7);
-  transition: color 0.3s ease;
-}
-
-.form a:hover {
-  color: var(--c8);
 }
 
 .form button {
@@ -56,14 +48,13 @@
 
 .main-login .signup-link {
   transition: color 0.3s ease;
-  color: var(--c8);
+  color: var(--c11);
 }
 
 .main-login .signup-link:hover {
-  color: var(--c9);
+  color: var(--c12);
 }
 
 .interact-span:hover {
   cursor: pointer;
-  font-weight: 700;
 }

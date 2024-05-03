@@ -6,7 +6,7 @@ import createCustomEvent from '../eventModule.js';
 import setNavigation from '../setNavigation.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
-import menuToggle from './elements/menuToggle.js';
+// import menuToggle from './elements/menuToggle.js';
 
 // Exporta a função principal que retorna a página principal
 export default function favorite() {
@@ -35,7 +35,6 @@ export default function favorite() {
   const main = favoriteElement.querySelector("main") 
   favoriteElement.insertBefore(header(), main)
   favoriteElement.append(footer())
-  favoriteElement.append(menuToggle())
 
   const containerFavorite = favoriteElement.querySelector('#container-favorite');
   const favoriteContent = favoriteElement.querySelector('#favorite-content');

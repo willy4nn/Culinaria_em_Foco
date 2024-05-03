@@ -7,7 +7,7 @@ import setNavigation from '../setNavigation.js';
 import displayModal from '../utils/modal.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
-import menuToggle from './elements/menuToggle.js';
+// import menuToggle from './elements/menuToggle.js';
 
 // Exporta a função principal que retorna a página principal
 export default function admin() {
@@ -63,7 +63,7 @@ export default function admin() {
   const main = adminElement.querySelector("main") 
   adminElement.insertBefore(header(), main)
   adminElement.append(footer())
-  adminElement.append(menuToggle())
+  // adminElement.append(menuToggle())
 
   getUsers();
 

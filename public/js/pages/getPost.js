@@ -1,7 +1,7 @@
 import createCustomEvent from '../eventModule.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
-import menuToggle from './elements/menuToggle.js';
+// // import menuToggle from './elements/menuToggle.js';
 import { modalError } from './elements/modalError.js';
 import { dateFormat } from '../utils/dateFormat.js';
 
@@ -64,7 +64,6 @@ export default function getPost(postId) {
   const main = getPostElement.querySelector("main") 
   getPostElement.insertBefore(header(), main)
   getPostElement.append(footer())
-  getPostElement.append(menuToggle())
   const { popupCard, showPopup } = modalError();
   //main.appendChild(popupCard);
   main.insertAdjacentElement("afterend", popupCard);

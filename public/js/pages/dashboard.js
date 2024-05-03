@@ -6,7 +6,7 @@ import createCustomEvent from '../eventModule.js';
 import setNavigation from '../setNavigation.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
-import menuToggle from './elements/menuToggle.js';
+// import menuToggle from './elements/menuToggle.js';
 
 // Exporta a função principal que retorna a página principal
 export default function dashboard() {
@@ -58,7 +58,7 @@ export default function dashboard() {
   const main = dashboardElement.querySelector("main") 
   dashboardElement.insertBefore(header(), main)
   dashboardElement.append(footer())
-  dashboardElement.append(menuToggle())  
+  // dashboardElement.append(menuToggle())  
 
   const containerDashbaord = dashboardElement.querySelector('#container-dashboard');
   const contentTable = dashboardElement.querySelector('#content-table');
