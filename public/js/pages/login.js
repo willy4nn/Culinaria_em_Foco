@@ -19,33 +19,24 @@ export default function login() {
   </div>
 </header>
 <main class="main main-login">
-  <div class="container login">
-    <div class="left-content">
-      <h1 class="secondary-heading">Aguçe seu paralar com novas experiências Culinárias.</h1>
-      <p class="paragraph-normal">Descubra sabores únicos e inspirações culinárias em nossa revista digital em destaque. Receitas criativas, dicas de chefs e histórias que vão transformar sua cozinha em um verdadeiro palco de delícias. Explore conosco o mundo da gastronomia!</p>
-    </div>
-
-    <div class="right-content">
-      <h1 class="primary-heading">Login</h1>
-      <div>
-        <form class="form">
-          <div class="inputs-container">
-            <div>
-              <input class="input paragraph-normal" id="email" type="text" name="email" placeholder="Email Address" />
-            </div>
-            <div>
-              <input class="input paragraph-normal" id="password" type="password" name="password" placeholder="Password"/>
-            </div>
-          </div>
-          <!-- <a class="paragraph-normal">Forgot you password?</a> -->
-          <button class="button button-fill" id="buttonSignIn">Sign In</button>
-        </form>
+  <h1 class="primary-heading">Login</h1>
+  <div>
+    <form class="form">
+      <div class="inputs-container">
+        <div>
+          <input class="input paragraph-normal" id="email" type="text" name="email" placeholder="Email Address" />
+        </div>
+        <div>
+          <input class="input paragraph-normal" id="password" type="password" name="password" placeholder="Password"/>
+        </div>
       </div>
-      <p class="signup-link paragraph-medium">
-        <a id="signup-span" class="interact-span">Não possui uma Conta? Cadastre-se</a>
-      </p>
-    </div>
+      <!-- <a class="paragraph-normal">Forgot you password?</a> -->
+      <button class="button button-fill" id="buttonSignIn">Sign In</button>
+    </form>
   </div>
+  <p class="signup-link paragraph-medium">
+    <a id="signup-span" class="interact-span">Não possui uma Conta? Cadastre-se</a>
+  </p>
 </main>
   `;
 
@@ -77,6 +68,8 @@ export default function login() {
   const buttonSignIn = loginElement.querySelector('#buttonSignIn');
   const signUpSpan = loginElement.querySelector('#signup-span');
 
+  const logoImage = loginElement.querySelector('.logo-image');
+
   // Esta função adiciona um ouvinte de evento ao elemento buttonSignIn. Quando o botão é clicado, o código dentro da função será executado
   buttonSignIn.addEventListener('click', (event) => {
     // Esta linha evita o comportamento padrão do botão, que é enviar o formulário
@@ -84,6 +77,8 @@ export default function login() {
     // Esta linha define duas variáveis com nome de usuário e senha (altere-as para suas credenciais reais)
     const email = emailInput.value.toString();
     const password = passwordInput.value.toString();
+
+    
 
     // Esta linha envia uma requisição POST para o servidor com o nome de usuário e senha no corpo da requisição
     fetch(`/api/login/auth`, {
@@ -105,7 +100,7 @@ export default function login() {
         setTimeout(() => {
           window.dispatchEvent(createCustomEvent('/home'));
         }, 3000); 
-        showPopup("Login efetuado com sucesso!", "Sucesso!", true)
+        showPopup("Login efetuado com sucesso!", "Sucesso!", true);
         return response.json();
       })
       .then((data) => {
@@ -126,6 +121,9 @@ export default function login() {
   const signupButton = loginElement.querySelector('.signup-button');
   setNavigation(signupButton, '/register');
 
+  logoImage.addEventListener("click", () => {
+    window.dispatchEvent(createCustomEvent(`/`));
+  })
   // Esta linha retorna o loginElement que contém todo o layout da página de login
   return loginElement;
 }

@@ -1,3 +1,4 @@
+import createCustomEvent from "../../eventModule.js";
 import setNavigation from "../../setNavigation.js";
 
 function logo() {

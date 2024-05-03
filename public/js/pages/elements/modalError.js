@@ -41,17 +41,17 @@ function modalError() {
 
     function showPopup(errorText, errorTitle, status) {
         if (status) {
-            divSpan.style.background = 'green';
-            return;
+            divSpan.style.background = '#0080007d';
+        } else {
+        divSpan.style.background = '#ff00007d';
         }
-        divSpan.style.background = 'red';
-        title.innerText = errorTitle || 'Erro!';
+        title.innerText = errorTitle || '';
         text.innerText = errorText;
 
         popupCard.style.transform = "translateY(80vh) translateX(-16px)";
         setTimeout(() => {
           popupCard.style.transform = "translateY(100vh) translateX(-16px)";
-        }, 400000);
+        }, 4000);
     }
 
     return { popupCard, showPopup };

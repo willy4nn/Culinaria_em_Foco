@@ -88,6 +88,11 @@ tr td:first-child {
     width: 80px;
 }
 
+.admin-format th:nth-child(11) {
+    text-align: start;
+    padding-left: 18px;
+}
+
 .editing {
     font-size: 0;
 }

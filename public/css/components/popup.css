@@ -1,6 +1,6 @@
 .popup-card {
     width: 22rem;
-    height: 5rem;
+    height: 8rem;
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -24,9 +24,9 @@
     align-items: center;
     justify-content: center;
     /* background-color: #8ac926; */
-    background-color: #f94144;  
-    border: 2px solid var(--c12);
-    color: var(--c12);
+    background-color: #f94144;
+    border: 2px solid #ffffff;
+    color: #ffffff;
     border-radius: 50%;
 }
 
@@ -63,6 +63,6 @@
 .popup-close-icon {
     /* font-size: 1rem; */
     font-size: 20px;
-    vertical-align: top;
+    /* vertical-align: top; */
     line-height: 1.2;
 }

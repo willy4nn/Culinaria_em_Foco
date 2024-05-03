@@ -190,7 +190,7 @@ function renderNewsFeed(news) {
       title.textContent = post.title;
       title.classList.add('paragraph-bold');
       image.classList.add('image');
-      image.src = post.banner + '.jpg';
+      image.src = post.banner;
 
       setNavigation(cardNews,`/post/${post.id}`)
       details.appendChild(category);

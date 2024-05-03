@@ -66,8 +66,16 @@ const loginRepository = {
         try {
           //Primeiro verifica se usuário existe
             const result = await pool.query('SELECT * FROM users WHERE email = $1', [email])
-          if(result.rowCount === 0){
+          if (result.rowCount === 0){
             const error = { success: false, error: 'Usuário inexistente' };
+            return error;
+          }
+          if (result.rows[0].status === 'deleted'){
+            const error = { success: false, error: 'Este usuário foi excluído' };
+            return error;
+          }
+          if (result.rows[0].status === 'banned'){
+            const error = { success: false, error: 'Este usuário está suspenso' };
             return error;
           }
 
@@ -211,8 +219,8 @@ const loginRepository = {
           //Aqui se desenrola o processo de atualização no banco
           await client.query('BEGIN')
 
-          await client.query(`UPDATE users SET name = $1, username = $2, email = $3, password = $4, user_type = $5, premium_active = $6, premium_date = $7, profile_photo = $8, created_at = $9 WHERE ${isNaN(username) ? "username" : "id"} = $10`, 
-          [newUser.name, newUser.username, newUser.email, newUser.password, newUser.user_type, newUser.premium_active, newUser.premium_date, newUser.profile_photo, newUser.created_at, username]);
+          await client.query(`UPDATE users SET name = $1, username = $2, email = $3, password = $4, user_type = $5, status = $6, premium_active = $7, premium_date = $8, profile_photo = $9 WHERE ${isNaN(username) ? "username" : "id"} = $10`, 
+          [newUser.name, newUser.username, newUser.email, newUser.password, newUser.user_type, newUser.status, newUser.premium_active, newUser.premium_date, newUser.profile_photo, username]);
 
           await client.query('COMMIT')
            
@@ -239,7 +247,8 @@ const loginRepository = {
           return error;
         }
         try {
-          await pool.query(`DELETE FROM users WHERE ${isNaN(username) ? "username" : "id"} = $1`, [username]);
+          //await pool.query(`DELETE FROM users WHERE ${isNaN(username) ? "username" : "id"} = $1`, [username]);
+          await pool.query(`UPDATE users SET status = 'deleted' WHERE ${isNaN(username) ? "username" : "id"} = $1`, [username]);
           const success = { success: true, message: "Usuário excluído com sucesso!"};
           return success;
         } catch (err) {

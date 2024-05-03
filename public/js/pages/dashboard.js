@@ -13,7 +13,7 @@ export default function dashboard() {
   // HTML do elemento principal
   const dashboardContentHTML = `
 
-    <main class="profile-bg">
+    <main class="">
       
       <div id="container-dashboard">
 
