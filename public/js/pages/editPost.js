@@ -127,7 +127,6 @@ export default function editPost(postId) {
   const main = editPostElement.querySelector("main") 
   editPostElement.insertBefore(header(), main)
   editPostElement.append(footer())
-  editPostElement.append(menuToggle())
 
   const titleInput = editPostElement.querySelector('#title');
   const categoryInputs = editPostElement.querySelectorAll(

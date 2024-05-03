@@ -265,7 +265,7 @@ export default function createPost() {
         setTimeout(() => {
           window.dispatchEvent(createCustomEvent('/post'));
         }, 3000); 
-        showPopup("Post efetuado com sucesso!", "Sucesso!")
+        showPopup("Post efetuado com sucesso!", "Sucesso!", true)
         return response.json();
       })
       .then((data) => {
