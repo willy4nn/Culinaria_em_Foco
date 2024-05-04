@@ -4,20 +4,19 @@ const SECRET_KEY = config.SECRET_KEY;
 
 //Esse middleware faz a verificação do token do usuário, caso ele tenha, permite o acesso aos dados
 async function permissionVerify (req, res, next){
-    const token = req.cookies.session_id;
-    if (!token) {
-        return res.status(401).send('Token JWT ausente');
+    const sessionToken = req.cookies.session_id;
+    if(!sessionToken){
+        return res.status(401).redirect("/");
     }
 
-    try {
-        // Verifica o token JWT usando a chave secreta
-        jwt.verify(token, SECRET_KEY);
-        next(); // Chama o próximo middleware ou rota se o token for válido
-    } catch (error) {
-        // Se houver um erro ao verificar o token, envie uma resposta com o erro
-        console.error('Erro ao verificar o token JWT:', error);
-        res.status(401).send('Token JWT inválido');
-    }
+    await jwt.verify(sessionToken, SECRET_KEY, (err, decoded) => {
+        if(err){
+            return res.status(403).redirect("/");
+        }else{
+            req.user = decoded.user;
+            next();
+        }
+    });
 }
 
 module.exports = permissionVerify;

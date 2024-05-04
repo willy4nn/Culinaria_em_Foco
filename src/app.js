@@ -5,6 +5,7 @@ const cors = require('cors');
 const path = require('path');
 
 const bodyParser = require('body-parser');
+const axios = require('axios');
 
 const fs = require('fs');
 
@@ -58,30 +59,33 @@ const upload = multer({ storage });
 app.post("/upload_files", upload.single("files"), uploadFiles);
 
 function uploadFiles(req, res) {
-
     res.json({ message: "Successfully uploaded files", data: { 
       'destination': req.file.destination,
       'filename': req.file.filename 
-    }});
-}
+    }}
+  )};
+
 
 app.post('/upload', async (req, res) => {
   const { imageUrls, imageUris } = req.body;
+  console.log("passou aqui");
 
   // Iterar sobre as URLs das imagens e fazer o download e salvar localmente
   for (let i = 0; i < imageUrls.length; i++) {
     try {
-      const response = await fetch(imageUrls[i]);
-      const imageData = await response.arrayBuffer();
+      const response = await axios.get(imageUrls[i], { responseType: 'arraybuffer' });
+      console.log("Imagem enviada com sucesso!", response)
+      //const directory = './src/uploads/posts_media';
       const directory = './public/uploads/posts_media';
+
       const filename = path.join(directory, imageUris[i]);
-      fs.writeFileSync(filename, Buffer.from(imageData));
+      fs.writeFileSync(filename, Buffer.from(response.data, 'binary'));
     } catch (error) {
-      console.error('Erro ao fazer download da imagem:', error);
-    }
-  }
-  res.status(200).json({ message: 'Imagens salvas com sucesso!' });
+      console.error("Imagem não foi enviada!", error)
+    res.sendFile(path.join(publicPath, 'index.html'));
+  }}
 });
+
 
 // Middlewares que verificam se usuario está logado e seus derivados cargos
 const permissionVerify = require("./middlewares/permissionVerify.js")

@@ -1,6 +1,5 @@
 import createCustomEvent from "../../eventModule.js";
 import setNavigation from "../../setNavigation.js";
-import createCustomEvent from "../../eventModule.js";
 
 function getUserData() {
   return fetch('/api/login/profile/')
@@ -74,25 +73,30 @@ function navigation(user) {
       address: '/profile'
     },
     {
+      user: 'user',
+      text: 'Favoritos',
+      address: '/favorite'
+    },
+    {
+      user: 'editor',
+      text: 'Postagens',
+      address: '/dashboard'
+    },
+    {
       user: 'admin',
       text: 'Postagens',
       address: '/dashboard'
     },
     {
-      user: 'user',
-      text: 'Favoritos',
-      address: '/favorite'
+      user: 'editor',
+      text: 'Postar',
+      address: '/post'
     },
     {
       user: 'admin',
       text: 'Admin',
       address: '/admin'
     },
-    {
-      user: 'editor',
-      text: 'Postar',
-      address: '/post'
-    }
   ]
 
   const logoutButton = document.createElement('button');
