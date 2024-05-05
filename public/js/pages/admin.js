@@ -20,7 +20,7 @@ export default function admin() {
       <div id="container-admin">
 
         <div id="container-header">
-            <h1 class="secondary-heading">Administrator</h1>
+            <h1 class="secondary-heading">Administrador</h1>
         </div>
 
         <div id="admin-content">
@@ -29,18 +29,17 @@ export default function admin() {
             <thead>
               <tr>
                 <th>Id</th>
-                <th>Name</th>
+                <th>Nome</th>
                 <th>Username</th>
                 <th>E-mail At</th>
-                <th>User Type</th>
+                <th>Tipo</th>
                 <th>Status</th>
-                <th>Premium Active</th>
-                <th>Premium Date</th>
-                <th>Profile Photo</th>
-                <!-- <th>Session Token</th> -->
-                <th>Created At</th>
-                <th>Edit</th>
-                <th>Delete</th>
+                <th>Premium</th>
+                <th>Premium Data</th>
+                <th>Foto</th>
+                <th>Data Cadastro</th>
+                <th>Editar</th>
+                <th>Deletar</th>
               </tr>
             </thead>
           </table>
@@ -110,12 +109,6 @@ export default function admin() {
           premiumDate.innerText = dateFormat(item.premium_date);
           profilePhotoImg.src = item.profile_photo || '/assets/images/default_profile_normal.png';
           createdAt.innerText = dateFormat(item.created_at);
-          //buttonEdit.innerText = 'Edit';
-          //buttonConfirm.innerText = 'Confirm';
-          //buttonDelete.innerText = 'Delete';
-          buttonEdit.innerText = 'edit_square';
-          buttonConfirm.innerText = 'check_circle';
-          buttonDelete.innerText = 'delete_forever';
 
           profilePhotoImg.classList.add('admin-profile-image');
           buttonConfirm.style.display = 'none';
@@ -123,9 +116,6 @@ export default function admin() {
           buttonConfirm.classList.add('table-button', 'button-fill');
           buttonDelete.classList.add('table-button', 'button-delete');
           tdEdit.classList.add('group-table-button');
-          /* buttonEdit.classList.add('material-symbols-outlined');
-          buttonConfirm.classList.add('material-symbols-outlined');
-          buttonDelete.classList.add('material-symbols-outlined'); */
 
           buttonEdit.innerHTML = 'Editar';
           buttonConfirm.innerHTML = 'Confirmar';
@@ -239,6 +229,8 @@ export default function admin() {
                   contentTable.innerHTML = '';
                   getUsers();
                   showPopup(data.result.message, 'Sucesso!', data.result.success);
+                } else {
+                  showPopup(data.result.message, 'Erro!', data.result.success);
                 }
               })
             }));

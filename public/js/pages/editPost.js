@@ -11,7 +11,7 @@ export default function editPost(postId) {
   <!-- ########## MAIN ########## -->
   <main class="main main-create-post"> 
     <!-- Título da página -->
-    <h1 class="primary-heading">Edit Post</h1>
+    <h1 class="primary-heading">Editar Postagem</h1>
   
     <!-- Formulário para editar post -->
     <form class="editor-container">
@@ -39,7 +39,7 @@ export default function editPost(postId) {
   
       <!-- Upload de banner -->
       <div class="select-banner">
-        <label class="paragraph-medium" for='files'>Select Banner</label>
+        <label class="paragraph-medium" for='files'>Selecione o Banner</label>
         <input class="paragraph-medium" id='banner' type="file" name="files">
         <img id="banner-preview" class="create-post-banner">
       </div>
@@ -105,15 +105,11 @@ export default function editPost(postId) {
           <p>Hello World!</p>
         </div>
       </div>
-  
-      <!-- Campo para inserir URL da imagem temporária -->
-      <div class="input-container">
-        <input id="image" type="text" name="image" placeholder="Image Temporário"/>
-      </div>
+
       <!-- Botões para salvar ou postar o conteúdo -->
       <div class="buttons">
-        <button class="button button-line" id="button-discard">Discard</button>
-        <button class="button button-fill" id="button-save-and-post">Save and Post</button>
+        <button class="button button-line" id="button-discard">Descartar</button>
+        <button class="button button-fill" id="button-save-and-post">Salvar e Postar</button>
       </div>
     </form>
   </main>
@@ -133,7 +129,6 @@ export default function editPost(postId) {
     'input[name="category"]'
   );
   const bannerInput = editPostElement.querySelector('#banner');
-  const imageInput = editPostElement.querySelector('#image');
   const bannerPreview = editPostElement.querySelector('#banner-preview');
 
   const buttonDiscard = editPostElement.querySelector('#button-discard');
@@ -163,7 +158,6 @@ export default function editPost(postId) {
       //categoryInputs.value = post.category;
       document.querySelector(`#${post.category}`).checked = true;
       editor.root.innerHTML = post.content;
-      imageInput.value = post.image;
       bannerPreview.src = post.banner;
 
       const resetChanges = [post.title, post.category, post.content, post.banner];
@@ -213,10 +207,9 @@ export default function editPost(postId) {
     // Armazena a imagem no back e retorna a uri
     
     const banner = bannerURI;
-    const image = imageInput.value.toString();
     const posted_draft = true;
 
-    const data = { title, category, content, banner, image, posted_draft };
+    const data = { title, category, content, banner, posted_draft };
     console.log(data);
 
     fetch(`/api/posts/` + postId, {

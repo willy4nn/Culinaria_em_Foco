@@ -12,7 +12,7 @@ router.get("/latest", postsController.getPostsOrderByCreatedAt);
 router.get('/like', postsController.getPostsOrderByLike);
 router.get("/:id", postsController.getPost);
 router.get("/category/:category", postsController.getPostsByCategory);
-router.get("/", editorPermissionVerify, postsController.getPostsByUserId);
+router.get("/", editorPermissionVerify, postsController.getPostsByEditorId);
 router.post("/", editorPermissionVerify, postsController.createPost);
 router.put("/:id", editorPermissionVerify, postsController.updatePost);
 router.delete("/:id", editorPermissionVerify, postsController.deletePost);
