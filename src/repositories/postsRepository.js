@@ -1,14 +1,14 @@
 const pool = require("../database/postgres.js");
 
-//COLUMNS: id, title, category, content, banner, image, posted_draft, status, likes_quantity,
+//COLUMNS: id, title, category, content, banner, posted_draft, status, likes_quantity,
 //comments_quantity, created_at, updated_at, created_by, updated_by
 
 const postsRepository = {
 
     // CREATE
-    createPost: async function (title, category, content, banner, image, posted_draft, status, created_by, updated_by) {
+    createPost: async function (title, category, content, banner, posted_draft, status, created_by, updated_by) {
 
-        const query = `INSERT INTO posts (title, category, content, banner, image, posted_draft, status, created_by, updated_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`;
+        const query = `INSERT INTO posts (title, category, content, banner, posted_draft, status, created_by, updated_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`;
 
         try {
             const result = await pool.query(query, [
@@ -16,7 +16,6 @@ const postsRepository = {
                 category,
                 content,
                 banner,
-                image,
                 posted_draft,
                 status,
                 created_by,
@@ -110,7 +109,7 @@ const postsRepository = {
     },
 
     // GET ALL BY USER ID
-    getPostsByUserId: async function (created_by, userType) {
+    getPostsByEditorId: async function (created_by, userType) {
 
         //const query = "SELECT * FROM posts WHERE created_by = $1";
         if (userType === 'admin') {
@@ -136,12 +135,12 @@ const postsRepository = {
     },
 
     // UPDATE
-    updatePost: async function (id, title, category, content, banner, image, posted_draft, status, updated_by) {
+    updatePost: async function (id, title, category, content, banner, posted_draft, status, updated_by) {
 
-//const query = "UPDATE posts SET title = $2, category = $3, content = $4, banner = $5, image = $6, posted_draft = $7, status = $8, updated_at = CURRENT_TIMESTAMP, updated_by = $9 WHERE id = $1";
-        const query = "UPDATE posts SET title = $2, category = $3, content = $4, banner = $5, image = $6, posted_draft = $7, status = $8, updated_at = CURRENT_TIMESTAMP, updated_by = $9 WHERE id = $1 AND status != 'deleted';";
+//const query = "UPDATE posts SET title = $2, category = $3, content = $4, banner = $5, posted_draft = $6, status = $7, updated_at = CURRENT_TIMESTAMP, updated_by = $8 WHERE id = $1";
+        const query = "UPDATE posts SET title = $2, category = $3, content = $4, banner = $5, posted_draft = $6, status = $7, updated_at = CURRENT_TIMESTAMP, updated_by = $8 WHERE id = $1 AND status != 'deleted';";
         try {
-            await pool.query(query, [id, title, category, content, banner, image, posted_draft, status, updated_by]);
+            await pool.query(query, [id, title, category, content, banner, posted_draft, status, updated_by]);
             console.log("Dados atualizados com sucesso!");
         } catch (error) {
             console.error("Erro ao atualizar dados: ", error);
@@ -158,9 +157,13 @@ const postsRepository = {
         try {
             await pool.query(query, [id]);
             console.log("Dados excluídos com sucesso!");
-        } catch (error) {
-            console.error("Erro ao excluir dados: ", error);
-            throw error;
+
+            const success = { success: true, message: "Postagem excluída com sucesso!"};
+            return success;
+        } catch (err) {
+            console.error("Erro ao excluir dados: ", err);
+            const error = { success: false, error: "Erro ao excluir usuário"};
+            return error;
         } 
     },
 };
