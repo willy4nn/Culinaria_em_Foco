@@ -9,19 +9,13 @@
 
 body {
   width: 100%;
-  min-height: 100vh;
   height: auto;
   position: relative;
   background: var(--c2);
-  background-image: url('../../assets/images/texture.png');
-  background-size: cover;
-  background-repeat: repeat;
-  /* background-position: center; */
-
 }
 
 #root {
   width: 100%;
-  /* height: auto; */
   height: 100%;
+  min-height: 100vh;
 }

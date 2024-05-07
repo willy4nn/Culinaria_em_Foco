@@ -4,7 +4,8 @@
 .header {
   display: flex;
   padding-inline: 5rem;
-  height: 10rem;
+  height: 8rem;
+  min-height: 8rem;
   justify-content: space-between;
   align-items: center;
 }
@@ -16,6 +17,23 @@
   font-family: var(--font-body);
   font-weight: 500;
   line-height: 1rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease; /* Incluindo a transição aqui */
+}
+
+.header .logo:hover {
+  box-shadow: var(--shdh-default);
+}
+
+
+.header .logo span {
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
 }
 
 .header .logo-icon {
