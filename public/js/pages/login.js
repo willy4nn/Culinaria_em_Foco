@@ -1,5 +1,4 @@
 // login.js
-
 import createCustomEvent from '../eventModule.js';
 import setNavigation from '../setNavigation.js';
 import footer from './elements/footer.js';
