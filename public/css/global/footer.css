@@ -11,4 +11,11 @@
   font-weight: 500;
   line-height: 1rem;
   flex-shrink: 0;
+  height: 8rem;
+  min-height: 8rem;
+}
+
+.footer p {
+  color: var(--c12);
+  text-align: center;
 }
