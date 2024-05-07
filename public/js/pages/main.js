@@ -21,6 +21,10 @@ const mainContentHTML = `
   <div class="text-container">
     <h1 class="primary-heading">Descubra o Prazer de Cozinhar <span>&amp;</span> Experimentar</h1>
     <p class="paragraph-normal">Descubra sabores únicos e inspirações culinárias em nossa revista digital em destaque. Receitas criativas, dicas de chefs e histórias que vão transformar sua cozinha em um verdadeiro palco de delícias. Explore conosco o mundo da gastronomia!</p>
+    <div class="buttons">
+      <a class="button button-line signin-button">Entrar</a>
+      <a class="button button-fill signup-button">Registrar</a>
+    </div>
   </div>
   <div class="image-container"></div>
 </main>

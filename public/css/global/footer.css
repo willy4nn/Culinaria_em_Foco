@@ -17,4 +17,5 @@
 
 .footer p {
   color: var(--c12);
+  text-align: center;
 }
