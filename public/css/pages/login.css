@@ -36,6 +36,7 @@
 .main-login .signup-link {
   transition: color 0.3s ease;
   color: var(--c8);
+  text-align: center;
 }
 
 .main-login .signup-link:hover {
@@ -45,4 +46,16 @@
 .interact-span:hover {
   cursor: pointer;
   font-weight: 700;
+}
+
+@media (max-width: 850px) {
+  .main-login {
+    padding: 1rem 2rem;
+  }
+}
+
+@media (max-width:450px) {
+  .main-login .primary-heading {
+    font-size: 3rem;
+  }
 }
