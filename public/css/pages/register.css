@@ -2,9 +2,10 @@
 
 /* ########## REGISTER PAGE ########## */
 .register-container {
-  height: auto;
   display: flex;
   flex-direction: column;
+  height: auto;
+  min-height: 100vh;
 }
 
 .main-register {
@@ -23,8 +24,23 @@
   cursor: pointer;
   transition: color 0.3s ease;
   color: var(--c11);
+  text-align: center;
 }
 
 .main-register .signin-link:hover {
   color: var(--c12);
 }
+
+@media (max-width:850px) {
+  .main-register {
+    padding: 1rem 2rem;
+  }
+}
+
+@media (max-width:450px) {
+  .main-register .primary-heading {
+    font-size: 3rem;
+  }
+}
+
+

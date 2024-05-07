@@ -6,6 +6,7 @@ import createCustomEvent from '../eventModule.js';
 import setNavigation from '../setNavigation.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
+import displayModal from '../utils/modal.js';
 // import menuToggle from './elements/menuToggle.js';
 
 // Exporta a função principal que retorna a página principal
@@ -63,30 +64,31 @@ export default function dashboard() {
   const containerDashbaord = dashboardElement.querySelector('#container-dashboard');
   const contentTable = dashboardElement.querySelector('#content-table');
 
-  
-  fetch(`/api/posts/`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error('Falha carregar postagens');
-    }
-    return response.json();
-  })
-  .then((response) => {
-    renderNews(response.data);
-  })
-  .catch((error) => {
-    console.error('Erro:', error);
-  });
+  getPostsByEditorId();
+
+  function getPostsByEditorId() {
+    fetch(`/api/posts/`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Falha carregar postagens');
+      }
+      return response.json();
+    })
+    .then((response) => {
+      renderNews(response.data);
+    })
+    .catch((error) => {
+      console.error('Erro:', error);
+    });
+  }
 
 
   function renderNews(data){
-    // For apenas para testar a renderização com mais dados
-    /* for(let i=0; i<10; i++) { */
 
       data.forEach((item, index) => {
           const tableRow = document.createElement('tr');
@@ -115,14 +117,12 @@ export default function dashboard() {
           status.innerText = item.status.charAt(0).toUpperCase() + item.status.slice(1);
           commentsQuantity.innerText = item.comments_quantity;
           likesQuantity.innerText = item.likes_quantity;
-          buttonEdit.innerText = 'Edit';
-          buttonDelete.innerText = 'Delete';
+          buttonEdit.innerText = 'Editar';
+          buttonDelete.innerText = 'Deletar';
 
           bannerImg.classList.add('banner-image');
           buttonEdit.classList.add('table-button', 'button-fill');
           buttonDelete.classList.add('table-button', 'button-delete');
-
-          //div.style.border = 'thin solid #b1b1b1';
 
           banner.appendChild(bannerImg);
           tdEdit.appendChild(buttonEdit);
@@ -134,21 +134,34 @@ export default function dashboard() {
             
           contentTable.appendChild(tableRow);
 
+          tableRow.addEventListener('click', () => {
+            window.dispatchEvent(createCustomEvent(`/post/${item.id}`));
+          })
+
           buttonEdit.addEventListener('click', (e) => {
-            //setNavigation("colocar um icon edit", `/post/${item.id}`);
             window.dispatchEvent(createCustomEvent(`/post/edit/${item.id}`));
+            e.stopPropagation();
           });
           
-          buttonDelete.addEventListener('click', (e) => {
-            console.log("delete");
-            deletePost(item.id).then(data => { if (data) tableRow.remove(); })
+          buttonDelete.addEventListener('click', () => {
+            const message = document.createElement('span');
+            message.innerText = "Tem certeza que deseja excluir esta postagem?"
+
+            contentTable.appendChild(displayModal(message, async () => {
+              deletePost(item.id)
+              .then((data) => {
+                if (data.result.success) {
+                  contentTable.innerHTML = '';
+                  getPostsByEditorId();
+                  showPopup(data.result.message, 'Sucesso!', data.result.success);
+                } else {
+                  showPopup(data.result.message, 'Erro!', data.result.success);
+                }
+              })
+            }));
           });
       });
-    /* } */
-  }
-
-  // const logoutButton = dashboardElement.querySelector('.logout');
-  
+  }  
 
   // Retorna o elemento principal
   return dashboardElement;
@@ -156,26 +169,26 @@ export default function dashboard() {
 
 async function deletePost(id) {
   return fetch('/api/posts/' + id, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((error) => {
+          throw new Error(
+            `Não foi possível deletar o post! ${error.message}`
+          );
+        });
+      }
+      return response.json();
     })
-      .then((response) => {
-        if (!response.ok) {
-          return response.json().then((error) => {
-            throw new Error(
-              `Não foi possível deletar o post! ${error.message}`
-            );
-          });
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        return data;
-      })
-      .catch((err) => {
-        console.error(err);
-      })
-    };
+    .then((data) => {
+      console.log(data);
+      return data;
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+};

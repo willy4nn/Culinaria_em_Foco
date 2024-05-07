@@ -1,7 +1,5 @@
 const pool = require("../database/postgres.js");
 
-//title, category, content, banner, image, posted_draft, status, created_at, updated_at, created_by, updated_by
-
 const likesRepository = {
 
     /** POSTS **/

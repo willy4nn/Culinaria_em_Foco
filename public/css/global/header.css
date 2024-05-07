@@ -4,18 +4,31 @@
 .header {
   display: flex;
   padding-inline: 5rem;
-  height: 10rem;
+  height: 8rem;
+  min-height: 8rem;
   justify-content: space-between;
   align-items: center;
 }
 
 .header .logo {
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 1rem;
   font-family: var(--font-body);
   font-weight: 500;
   line-height: 1rem;
+  border-radius: 5rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease; /* Incluindo a transição aqui */
+}
+
+.header .logo span {
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
 }
 
 .header .logo-icon {
@@ -115,9 +128,13 @@
     padding: 1rem 2rem;
   }
 
-  .header {
-    .buttons {
+  .header .buttons {
       display: none;
     }
+}
+
+@media (max-width: 400px) {
+  .header {
+    padding: 1rem 1.5rem;
   }
 }

@@ -17,7 +17,7 @@ export default function favorite() {
       
       <div id="container-favorite">
         <div id="container-header">
-            <h1 class="primary-heading">Favorites</h1>
+            <h1 class="primary-heading">Favoritos</h1>
         </div>
         <div id="favorite-content">
         </div>
@@ -81,8 +81,8 @@ export default function favorite() {
           title.innerText = item.title;
           category.innerText = item.category.charAt(0).toUpperCase() + item.category.slice(1);
           created_at.innerText = dateFormat(item.created_at);
-          commentsQuantity.innerText = `${item.comments_quantity} comentários`;
-          likesQuantity.innerText = `${item.likes_quantity} likes`;
+          commentsQuantity.innerText = item.comments_quantity > 1 ? `${item.comments_quantity} comentários` : `${item.comments_quantity} comentários`;
+          likesQuantity.innerText = item.likes_quantity > 1 ? `${item.likes_quantity} likes` : `${item.likes_quantity} like`;
           console.log("category", category.innerText);
 
           if (category.innerText == 'Trends') category.style.backgroundColor = '#1f7e93';

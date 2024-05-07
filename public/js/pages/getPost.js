@@ -38,11 +38,11 @@ export default function getPost(postId) {
         <div id="comments-container">
           <div id="comment-editor">
             <div id="input-container">
-              <textarea id="comment-textarea" placeholder="Add a comment" rows="1"></textarea>
+              <textarea id="comment-textarea" placeholder="Adicionar comentário" rows="1"></textarea>
             </div>
             <div id="buttons-container">
-              <button id="cancel-button" class="comment-button button-fill-cancel">Cancel</button>
-              <button id="comment-button" class="comment-button button-fill">Comment</button>
+              <button id="cancel-button" class="comment-button button-fill-cancel">Cancelar</button>
+              <button id="comment-button" class="comment-button button-fill">Comentar</button>
             </div>
           </div>
 
@@ -140,7 +140,7 @@ export default function getPost(postId) {
 
       buttonLike.addEventListener('click', async () => {
         const newQuantity = await likePost(postId);
-        likesQuantity.innerText = `${newQuantity} curtidas`;
+        likesQuantity.innerText = newQuantity > 1 ? `${newQuantity} curtidas` : `${newQuantity} curtida`
 
         if (liked) {
           likeIcon.classList.remove('liked');
@@ -221,7 +221,7 @@ export default function getPost(postId) {
     console.log("rendlikefav:", post);
 
     if (isliked[0]) likeIcon.classList.add('liked');
-    likesQuantity.innerText = `${post.likes_quantity} curtidas`;
+    likesQuantity.innerText = post.likes_quantity > 1 ? `${post.likes_quantity} curtidas` : `${post.likes_quantity} curtida`;
     
     if (isfavorited[0]) {
       favoriteIcon.innerText = 'bookmark_added';
@@ -265,7 +265,7 @@ export default function getPost(postId) {
     commentTextarea.style.height = commentTextarea.scrollHeight + 'px';
     commentTextarea.rows = '1';
     commentEditor.style.border = "solid 1px #cccccc";
-    commentTextarea.placeholder = 'Add a comment';
+    commentTextarea.placeholder = 'Adicionar comentário';
   });
 
   commentTextarea.addEventListener('input', function() {
@@ -327,10 +327,10 @@ export default function getPost(postId) {
       content.innerHTML = comment.content;
 
       likeIcon.innerHTML = 'favorite';
-      openReplyTextarea.innerText = 'Reply';
+      openReplyTextarea.innerText = 'Responder';
       //showRepliesButton.innerText = `${comment.replies_quantity} replies`
       showRepliesNumber.innerText = comment.replies_quantity
-      showRepliesComplement.innerText = comment.replies_quantity > 1 ? 'replies' : 'reply';
+      showRepliesComplement.innerText = comment.replies_quantity > 1 ? 'repostas' : 'reposta';
       console.log("sssss",showRepliesComplement.innerText);
       showArrowIcon.innerText = 'arrow_drop_down';
       
@@ -411,9 +411,9 @@ export default function getPost(postId) {
           buttonReply.classList.add('comment-button', 'button-fill', 'reply-button');
           console.log("userlogge", userLogged);
           profilePhoto.src = userLogged.profilePhoto || '../../uploads/profile_photo/default_profile_normal.png';
-          replyTextarea.placeholder = 'Add a reply';
-          buttonCancel.innerText = 'Cancel';
-          buttonReply.innerText = 'Reply';
+          replyTextarea.placeholder = 'Adicionar resposta';
+          buttonCancel.innerText = 'Cancelar';
+          buttonReply.innerText = 'Responder';
 
           buttonsDiv.append(buttonCancel, buttonReply);
           contentDiv.append(profilePhoto, replyTextarea);
@@ -563,7 +563,7 @@ export default function getPost(postId) {
         content.innerHTML = reply.content;
     
         likeIcon.innerHTML = 'favorite';
-        openReplyReplyTextarea.innerText = 'Reply';
+        openReplyReplyTextarea.innerText = 'Responder';
     
         leftHeaderDiv.append(profilePhoto, name, separatorDot, createdAt);
         rightHeaderDiv.append(openReplyReplyTextarea, likeIcon);
@@ -1019,10 +1019,10 @@ function getTimeAgo(postDate) {
   const hours = Math.floor(minutes / 60);
   const days = Math.floor(hours / 24);
 
-  if (days > 0) return days + (days === 1 ? ' day ago' : ' days ago');
-  else if (hours > 0) return hours + (hours === 1 ? ' hour ago' : ' hours ago');
-  else if (minutes > 0) return minutes + (minutes === 1 ? ' minute ago' : ' minutes ago');
-  else return 'Just now';
+  if (days > 0) return `há ${days} ${(days === 1 ? 'dia' : 'dias')}`;
+  else if (hours > 0) return `há ${hours} ${(hours === 1 ? 'hora' : 'horas')}`;
+  else if (minutes > 0) return `${minutes} ${(minutes === 1 ? 'minuto' : 'minutos')}`;
+  else return 'agora';
 }
 
 function loading(div) {

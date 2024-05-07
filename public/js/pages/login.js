@@ -1,5 +1,4 @@
 // login.js
-
 import createCustomEvent from '../eventModule.js';
 import setNavigation from '../setNavigation.js';
 import footer from './elements/footer.js';
@@ -24,10 +23,10 @@ export default function login() {
     <form class="form">
       <div class="inputs-container">
         <div>
-          <input class="input paragraph-normal" id="email" type="text" name="email" placeholder="Email Address" />
+          <input class="input paragraph-normal" id="email" type="text" name="email" placeholder="E-mail" />
         </div>
         <div>
-          <input class="input paragraph-normal" id="password" type="password" name="password" placeholder="Password"/>
+          <input class="input paragraph-normal" id="password" type="password" name="password" placeholder="Senha"/>
         </div>
       </div>
       <!-- <a class="paragraph-normal">Forgot you password?</a> -->

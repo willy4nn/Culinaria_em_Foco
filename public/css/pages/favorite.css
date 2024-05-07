@@ -3,6 +3,18 @@
     grid-template-columns: repeat(3, 1fr);
 }
 
+@media screen and (max-width: 900px) {
+    #favorite-content {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+@media screen and (min-width: 900px) and (max-width: 1340px) {
+    #favorite-content {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 .favorite-item {
     display: flex;
     justify-content: center;
@@ -17,8 +29,6 @@
     background-color: #262626;
     color: white;
 }
-
-
 
 .favorite-item:hover {
     box-shadow: 3px 3px 3px #888888;

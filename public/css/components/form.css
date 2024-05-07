@@ -44,3 +44,10 @@
   border: 1px solid var(--c6);
   color: var(--c12);
 }
+
+@media (max-width: 550px) {
+  .input {
+    min-width: 0rem;
+    max-width: 20rem;
+  }
+}

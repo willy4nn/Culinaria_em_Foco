@@ -106,10 +106,6 @@ export default function createPost() {
       </div>
     </div>
 
-    <!-- Campo para inserir URL da imagem temporária -->
-    <div class="input-container">
-      <input id="image" type="text" name="image" placeholder="Image Temporário"/>
-    </div>
     <!-- Botões para salvar ou postar o conteúdo -->
     <div class="buttons">
       <button class="button button-line" id="button-save">Save</button>
@@ -137,7 +133,6 @@ export default function createPost() {
   const categoryInputs = createPostElement.querySelectorAll('input[name="category"]');
 
   const bannerInput = createPostElement.querySelector('#banner');
-  const imageInput = createPostElement.querySelector('#image');
   const bannerPreview = createPostElement.querySelector('#banner-preview');
   bannerPreview.src = '/assets/images/default_image_banner.png';
 
@@ -243,12 +238,11 @@ export default function createPost() {
     const content = editorContent.toString();
     // Se tiver file armazena a imagem no back e retorna a uri, se não retorna vazio
     const banner = await importLocalFile(bannerInput.files[0], 'banner');
-    const image = imageInput.value.toString();
 
     console.log('bn', bannerInput);
     console.log('bn', bannerInput.files);
 
-    const data = { title, category, content, banner, image, posted_draft };
+    const data = { title, category, content, banner, posted_draft };
     console.log(data);
 
     fetch(`/api/posts/`, {

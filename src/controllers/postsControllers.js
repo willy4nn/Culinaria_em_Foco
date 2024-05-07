@@ -4,7 +4,7 @@ const postsController = {
 
     // CREATE
     createPost: async (req, res) => {
-        const { title, category, content, banner, image, posted_draft } = req.body;
+        const { title, category, content, banner, posted_draft } = req.body;
         const created_by = req.user.id;
         const updated_by = req.user.id;
         const status = 'active';
@@ -15,7 +15,6 @@ const postsController = {
                 category,
                 content,
                 banner,
-                image,
                 posted_draft,
                 status,
                 created_by,
@@ -94,13 +93,13 @@ const postsController = {
     },
     
     // GET ALL BY USER ID
-    getPostsByUserId: async (req, res) => {
+    getPostsByEditorId: async (req, res) => {
         console.log(req.user);
         const created_by = req.user.id;
         const userType = req.user.userType;
 
         try {
-            const response = await postsRepository.getPostsByUserId(created_by, userType);
+            const response = await postsRepository.getPostsByEditorId(created_by, userType);
 
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
@@ -111,13 +110,13 @@ const postsController = {
     // UPDATE
     updatePost: async (req, res) => {
         const id = req.params.id;
-        const { title, category, content, banner, image, posted_draft } = req.body;
+        const { title, category, content, banner, posted_draft } = req.body;
         const updated_by = req.user.id;
         const status = 'active';
         
         try {
             const response = await postsRepository.updatePost(
-                id, title, category, content, banner, image, posted_draft, status, updated_by
+                id, title, category, content, banner, posted_draft, status, updated_by
             );
 
             res.status(200).json({ data: response, status: 200 });

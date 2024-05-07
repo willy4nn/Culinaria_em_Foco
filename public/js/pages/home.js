@@ -42,7 +42,7 @@ async function getNewsFeed(category) {
 function renderFeaturedNewsSection(news) {
   const featuredNewsSectionHTML = `
     <div class="featured-news-container">
-      <h1 class="primary-heading">Featured News</h1>
+      <h1 class="primary-heading">Em destaque</h1>
       <div class="featured-news-content">
         <div class="carousel-container">
           <div class="banner-container">
@@ -135,22 +135,22 @@ function renderFeaturedNewsSection(news) {
 function renderNewsFeed(news) {
   const newsFeedHTML = `
     <div class="news-feed-container">
-      <h1 class="primary-heading">News Feed</h1>
+      <h1 class="primary-heading">Feed de Notícias</h1>
       <div class="filters">
       <input class="filter" type="radio" id="interviews" name="category" value="interviews">
-      <label class="checkbox" for="interviews">Interviews</label><br>
+      <label class="checkbox" for="interviews">Entrevistas</label><br>
 
       <input class="filter" type="radio" id="reviews" name="category" value="reviews">
       <label class="checkbox" for="reviews">Reviews</label><br>
 
       <input class="filter" type="radio" id="stories" name="category" value="stories">
-      <label class="checkbox" for="stories">Stories</label><br>
+      <label class="checkbox" for="stories">Histórias</label><br>
 
       <input class="filter" type="radio" id="tips" name="category" value="tips">
-      <label class="checkbox" for="tips">Tips</label><br>
+      <label class="checkbox" for="tips">Dicas</label><br>
 
       <input class="filter" type="radio" id="trends" name="category" value="trends">
-      <label class="checkbox" for="trends">Trends</label><br>
+      <label class="checkbox" for="trends">Tendências</label><br>
       </div>
       <div class="news-feed-content">
 
