@@ -1,4 +1,4 @@
-const loginRepository = require('../repositories/loginRepository')
+const loginRepository = require('../repositories/loginRepository');
 
 const loginController = {
 
@@ -105,7 +105,39 @@ deleteUser: async (req, res) => {
     return res.status(500).json({ result })
   }
     res.status(200).json({ result })
-  }
+  },
+
+  forgotPassword: async(req, res) => {
+    const { email } = req.body;
+
+    if(!email){
+      return res.status(400).json({ message: "Informe o Email no campo Solicitado" });
+    }
+
+    const result = await loginRepository.forgotPassword(email)
+    if(!result.success){
+      return res.status(500).json({ result })
+    }
+    res.status(200).json({ result })
+  },
+
+  recoveryPassword: async(req, res) => {
+    const { token, password } = req.body;
+    if(!token){
+      return res.status(400).json({ message: "Informe o Código no campo Solicitado" });
+    }
+
+    if(!password){
+      return res.status(400).json({ message: "Informe a nova Senha nos campos Solicitados" });
+    }
+    
+    const result = await loginRepository.recoveryPassword(token, password);
+    if(!result.success){
+      return res.status(500).json({ message: result.error })
+    }
+
+    res.status(201).json({ message: result.message });
+  },
 }
 
 module.exports = loginController;

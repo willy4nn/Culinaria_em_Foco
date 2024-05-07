@@ -20,4 +20,9 @@ router.post("/logout", loginController.logout);
 router.put("/user/:username", selfPermissionVerify, loginController.updateUser);
 router.delete("/user/:username", selfPermissionVerify, loginController.deleteUser);
 
+//Rotas para recuperação de senha
+router.post("/forgot", loginController.forgotPassword);
+//Rota para a página de redefinição de senha
+router.put("/recover", loginController.recoveryPassword);
+
 module.exports = router;

@@ -6,6 +6,7 @@ const pool = require('../database/postgres');
 //Configurações default de ambiente
 const { config } = require('../config/configFile');
 const jwt = require('jsonwebtoken');
+const verifyToken = require('../utils/verifyToken');
 
 const loginRepository = {
 
@@ -257,6 +258,63 @@ const loginRepository = {
           return error;
         }
     },
+
+    forgotPassword: async (email) => {
+      const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+      if (result.rowCount === 0) {
+        const error = {success: false, error: "Email não encontrado" }
+        return error;
+      }
+
+      //Após verificado a presença do email no banco
+      //o sistema gera um token assinado com os dados do cliente que solicitou
+      //a alteração da senha
+
+      //Dados do token a ser gerado
+      const userToken = {
+        id: result.rows[0].id,
+        username: result.rows[0].username,
+        name: result.rows[0].name
+      };
+      //Aqui é feito o processo de assinatura do token
+        const passRecoveryToken = await jwt.sign({ user: userToken }, config.SECRET_KEY, { expiresIn: '5m' });
+        const success = { success: true, recoveryToken: passRecoveryToken, message: 'Solicitação efetuada com Sucesso!' };
+        return success;
+    },
+
+    recoveryPassword: async (token, password) => {
+
+      const validToken = await verifyToken(token);
+
+      if(!validToken.success){
+        return validToken.error;
+      }
+      const userId = validToken.userData.id;
+
+      //Procedimento realiza Transação - Utilizando conexão do tipo Client
+      const client = await pool.connect()
+      try {
+        
+        //Aqui se desenrola o processo de atualização no banco
+        await client.query('BEGIN')
+
+        await client.query(`UPDATE users SET password = $1 WHERE id = $2`, 
+        [password, userId]);
+
+        await client.query('COMMIT')
+        
+        const success = { success: true, message: 'Senha Atualizada com sucesso!' }
+        return success
+
+        } catch (err) {
+          await client.query('ROLLBACK')
+          console.error("Não foi possível atualizar a Senha", err);
+          const error = { success: false, error: "Não foi possível atualizar a Senha"};
+          return error
+      } finally {
+        client.release();
+      }
+    }
 }
 
 module.exports = loginRepository;
