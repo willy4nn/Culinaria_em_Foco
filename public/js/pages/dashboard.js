@@ -138,8 +138,9 @@ export default function dashboard() {
             window.dispatchEvent(createCustomEvent(`/post/${item.id}`));
           })
 
-          buttonEdit.addEventListener('click', () => {
+          buttonEdit.addEventListener('click', (e) => {
             window.dispatchEvent(createCustomEvent(`/post/edit/${item.id}`));
+            e.stopPropagation();
           });
           
           buttonDelete.addEventListener('click', () => {

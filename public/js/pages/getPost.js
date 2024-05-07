@@ -140,7 +140,7 @@ export default function getPost(postId) {
 
       buttonLike.addEventListener('click', async () => {
         const newQuantity = await likePost(postId);
-        likesQuantity.innerText > 1 ? `${newQuantity} curtidas` : `${newQuantity} curtida`
+        likesQuantity.innerText = newQuantity > 1 ? `${newQuantity} curtidas` : `${newQuantity} curtida`
 
         if (liked) {
           likeIcon.classList.remove('liked');
@@ -221,7 +221,7 @@ export default function getPost(postId) {
     console.log("rendlikefav:", post);
 
     if (isliked[0]) likeIcon.classList.add('liked');
-    likesQuantity.innerText = likesQuantity.innerText > 1 ? `${post.likes_quantity} curtidas` : `${post.likes_quantity} curtida`;
+    likesQuantity.innerText = post.likes_quantity > 1 ? `${post.likes_quantity} curtidas` : `${post.likes_quantity} curtida`;
     
     if (isfavorited[0]) {
       favoriteIcon.innerText = 'bookmark_added';
