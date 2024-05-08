@@ -6,12 +6,12 @@ const SECRET_KEY = config.SECRET_KEY;
 async function permissionVerify (req, res, next){
     const sessionToken = req.cookies.session_id;
     if(!sessionToken){
-        return res.status(401).redirect("/");
+        return res.status(401).json({ error: "Token JWT ausente" });
     }
 
     await jwt.verify(sessionToken, SECRET_KEY, (err, decoded) => {
         if(err){
-            return res.status(403).redirect("/");
+            return res.status(401).json({ error: "Token JWT inválido" });
         }else{
             req.user = decoded.user;
             next();
