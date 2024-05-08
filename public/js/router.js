@@ -10,6 +10,8 @@ import editPost from './pages/editPost.js';
 import dashboard from './pages/dashboard.js';
 import favorite from './pages/favorite.js';
 import admin from './pages/admin.js';
+import forgotPassword from './pages/forgot-password.js';
+import recoveryPassword from './pages/recovery-password.js';
 
 
 const router = {
@@ -22,6 +24,13 @@ const router = {
   '/register': function () {
     return register();
   },
+  '/forgot-password': function () {
+    return forgotPassword();
+  },
+  '/recovery-password/:token': function (params) {
+    console.log("token", params)
+    return recoveryPassword(params.token);
+  },
   '/home': function () {
     return home();
   },
@@ -30,11 +39,11 @@ const router = {
     return createPost();
   },
   '/post/:id': function (params) {
-    console.log("gett", params)
+    console.log("post id", params)
     return getPost(params.id);
   },
   '/post/edit/:id': function (params) {
-    console.log("edit", params)
+    console.log("post edit id", params)
     return editPost(params.id);
   },
   '/editor': function () {
@@ -81,6 +90,12 @@ const router = {
       const paramIndex = path.indexOf('/post/') + 6; // Adiciona o comprimento de '/post/' para encontrar o início do ID
       const param = path.substring(paramIndex); // Extrai o ID da URL (/post/1)
       return router['/post/:id']({ id: param }); // Passa o ID como parâmetro para a rota de exibição
+    }
+
+    if (path.startsWith('/recovery-password/')) {
+      const paramIndex = path.indexOf('/recovery-password/') + 19; // Adiciona o comprimento de '/recovery-password/' para encontrar o início do ID
+      const param = path.substring(paramIndex); // Extrai o Token da URL (/recovery-password/token)
+      return router['/recovery-password/:token']({ token: param }); // Passa o Token como parâmetro para a rota de exibição
     }
 
     // Se não for uma rota dinâmica, apenas chama a função associada

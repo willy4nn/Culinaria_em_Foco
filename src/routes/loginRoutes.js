@@ -3,7 +3,8 @@ const router = express.Router();
 const loginController = require("../controllers/loginControllers");
 const permissionVerify = require("../middlewares/permissionVerify")
 const adminPermissionVerify = require("../middlewares/adminPermissionVerify")
-const selfPermissionVerify = require("../middlewares/selfPermissionVerify")
+const selfPermissionVerify = require("../middlewares/selfPermissionVerify");
+const recoveryPasswordPermissionVerify = require("../middlewares/recoveryPasswordTokenVerify");
 
 //Rotas de verificação do login do Usuário
 router.get('/user', permissionVerify, loginController.getLogin);
@@ -21,8 +22,8 @@ router.put("/user/:username", selfPermissionVerify, loginController.updateUser);
 router.delete("/user/:username", selfPermissionVerify, loginController.deleteUser);
 
 //Rotas para recuperação de senha
-router.post("/forgot", loginController.forgotPassword);
+router.post("/forgot-password", loginController.forgotPassword);
 //Rota para a página de redefinição de senha
-router.put("/recover", loginController.recoveryPassword);
+router.put("/recovery-password/:token", recoveryPasswordPermissionVerify, loginController.recoveryPassword);
 
 module.exports = router;

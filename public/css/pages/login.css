@@ -48,6 +48,7 @@
   font-weight: 700;
 }
 
+
 @media (max-width: 850px) {
   .main-login {
     padding: 1rem 2rem;
@@ -58,4 +59,14 @@
   .main-login .primary-heading {
     font-size: 3rem;
   }
+}
+
+/* FORGOT PASSWORD */
+
+#forgot-password-span {
+  color: #999999;
+}
+
+.inputs-container.forgot-password {
+  padding-bottom: 10px;
 }

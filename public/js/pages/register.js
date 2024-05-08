@@ -14,7 +14,7 @@ export default function register() {
 <header class="header header-register">
   <div class="logo">
     <img src="/assets/images/croissant-logo.svg" alt="Logo Chef's Corner" />
-    <span class="paragraph-medium">Chef's Corner</span>
+    <span class="paragraph-medium">Culinária em Foco</span>
   </div>
   <div class="buttons">
     <a class="button button-fill signin-button">Entrar</a>

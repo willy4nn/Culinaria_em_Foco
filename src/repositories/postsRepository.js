@@ -8,7 +8,7 @@ const postsRepository = {
     // CREATE
     createPost: async function (title, category, content, banner, posted_draft, status, created_by, updated_by) {
 
-        const query = `INSERT INTO posts (title, category, content, banner, posted_draft, status, created_by, updated_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`;
+        const query = `INSERT INTO posts (title, category, content, banner, posted_draft, status, created_by, updated_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
 
         try {
             const result = await pool.query(query, [
