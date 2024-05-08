@@ -3,7 +3,6 @@
 // Importa a função createCustomEvent do módulo de eventos
 import createCustomEvent from '../eventModule.js';
 import setNavigation from '../setNavigation.js';
-import header from './elements/header.js';
 import footer from './elements/footer.js';
 import { modalError } from './elements/modalError.js';
 
@@ -139,7 +138,6 @@ export default function register() {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
       })
       .catch((err) => {
         //alert(err)

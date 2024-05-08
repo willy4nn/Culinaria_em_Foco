@@ -19,7 +19,6 @@ const repliesController = {
     // GET ALL replies BY comment ID and JOIN with users name and profile_photo
     getRepliesByCommentId: async (req, res) => {
         const comments_id = req.query.comments_id;
-        console.log("replie by comment", comments_id);
 
         try {
             const response = await repliesRepository.getRepliesByCommentId(comments_id);

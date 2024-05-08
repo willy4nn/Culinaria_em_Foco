@@ -1,7 +1,6 @@
 // login.js
 
 import createCustomEvent from '../eventModule.js';
-import setNavigation from '../setNavigation.js';
 import footer from './elements/footer.js';
 import { modalError } from './elements/modalError.js';
 
@@ -88,7 +87,6 @@ export default function recoveryPassword(token) {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         showPopup(data.result.message, "Sucesso!", data.result.success);
         firstPassword.value = '';
         secondPassword.value = '';

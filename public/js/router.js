@@ -28,7 +28,6 @@ const router = {
     return forgotPassword();
   },
   '/recovery-password/:token': function (params) {
-    console.log("token", params)
     return recoveryPassword(params.token);
   },
   '/home': function () {
@@ -39,11 +38,9 @@ const router = {
     return createPost();
   },
   '/post/:id': function (params) {
-    console.log("post id", params)
     return getPost(params.id);
   },
   '/post/edit/:id': function (params) {
-    console.log("post edit id", params)
     return editPost(params.id);
   },
   '/editor': function () {
@@ -61,22 +58,7 @@ const router = {
   '/admin': function () {
     return admin();
   },
-  /* getPage: function (path) {
-    // Verifica se a rota possui um parâmetro dinâmico
-    const dynamicRoute = Object.keys(router).find(route => {
-        const routePattern = new RegExp(`^${route.replace(/:\w+/g, '\\w+')}$`);
-        return routePattern.test(path);
-    });
 
-    if (dynamicRoute) {
-        // Se a rota for dinâmica, extraia o parâmetro e chame a função associada
-        const param = path.split('/')[2]; // Extrai o ID da URL (/post/1)
-        return router[dynamicRoute]({ id: param }); // Passa o ID como parâmetro
-    } else {
-        // Se não for uma rota dinâmica, apenas chama a função associada
-        return router[path]();
-    }
-  }, */
   getPage: function (path) {
     // Verifica se a rota é a rota de edição de post
     if (path.startsWith('/post/edit/')) {

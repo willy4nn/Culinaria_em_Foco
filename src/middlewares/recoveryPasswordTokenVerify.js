@@ -15,8 +15,6 @@ async function recoveryPasswordPermissionVerify(req, res, next) {
       if (err) {
         return res.status(403).json({ message: "Link expirado ou inválido, favor solicitar um novo" });
       } 
-      console.log(decoded);
-  
       req.user = decoded.user;
       next();
       }

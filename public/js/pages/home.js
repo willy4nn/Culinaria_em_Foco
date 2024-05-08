@@ -1,6 +1,5 @@
 // Importa os módulos necessários
 import getTimeAgo from "../utils/getTimeAgo.js";
-import createCustomEvent from '../eventModule.js';
 import footer from './elements/footer.js'
 import header from './elements/header.js'
 import setNavigation from "../setNavigation.js";

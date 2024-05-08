@@ -5,7 +5,6 @@ import { renewDate } from '../utils/dateFormat.js';
 import displayModal from '../utils/modal.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
-// import menuToggle from './elements/menuToggle.js';
 import { modalError } from './elements/modalError.js';
 
 //Modal de erro
@@ -98,7 +97,6 @@ export default function profile() {
   const main = profileElement.querySelector("main") 
   profileElement.insertBefore(header(), main)
   profileElement.append(footer())
-  // profileElement.append(menuToggle())
 
   //Modal de erro
   main.insertAdjacentElement("afterend", popupCard);
@@ -136,7 +134,6 @@ export default function profile() {
   (function loadProfile() {
   
     getUserData().then(profileData => {
-      console.log("renderProfile: ", profileData);
       profilePhoto.src = profileData.profile_photo || "/assets/images/default_profile_normal.png";
       profileUsername.innerText = `@${profileData.username}` || "@none";
       profileName.innerText = profileData.name || "none";
@@ -227,7 +224,6 @@ export default function profile() {
     
         if (erro) {
           showPopup(erro);
-          console.log("erro:", erro);
           return
         }
 
@@ -269,19 +265,14 @@ export default function profile() {
       // Upload da foto de perfil
       async function updatePhoto(file){
         const photoURI = await importLocalFile(file, 'photo');
-        console.log("photouri", photoURI);
-        console.log("photouri", await photoURI);
 
         if (photoURI) {
-          console.log("photo", photoURI);
-
           const data = {
             profile_photo: photoURI
           }
 
           updateUser(profileData.username, data)
           .then((data) => {
-            console.log("dataaaa",data);
             if (data) profilePhoto.src = photoURI;
           })
           .catch(error => {
@@ -317,7 +308,6 @@ async function getUserData() {
       return response.json();
   })
   .then((data) => {
-      console.log("get user: ", data);
       return data;
   })
   .catch((error) => {
@@ -328,7 +318,6 @@ async function getUserData() {
 }
 
 async function updateUser(username, data) {
-  console.log("updateUser: ", username, data);
   return fetch('/api/login/user/' + username, {
       method: 'PUT',
       headers: {
@@ -344,7 +333,6 @@ async function updateUser(username, data) {
       })
       .then((data) => {
         showPopup(data.message, "Sucesso!")
-        console.log(data);
         return data;
       })
       .catch((err) => {

@@ -39,7 +39,6 @@ function logo() {
 }
 
 function navigation(user) {
-  console.log('Usuário:', user)
   function createLink(text, adress){
     const link = document.createElement('li');
     link.classList.add('link');
@@ -126,7 +125,6 @@ function navigation(user) {
       return response.json();
     })
     .then((data) => {
-      console.log(data);
     })
     .catch((error) => {
       console.error('Erro:', error);

@@ -9,7 +9,6 @@ const commentsRepository = {
 
         try {
             const result = await pool.query(query, [posts_id, users_id, content]);
-            console.log("Dados inseridos com sucesso!");
             return result.rows;
             
         } catch (error) {
@@ -26,8 +25,6 @@ const commentsRepository = {
 
         try {
             const result = await pool.query(query, [posts_id]);
-            console.log("Registros encontrados: ");
-            console.table(result.rows);
 
             return result.rows;
         } catch (error) {
@@ -43,9 +40,6 @@ const commentsRepository = {
 
         try {
             const result = await pool.query(query);
-            console.log("Registros encontrados: ");
-            console.table(result.rows);
-
             return result.rows;
         } catch (error) {
             console.error("Erro ao selecionar dados: ", error);
@@ -60,9 +54,6 @@ const commentsRepository = {
 
         try {
             const result = await pool.query(query, [id]);
-            console.log("Registros encontrados: ");
-            console.table(result.rows);
-
             return result.rows;
         } catch (error) {
             console.error("Erro ao selecionar dados: ", error);
@@ -77,7 +68,6 @@ const commentsRepository = {
 
         try {
             const result = await pool.query(query, [id, content]);
-            console.log("Dados atualizados com sucesso!");
 
             return result.rows;
         } catch (error) {
@@ -93,7 +83,6 @@ const commentsRepository = {
 
         try {
             await pool.query(query, [id]);
-            console.log("Dados excluídos com sucesso!");
         } catch (error) {
             console.error("Erro ao excluir dados: ", error);
             throw error;

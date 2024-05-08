@@ -88,14 +88,12 @@ export default function login() {
       body: JSON.stringify({ email, password }),
     })
       .then((response) => {
-        // Esta linha verifica se a resposta do servidor é bem-sucedida
         if (!response.ok) {
           return response.json().then((error) => {
             throw new Error(error.message)
           })
         };
 
-        // Esta linha retorna os dados da resposta em formato JSON
         setTimeout(() => {
           window.dispatchEvent(createCustomEvent('/home'));
         }, 3000); 
@@ -103,12 +101,9 @@ export default function login() {
         return response.json();
       })
       .then((data) => {
-        // Esta linha registra os dados recebidos do servidor no console (você pode substituir isso por sua própria lógica para lidar com a resposta)
-        console.log(data);
       })
       .catch((error) => {
         showPopup(error);
-        // Esta linha captura qualquer erro que ocorra durante o processo de login
         console.error('Erro:', error);
       });
   });
@@ -126,6 +121,5 @@ export default function login() {
   logoImage.addEventListener("click", () => {
     window.dispatchEvent(createCustomEvent(`/`));
   })
-  // Esta linha retorna o loginElement que contém todo o layout da página de login
   return loginElement;
 }

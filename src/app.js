@@ -88,7 +88,6 @@ app.post('/upload', async (req, res) => {
   for (let i = 0; i < imageUrls.length; i++) {
     try {
       const response = await axios.get(imageUrls[i], { responseType: 'arraybuffer' });
-      console.log("Imagem enviada com sucesso!", response)
       const directory = './public/uploads/posts_media';
 
       // Verificar se o diretório existe, caso contrário, criá-lo

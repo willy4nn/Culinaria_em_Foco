@@ -9,11 +9,9 @@ function renderRepliesByCommentId(repliedCommentDiv, repliedCommentId) {
  
     getRepliesByCommentId(repliedCommentId)
     .then(data => {
-      //commentsList.innerHTML = "";
       data.forEach(async reply => {
   
         const replyIsLiked = await getRepliesIsLiked(reply.id);
-        console.log("replyIsLiked", replyIsLiked);
   
         const div = document.createElement('div');
         const headerDiv = document.createElement('div');
@@ -42,7 +40,6 @@ function renderRepliesByCommentId(repliedCommentDiv, repliedCommentId) {
   
         likeIcon.classList.add('material-symbols-outlined', 'comment-like');
         if (replyIsLiked) likeIcon.classList.add('liked');
-        if (replyIsLiked) console.log("colorido");
         openReplyTextarea.classList.add('open-reply');
 
         profilePhoto.src = reply.profile_photo || '../../uploads/profile_photo/default_profile_normal.png';
@@ -60,8 +57,6 @@ function renderRepliesByCommentId(repliedCommentDiv, repliedCommentId) {
         headerDiv.append(leftHeaderDiv, rightHeaderDiv);
         div.append(headerDiv, content);
 
-        //repliedCommentDiv.removeChild(loader);
-        //repliedCommentDiv.appendChild(div);
         newReplies.appendChild(div);
       });
       repliedCommentDiv.removeChild(loader);
@@ -73,7 +68,6 @@ function renderRepliesByCommentId(repliedCommentDiv, repliedCommentId) {
 
 function handleShowReplies(showRepliesList, openReplyTextarea, commentElement, replyVisibility, comment) {
     let newReplies = document.createElement('div');
-    ///div.appendChild(newReplies);
     commentElement.appendChild(newReplies);
     
     // Mostrar respostas
@@ -84,18 +78,11 @@ function handleShowReplies(showRepliesList, openReplyTextarea, commentElement, r
         showArrowIcon.innerText = 'arrow_drop_up';
         } else {
         if (!replyVisibility.shownReply) {
-            //newReplies.innerHTML = '';
-            //newReplies.appendChild(renderRepliesByCommentId(div, comment.id));
             newReplies.style.display = 'block';
-
-            ////div.appendChild(newReplies);
             replyVisibility.shownReply = true;
             showArrowIcon.innerText = 'arrow_drop_up';
         } else {
-            //newReplies.innerHTML = '';
             newReplies.style.display = 'none';
-
-            ////div.removeChild(newReplies)
             replyVisibility.shownReply = false;
             showArrowIcon.innerText = 'arrow_drop_down';
         }
@@ -130,7 +117,6 @@ function handleShowReplies(showRepliesList, openReplyTextarea, commentElement, r
             contentDiv.append(profilePhoto, replyTextarea);
             
             replyDiv.append(contentDiv, buttonsDiv);
-            //div.appendChild(replyDiv);
             div.insertBefore(replyDiv, newReplies);
             commentElement.insertBefore(replyDiv, newReplies);
 
@@ -170,19 +156,12 @@ function handleShowReplies(showRepliesList, openReplyTextarea, commentElement, r
                 .catch(error => {
                     console.error('Erro ao buscar post:', error);
                 });
-            /*  }) */
             });
-            
-
         }
     });  
 }
 
 export { renderRepliesByCommentId, handleShowReplies };
-
-/* handleRepliesButtons() {
-
-} */
 
 /* REPLIES */
 
@@ -197,11 +176,9 @@ async function getRepliesByCommentId(id) {
         return response.json();
     })
     .then((data) => {
-        console.log("get replies :", data);
         return data.data;
     })
     .catch((error) => {
-        //displayError(error.error);
         console.error('Erro:', error.error);
     });
 }
@@ -209,7 +186,6 @@ async function getRepliesByCommentId(id) {
 async function getRepliesIsLiked(replies_id) {
 
 const queryParams = new URLSearchParams({ replies_id }).toString();
-console.log("query", queryParams);
 return fetch(`/api/likes/replies/isliked?${queryParams}`, {
     method: 'GET',
     headers: {
@@ -225,11 +201,9 @@ return fetch(`/api/likes/replies/isliked?${queryParams}`, {
     return response.json();
 })
 .then((data) => {
-    console.log("get replies isliked :", data);
     return data.data[0];
 })
 .catch((error) => {
-    //displayError(error.error);
     console.error('Erro:', error.error);
 });
 }
@@ -251,11 +225,9 @@ return fetch('/api/replies/', {
     return response.json();
 })
 .then((data) => {
-    console.log("create reply:", data);
     return data;
 })
 .catch((error) => {
-    //displayError(error.error);
     console.error('Erro:', error.error);
 });
 }

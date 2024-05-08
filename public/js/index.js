@@ -24,7 +24,6 @@ window.addEventListener('popstate', function () {
 });
 
 // Obtém o caminho da página atual e renderiza a página correspondente
-console.log(document.location.pathname);
 const initialPath = document.location.pathname;
 const initialPage = router.getPage(initialPath);
 renderPage(initialPage);
