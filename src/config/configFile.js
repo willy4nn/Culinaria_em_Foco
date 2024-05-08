@@ -19,4 +19,10 @@ const configDatabase = {
     DATABASE: process.env.DATABASE || "meu_banco",
 };
 
-module.exports = { config, configDatabase };
+const configMail = {
+    MAIL_USER: process.env.MAIL_USER || "email@gmail.com",
+    MAIL_PASS: process.env.MAIL_PASS || "123456789",
+    MAIL_SECRET_KEY: process.env.MAIL_SECRET_KEY || "um_erro_aconteceu"
+}
+
+module.exports = { config, configDatabase, configMail };

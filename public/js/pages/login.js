@@ -29,7 +29,7 @@ export default function login() {
           <input class="input paragraph-normal" id="password" type="password" name="password" placeholder="Senha"/>
         </div>
       </div>
-      <!-- <a class="paragraph-normal">Forgot you password?</a> -->
+      <a id="forgot-password-span" class="paragraph-normal">Esqueceu sua senha?</a>
       <button class="button button-fill" id="buttonSignIn">Sign In</button>
     </form>
   </div>
@@ -119,6 +119,9 @@ export default function login() {
 
   const signupButton = loginElement.querySelector('.signup-button');
   setNavigation(signupButton, '/register');
+
+  const forgotPasswordSpan = loginElement.querySelector('#forgot-password-span');
+  setNavigation(forgotPasswordSpan, '/forgot-password');
 
   logoImage.addEventListener("click", () => {
     window.dispatchEvent(createCustomEvent(`/`));

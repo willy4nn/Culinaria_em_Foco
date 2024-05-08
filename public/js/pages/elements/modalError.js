@@ -48,9 +48,9 @@ function modalError() {
         title.innerText = errorTitle || '';
         text.innerText = errorText;
 
-        popupCard.style.transform = "translateY(80vh) translateX(-16px)";
+        popupCard.style.transform = "translateY(80vh) translateX(0px)";
         setTimeout(() => {
-          popupCard.style.transform = "translateY(100vh) translateX(-16px)";
+          popupCard.style.transform = "translateY(100vh) translateX(0px)";
         }, 4000);
     }
 
