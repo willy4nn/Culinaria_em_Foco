@@ -12,7 +12,7 @@ import favorite from './pages/favorite.js';
 import admin from './pages/admin.js';
 import forgotPassword from './pages/forgot-password.js';
 import recoveryPassword from './pages/recovery-password.js';
-
+import notFound from './pages/not-found.js';
 
 const router = {
   '/': function () {
@@ -59,6 +59,11 @@ const router = {
     return admin();
   },
 
+  // Adicione uma rota para lidar com páginas não encontradas
+  '*': function () {
+    return notFound();
+  },
+
   getPage: function (path) {
     // Verifica se a rota é a rota de edição de post
     if (path.startsWith('/post/edit/')) {
@@ -79,11 +84,15 @@ const router = {
       const param = path.substring(paramIndex); // Extrai o Token da URL (/recovery-password/token)
       return router['/recovery-password/:token']({ token: param }); // Passa o Token como parâmetro para a rota de exibição
     }
-
-    // Se não for uma rota dinâmica, apenas chama a função associada
-    return router[path]();
+    // Verifica se a função associada à rota existe
+    if (typeof router[path] === 'function') {
+      // Se existir, chama a função associada à rota
+      return router[path]();
+    } else {
+      // Se não existir, redireciona para a página 404
+      return router['*'](); // Ou qualquer função que você tenha definido para a página 404
+    }
   },
-
 };
 
 export default router;
