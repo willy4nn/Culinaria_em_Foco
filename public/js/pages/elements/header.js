@@ -82,11 +82,6 @@ function navigation(user) {
       address: '/dashboard'
     },
     {
-      user: 'admin',
-      text: 'Postagens',
-      address: '/dashboard'
-    },
-    {
       user: 'editor',
       text: 'Postar',
       address: '/post'
@@ -132,12 +127,13 @@ function navigation(user) {
   });
 
   links.forEach((link) => {
-    if (link.user == 'admin' && user.user_type == 'user' || link.user == 'admin' && user.user_type == 'editor') {
+    if (user.user_type == "user" && link.user != "user") {
       return;
     }
-    if (link.user == 'editor' && user.user_type == 'user') {
+    if (user.user_type == "editor" && link.user == "admin") {
       return;
     }
+
     const item = createLink(link.text, link.address);
     item.classList.add('item');
     list.appendChild(item);

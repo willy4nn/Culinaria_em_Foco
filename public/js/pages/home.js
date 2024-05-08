@@ -4,6 +4,49 @@ import footer from './elements/footer.js'
 import header from './elements/header.js'
 import setNavigation from "../setNavigation.js";
 
+// Função principal que renderiza a página inicial
+export default function home() {
+  // HTML do conteúdo da página inicial
+  function createHomeContentHTML() {
+    const homeContentHTML = `
+    <main class="main main-home">
+
+    </main>
+  `;
+    return homeContentHTML;
+  }
+
+  // Cria um elemento div para a página inicial
+  const homeElement = document.createElement('div');
+  homeElement.classList.add('home-container');
+  homeElement.innerHTML = createHomeContentHTML();
+
+  const main = homeElement.querySelector("main") 
+
+  homeElement.insertBefore(header(), main)
+  homeElement.append(footer())
+
+  // Chama a função getFeaturedNews() para obter as notícias em destaque
+  getFeaturedNews(3).then(news => {
+    // Renderiza a seção de notícias em destaque
+    const featuredNewsSection = renderFeaturedNewsSection(news.data);
+    // Adiciona a seção de notícias em destaque ao elemento principal da página inicial
+    const mainElement = homeElement.querySelector('.main-home');
+    mainElement.appendChild(featuredNewsSection);
+  });
+
+  getNewsFeed().then(news => {
+    // Renderiza a seção de notícias em destaque
+    const newsFeedSection = renderNewsFeed(news.data);
+    // Adiciona a seção de notícias em destaque ao elemento principal da página inicial
+    const mainElement = homeElement.querySelector('.main-home');
+    mainElement.appendChild(newsFeedSection);
+  });
+
+  // Retorna o elemento da página inicial
+  return homeElement;
+}
+
 async function getFeaturedNews(limit) {
   let url = limit ? `/api/posts/like?limit=${limit}` : `/api/posts/like?limit=1`;
 
@@ -130,7 +173,6 @@ function renderFeaturedNewsSection(news) {
   return featuredNewsSection;
 }
 
-
 function renderNewsFeed(news) {
   const newsFeedHTML = `
     <div class="news-feed-container">
@@ -196,7 +238,6 @@ function renderNewsFeed(news) {
       cardNews.appendChild(title);
       cardNews.appendChild(image);
       
-
       return cardNews;
     },
     default : (news) => {
@@ -239,7 +280,6 @@ function renderNewsFeed(news) {
       const defaultNewsFeed = document.createElement('div');
       defaultNewsFeed.innerHTML = defaultNewsFeedHTML;
 
-
       news.forEach((post, index) => {
         defaultNewsFeed.querySelector('div').appendChild(renders.createCardNews(post));
       })
@@ -260,47 +300,4 @@ function renderNewsFeed(news) {
   renderNews(null, news);
 
   return newsFeed;
-}
-
-// Função principal que renderiza a página inicial
-export default function home() {
-  // HTML do conteúdo da página inicial
-  function createHomeContentHTML() {
-    const homeContentHTML = `
-    <main class="main main-home">
-
-    </main>
-  `;
-    return homeContentHTML;
-  }
-
-  // Cria um elemento div para a página inicial
-  const homeElement = document.createElement('div');
-  homeElement.classList.add('home-container');
-  homeElement.innerHTML = createHomeContentHTML();
-
-  const main = homeElement.querySelector("main") 
-
-  homeElement.insertBefore(header(), main)
-  homeElement.append(footer())
-
-  // Chama a função getFeaturedNews() para obter as notícias em destaque
-  getFeaturedNews(3).then(news => {
-    // Renderiza a seção de notícias em destaque
-    const featuredNewsSection = renderFeaturedNewsSection(news.data);
-    // Adiciona a seção de notícias em destaque ao elemento principal da página inicial
-    const mainElement = homeElement.querySelector('.main-home');
-    mainElement.appendChild(featuredNewsSection);
-  });
-
-  getNewsFeed().then(news => {
-    // Renderiza a seção de notícias em destaque
-    const newsFeedSection = renderNewsFeed(news.data);
-    // Adiciona a seção de notícias em destaque ao elemento principal da página inicial
-    const mainElement = homeElement.querySelector('.main-home');
-    mainElement.appendChild(newsFeedSection);
-  });
-
-  // Retorna o elemento da página inicial
-  return homeElement;
 }
