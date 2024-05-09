@@ -184,6 +184,7 @@ export default function profile() {
 
       premiumButton.addEventListener('click', () => {
         animationClick(premiumButton);
+        window.dispatchEvent(createCustomEvent('/editor')); // Teste
       });
 
       editButton.addEventListener('click', () => {

@@ -12,6 +12,7 @@ import favorite from './pages/favorite.js';
 import admin from './pages/admin.js';
 import forgotPassword from './pages/forgot-password.js';
 import recoveryPassword from './pages/recovery-password.js';
+import create from './pages/create.js';
 
 
 const router = {
@@ -37,6 +38,9 @@ const router = {
   
   '/post': function () {
     return createPost();
+  },
+  '/create': function () {
+    return create();
   },
   '/post/:id': function (params) {
     console.log("post id", params)

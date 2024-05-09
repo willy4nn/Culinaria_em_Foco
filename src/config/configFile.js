@@ -25,4 +25,8 @@ const configMail = {
     MAIL_SECRET_KEY: process.env.MAIL_SECRET_KEY || "um_erro_aconteceu"
 }
 
-module.exports = { config, configDatabase, configMail };
+const configTinymce = {
+    TINYMCE_SECRET_KEY: process.env.TINYMCE_SECRET_KEY || "no_key",
+}
+
+module.exports = { config, configDatabase, configMail, configTinymce };

@@ -97,6 +97,7 @@ const editorPermissionVerify = require("./middlewares/editorPermissionVerify.js"
 
 //Base de rotas da API
 const routes = require('./routes');
+const { createToken } = require('./utils/tinymce-jwt.js');
 app.use('/api', routes);
 
 //Aqui é a parte que separa os ambientes para se trabalhar
@@ -144,6 +145,14 @@ if(environment === "development"){
   app.get('/editor', editorPermissionVerify, (req, res) => {
     res.sendFile(path.join(publicPath, 'index.html'));
   });
+  
+  app.get('/create', editorPermissionVerify, (req, res) => {
+    res.sendFile(path.join(publicPath, 'index.html'));
+  });
+
+  /* app.post('/tinymce-jwt', (req, res) => {
+  }); */
+  app.post('/tinymce-jwt', createToken);
 
   //Aqui é onde chama todas as outras rotas que não precisam de verificação especial
   app.get('*', permissionVerify, (req, res) => {
