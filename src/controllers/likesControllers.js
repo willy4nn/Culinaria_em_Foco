@@ -38,7 +38,6 @@ const likesController = {
     getPostLikes: async (req, res) => {
         try {
             const response = await likesRepository.getPostLikes();
-            console.log("res", response);
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
             res.status(error.code || 500).json({ error, status: error.code || 500 });
@@ -49,14 +48,9 @@ const likesController = {
     getPostsIsLiked: async (req, res) => {
         const posts_id = req.query.posts_id;
         const users_id = req.user.id;
-        console.log("po", posts_id);
-        console.log("us", users_id);
 
         try {
             const response = await likesRepository.getPostsIsLiked(posts_id, users_id);
-
-            console.log("resp", response);
-
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
             res.status(error.code || 500).json({ error, status: error.code || 500 });
@@ -97,7 +91,6 @@ const likesController = {
     getCommentlikes: async (req, res) => {
         try {
             const response = await likesRepository.getCommentlikes();
-            console.log("res", response);
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
             res.status(error.code || 500).json({ error, status: error.code || 500 });
@@ -111,9 +104,6 @@ const likesController = {
 
         try {
             const response = await likesRepository.getCommentsIsLiked(comments_id, users_id);
-
-            console.log("resp", response);
-
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
             res.status(error.code || 500).json({ error, status: error.code || 500 });
@@ -153,7 +143,6 @@ const likesController = {
     getRepliesLikes: async (req, res) => {
         try {
             const response = await likesRepository.getRepliesLikes();
-            console.log("res", response);
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
             res.status(error.code || 500).json({ error, status: error.code || 500 });
@@ -167,9 +156,6 @@ const likesController = {
 
         try {
             const response = await likesRepository.getRepliesIsLiked(replies_id, users_id);
-
-            console.log("resp", response);
-
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
             res.status(error.code || 500).json({ error, status: error.code || 500 });

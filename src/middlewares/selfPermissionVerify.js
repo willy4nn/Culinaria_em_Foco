@@ -6,6 +6,9 @@ const SECRET_KEY = config.SECRET_KEY;
 async function selfPermissionVerify(req, res, next) {
     const sessionToken = req.cookies.session_id;
     const selfUsername = req.params.username;
+    if (!sessionToken) {
+      return res.status(401).json({ error: "Token JWT ausente" });
+    }
 
     await jwt.verify(sessionToken, SECRET_KEY, (err, decoded) => {
       if (err) {

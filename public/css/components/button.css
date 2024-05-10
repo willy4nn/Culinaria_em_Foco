@@ -47,3 +47,13 @@
   border: 1px solid var(--p12z);
   color: var(--p12z);
 }
+
+.disabled {
+  opacity: 0.5; 
+  cursor: not-allowed; 
+}
+
+.disabled:hover {
+  opacity: 0.5; 
+  cursor: not-allowed; 
+}

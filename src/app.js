@@ -44,9 +44,21 @@ const multer = require("multer");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     try {
-      if (req.body.type === 'banner') cb(null, './public/uploads/posts_banner');
-      else if (req.body.type === 'photo')cb(null, './public/uploads/profile_photo');
-      else throw Error('Tipo de upload inválido (banner | photo)');
+      let uploadPath;
+      if (req.body.type === 'banner') 
+        uploadPath = './public/uploads/posts_banner';
+      else if (req.body.type === 'photo')
+        uploadPath = './public/uploads/profile_photo';
+      else 
+        throw Error('Tipo de upload inválido (banner | photo)');
+      
+      // Verificar se o diretório existe, caso contrário, criá-lo
+      if (!fs.existsSync(uploadPath)) {
+        fs.mkdirSync(uploadPath, { recursive: true });
+      }
+
+      cb(null, uploadPath);
+
     } catch (error) {
       console.error('Erro :', error)
     }
@@ -68,18 +80,20 @@ function uploadFiles(req, res) {
     }}
   )};
 
-
+// Upload com axios
 app.post('/upload', async (req, res) => {
   const { imageUrls, imageUris } = req.body;
-  console.log("passou aqui");
 
   // Iterar sobre as URLs das imagens e fazer o download e salvar localmente
   for (let i = 0; i < imageUrls.length; i++) {
     try {
       const response = await axios.get(imageUrls[i], { responseType: 'arraybuffer' });
-      console.log("Imagem enviada com sucesso!", response)
-      //const directory = './src/uploads/posts_media';
       const directory = './public/uploads/posts_media';
+
+      // Verificar se o diretório existe, caso contrário, criá-lo
+      if (!fs.existsSync(directory)) {
+        fs.mkdirSync(directory, { recursive: true });
+      }
 
       const filename = path.join(directory, imageUris[i]);
       fs.writeFileSync(filename, Buffer.from(response.data, 'binary'));

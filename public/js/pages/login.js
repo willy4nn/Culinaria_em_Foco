@@ -89,6 +89,10 @@ export default function login() {
     const email = emailInput.value.toString();
     const password = passwordInput.value.toString();
 
+    //Desabilita temporáriamente os botôes a fim de não lancar mais chamadas na api
+    buttonSignIn.classList.add("disabled");
+    buttonSignIn.disabled = true;
+
     // Envia uma requisição POST para a API de autenticação.
     fetch(`/api/login/auth`, {
       method: 'POST',
@@ -120,6 +124,13 @@ export default function login() {
         console.log(data);
       })
       .catch((error) => {
+
+        //Reabilita o botão novamente
+        setTimeout(() => {
+          buttonSignIn.classList.remove("disabled");
+          buttonSignIn.disabled = false;
+        }, 2000);
+        
         // Exibe um popup de erro e registra o erro no console.
         showPopup(error);
         console.error('Erro:', error);

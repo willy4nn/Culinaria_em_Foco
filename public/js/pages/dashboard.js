@@ -3,11 +3,9 @@
 // Importa a função createCustomEvent do módulo de eventos
 import { dateFormat } from '../utils/dateFormat.js';
 import createCustomEvent from '../eventModule.js';
-import setNavigation from '../setNavigation.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
 import displayModal from '../utils/modal.js';
-// import menuToggle from './elements/menuToggle.js';
 
 // Exporta a função principal que retorna a página principal
 export default function dashboard() {
@@ -59,9 +57,8 @@ export default function dashboard() {
   const main = dashboardElement.querySelector("main") 
   dashboardElement.insertBefore(header(), main)
   dashboardElement.append(footer())
-  // dashboardElement.append(menuToggle())  
 
-  const containerDashbaord = dashboardElement.querySelector('#container-dashboard');
+  const containerDashboard = dashboardElement.querySelector('#container-dashboard');
   const contentTable = dashboardElement.querySelector('#content-table');
 
   getPostsByEditorId();
@@ -97,7 +94,6 @@ export default function dashboard() {
           const bannerImg = document.createElement('img');
           const category = document.createElement('td');
           const created_at = document.createElement('td');
-          //const updated_at = document.createElement('td');
           const posted = document.createElement('td');
           const status = document.createElement('td');
           const commentsQuantity = document.createElement('td');
@@ -112,7 +108,6 @@ export default function dashboard() {
           bannerImg.src = item.banner;
           category.innerText = item.category.charAt(0).toUpperCase() + item.category.slice(1);
           created_at.innerText = dateFormat(item.created_at);
-          /* updated_at.innerText = dateFormat(item.updated_at); */
           posted.innerText = item.posted_draft ? 'Posted' : 'Draft';
           status.innerText = item.status.charAt(0).toUpperCase() + item.status.slice(1);
           commentsQuantity.innerText = item.comments_quantity;
@@ -129,7 +124,7 @@ export default function dashboard() {
           tdDelete.appendChild(buttonDelete);
 
           tableRow.append(title, banner, category, created_at, posted, 
-                            status, commentsQuantity, likesQuantity, tdEdit, tdDelete
+            status, commentsQuantity, likesQuantity, tdEdit, tdDelete
           );
             
           contentTable.appendChild(tableRow);
@@ -185,7 +180,6 @@ async function deletePost(id) {
       return response.json();
     })
     .then((data) => {
-      console.log(data);
       return data;
     })
     .catch((err) => {

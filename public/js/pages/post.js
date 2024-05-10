@@ -160,9 +160,7 @@ export default function createPost() {
     quillScriptElement.addEventListener('load', resolve);
   })])
   .then(([userData, _]) => {
-    // _ é uma convensão de nomenclatura para uma promisse ignorada (não será utilizada)
-      console.log("Carregou:", userData);
-
+      // _ é uma convensão de nomenclatura para uma promisse ignorada (não será utilizada)
       // Carrega o editor de texto
       const editor = new Quill('#editor', {
           modules: { toolbar: '#toolbar' },
@@ -197,10 +195,9 @@ export default function createPost() {
  
   // Se clicar e não selecionar nenhum arquivo, o anterior é perdido.
   bannerInput.addEventListener('click', () => { 
-    console.log("entrou aqui;");
     bannerPreview.src = '/assets/images/default_image_banner.png';
-  
   });
+
   bannerInput.addEventListener("change", (e) => {
     const file = e.target.files[0];
 
@@ -233,17 +230,16 @@ export default function createPost() {
       showPopup("Marque uma Categoria para a Postagem")
       return
     }
+
+    buttonPost.classList.add("disabled");
+    buttonPost.disabled = true;
     
     category = category ? category.toLowerCase() : ''; // Fixando a categoria vazia se não houver seleção
     const content = editorContent.toString();
     // Se tiver file armazena a imagem no back e retorna a uri, se não retorna vazio
     const banner = await importLocalFile(bannerInput.files[0], 'banner');
 
-    console.log('bn', bannerInput);
-    console.log('bn', bannerInput.files);
-
     const data = { title, category, content, banner, posted_draft };
-    console.log(data);
 
     fetch(`/api/posts/`, {
       method: 'POST',
@@ -263,9 +259,10 @@ export default function createPost() {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
       })
       .catch((error) => {
+        buttonPost.classList.remove("disabled");
+        buttonPost.disabled = false;
         showPopup(error)
         console.error('Erro:', error);
       });
@@ -285,7 +282,6 @@ async function getLogin() {
       return response.json();
   })
   .then((data) => {
-      console.log("get user :", data);
       return data;
   })
   .catch((error) => {

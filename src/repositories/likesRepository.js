@@ -19,7 +19,6 @@ const likesRepository = {
             const result = await client.query(query, [posts_id, users_id]);
 
             await client.query('COMMIT');
-            console.log("Dados inseridos com sucesso!");
 
             return result.rows;
         } catch (error) {
@@ -38,9 +37,6 @@ const likesRepository = {
 
         try {
             const result = await pool.query(query, [id]);
-            console.log("Registros encontrados: ");
-            console.table(result.rows);
-
             return result.rows;
         } catch (error) {
             console.error("Erro ao selecionar dados: ", error);
@@ -55,8 +51,6 @@ const likesRepository = {
 
         try {
             const result = await pool.query(query);
-            console.log("Registros encontrados: ");
-            console.table(result.rows);
 
             return result.rows;
         } catch (error) {
@@ -73,9 +67,6 @@ const likesRepository = {
 
         try {
             const result = await pool.query(query, [posts_id, users_id]);
-            console.log("Registros encontrados: ");
-            console.table(result.rows);
-
             return result.rows;
         } catch (error) {
             console.error("Erro ao selecionar dados: ", error);
@@ -99,8 +90,6 @@ const likesRepository = {
 
             const result = await client.query(query, [posts_comments_id, users_id]);
             await client.query('COMMIT');
-            
-            console.log("Dados inseridos com sucesso!");
 
             return result.rows;
         } catch (error) {
@@ -119,9 +108,6 @@ const likesRepository = {
 
         try {
             const result = await pool.query(query, [id]);
-            console.log("Registros encontrados: ");
-            console.table(result.rows);
-
             return result.rows;
         } catch (error) {
             console.error("Erro ao selecionar dados: ", error);
@@ -136,9 +122,6 @@ const likesRepository = {
 
         try {
             const result = await pool.query(query);
-            console.log("Registros encontrados: ");
-            console.table(result.rows);
-
             return result.rows;
         } catch (error) {
             console.error("Erro ao selecionar dados: ", error);
@@ -153,9 +136,6 @@ const likesRepository = {
 
         try {
             const result = await pool.query(query, [posts_comments_id, users_id]);
-            console.log("Registros encontrados: ");
-            console.table(result.rows);
-
             return result.rows;
         } catch (error) {
             console.error("Erro ao selecionar dados: ", error);
@@ -179,8 +159,6 @@ const likesRepository = {
 
             const result = await client.query(query, [comments_replies_id, users_id]);
             await client.query("COMMIT")
-            
-            console.log("Dados inseridos com sucesso!");
 
             return result.rows;
         } catch (error) {
@@ -199,9 +177,6 @@ const likesRepository = {
 
         try {
             const result = await pool.query(query, [id]);
-            console.log("Registros encontrados: ");
-            console.table(result.rows);
-
             return result.rows;
         } catch (error) {
             console.error("Erro ao selecionar dados: ", error);
@@ -216,9 +191,6 @@ const likesRepository = {
 
         try {
             const result = await pool.query(query);
-            console.log("Registros encontrados: ");
-            console.table(result.rows);
-
             return result.rows;
         } catch (error) {
             console.error("Erro ao selecionar dados: ", error);
@@ -233,9 +205,6 @@ const likesRepository = {
 
         try {
             const result = await pool.query(query, [comments_replies_id, users_id]);
-            console.log("Registros encontrados: ");
-            console.table(result.rows);
-
             return result.rows;
         } catch (error) {
             console.error("Erro ao selecionar dados: ", error);

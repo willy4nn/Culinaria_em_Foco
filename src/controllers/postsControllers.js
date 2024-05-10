@@ -67,7 +67,6 @@ const postsController = {
     // GET ALL ORDER BY LIKES (LIMIT = MAX RESULTS)
     getPostsOrderByLike: async (req, res) => {
         const maxResults = req.query.limit;
-        console.log("mm",maxResults);
 
         try {
             const response = await postsRepository.getPostsOrderByLike(maxResults);
@@ -81,7 +80,6 @@ const postsController = {
     // GET ALL ORDER BY CREATED_AT (LIMIT = MAX RESULTS)
     getPostsOrderByCreatedAt: async (req, res) => {
         const maxResults = req.query.limit;
-        console.log("mm",maxResults);
 
         try {
             const response = await postsRepository.getPostsOrderByCreatedAt(maxResults);
@@ -94,7 +92,6 @@ const postsController = {
     
     // GET ALL BY USER ID
     getPostsByEditorId: async (req, res) => {
-        console.log(req.user);
         const created_by = req.user.id;
         const userType = req.user.userType;
 
@@ -128,8 +125,6 @@ const postsController = {
     // DELETE
     deletePost: async (req, res) => {
         const id = req.params.id;
-        console.log("id",id);
-
         try {
             const response = await postsRepository.deletePost(id);
 
