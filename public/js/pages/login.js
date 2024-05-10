@@ -125,10 +125,6 @@ export default function login() {
   const forgotPasswordSpan = loginElement.querySelector('#forgot-password-span');
   setNavigation(forgotPasswordSpan, '/forgot-password');
 
-  logoImage.addEventListener("click", () => {
-    window.dispatchEvent(createCustomEvent(`/`));
-  })
-
   // Esta linha retorna o loginElement que contém todo o layout da página de login
   return loginElement;
 }
