@@ -230,6 +230,9 @@ export default function createPost() {
       showPopup("Marque uma Categoria para a Postagem")
       return
     }
+
+    buttonPost.classList.add("disabled");
+    buttonPost.disabled = true;
     
     category = category ? category.toLowerCase() : ''; // Fixando a categoria vazia se não houver seleção
     const content = editorContent.toString();
@@ -258,6 +261,8 @@ export default function createPost() {
       .then((data) => {
       })
       .catch((error) => {
+        buttonPost.classList.remove("disabled");
+        buttonPost.disabled = false;
         showPopup(error)
         console.error('Erro:', error);
       });
