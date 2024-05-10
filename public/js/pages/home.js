@@ -1,3 +1,5 @@
+// home.js
+
 // Importa as funções necessárias
 import getTimeAgo from "../utils/getTimeAgo.js";
 import footer from './elements/footer.js';
@@ -23,6 +25,7 @@ async function getFeaturedNews(limit) {
   } catch (error) {
     // Registra um erro caso haja problemas com a solicitação
     console.error('Error fetching featured news:', error);
+    
     // Retorna null em caso de erro
     return null;
   }
@@ -50,6 +53,7 @@ async function getNewsFeed(category) {
   } catch (error) {
     // Registra um erro caso haja problemas com a solicitação
     console.error('Error fetching news:', error);
+    
     // Retorna null em caso de erro
     return null;
   }
@@ -87,6 +91,7 @@ function renderFeaturedNewsSection(news) {
   
   // Cria um novo elemento de seção
   const featuredNewsSection = document.createElement('section');
+  
   // Define o conteúdo HTML da seção
   featuredNewsSection.innerHTML = featuredNewsSectionHTML;
 
@@ -149,6 +154,7 @@ function renderFeaturedNewsSection(news) {
 
   // Inicia a exibição inicial das notícias
   updateNews();
+  
   // Atualiza a navegação
   updateIndexNavigation();
 
@@ -187,6 +193,7 @@ function renderNewsFeed(news) {
   
   // Cria um novo elemento de seção
   const newsFeed = document.createElement('section');
+  
   // Define o conteúdo HTML da seção
   newsFeed.innerHTML = newsFeedHTML;
 
@@ -201,7 +208,7 @@ function renderNewsFeed(news) {
     filter.addEventListener('click', () => {
       // Obtém as notícias da categoria selecionada e renderiza
       getNewsFeed(filter.value).then(news => {
-        renderNews(news);
+        renderNews(news.data);
       });
     });
   });
@@ -297,6 +304,7 @@ export default function home() {
 
   // Insere o cabeçalho antes do elemento principal
   homeElement.insertBefore(header(), main);
+  
   // Adiciona o rodapé ao final do elemento principal
   homeElement.append(footer());
 
