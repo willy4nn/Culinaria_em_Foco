@@ -8,12 +8,11 @@ import getPost from './pages/getPost.js';
 import editor from './pages/editor.js';
 import editPost from './pages/editPost.js';
 import dashboard from './pages/dashboard.js';
-import favorite from './pages/favorite.js';
+import favorites from './pages/favorites.js';
 import admin from './pages/admin.js';
 import forgotPassword from './pages/forgot-password.js';
 import recoveryPassword from './pages/recovery-password.js';
 import create from './pages/create.js';
-
 
 const router = {
   '/': function () {
@@ -56,8 +55,8 @@ const router = {
   '/dashboard': function () {
     return dashboard();
   },
-  '/favorite': function () {
-    return favorite();
+  '/favorites': function () {
+    return favorites();
   },
   '/profile': function () {
     return profile();
@@ -65,22 +64,6 @@ const router = {
   '/admin': function () {
     return admin();
   },
-  /* getPage: function (path) {
-    // Verifica se a rota possui um parâmetro dinâmico
-    const dynamicRoute = Object.keys(router).find(route => {
-        const routePattern = new RegExp(`^${route.replace(/:\w+/g, '\\w+')}$`);
-        return routePattern.test(path);
-    });
-
-    if (dynamicRoute) {
-        // Se a rota for dinâmica, extraia o parâmetro e chame a função associada
-        const param = path.split('/')[2]; // Extrai o ID da URL (/post/1)
-        return router[dynamicRoute]({ id: param }); // Passa o ID como parâmetro
-    } else {
-        // Se não for uma rota dinâmica, apenas chama a função associada
-        return router[path]();
-    }
-  }, */
   getPage: function (path) {
     // Verifica se a rota é a rota de edição de post
     if (path.startsWith('/post/edit/')) {
@@ -105,7 +88,6 @@ const router = {
     // Se não for uma rota dinâmica, apenas chama a função associada
     return router[path]();
   },
-
 };
 
 export default router;

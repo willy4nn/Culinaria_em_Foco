@@ -74,7 +74,7 @@ function navigation(user) {
     {
       user: 'user',
       text: 'Favoritos',
-      address: '/favorite'
+      address: '/favorites'
     },
     {
       user: 'editor',
