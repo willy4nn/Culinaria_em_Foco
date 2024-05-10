@@ -4,8 +4,9 @@ const pool = require('../database/postgres');
 
 
 //Configurações default de ambiente
-const { config } = require('../config/configFile');
+const { config, configMail } = require('../config/configFile');
 const jwt = require('jsonwebtoken');
+const verifyToken = require('../utils/verifyToken');
 
 const loginRepository = {
 
@@ -31,30 +32,19 @@ const loginRepository = {
     }
   },
 
-    getUser: async function(username) {
-      try {
-        const result = await pool.query(`SELECT * FROM users WHERE ${isNaN(username) ? "username" : "id"} = $1`, [username]);
-        return result;
-      } catch (error) {
-        console.error("Não foi possível resgatar dados do usuário", error);
-        throw error;
-      } 
-    },
+  getUser: async function(username) {
+    try {
+      const result = await pool.query(`SELECT * FROM users WHERE ${isNaN(username) ? "username" : "id"} = $1`, [username]);
+      return result;
+    } catch (error) {
+      console.error("Não foi possível resgatar dados do usuário", error);
+      throw error;
+    } 
+  },
 
-    getUsers: async () => {
-        try {
-          const result = await pool.query('SELECT * FROM users')
-          return result;
-        } catch (error) {
-          throw error;
-        } 
-          
-    },
-
-    // Carrega todos os dados do usuário logado
-    getProfile: async (users_id) => {
+  getUsers: async () => {
       try {
-        const result = await pool.query('SELECT * FROM users WHERE id = $1', [users_id])
+        const result = await pool.query('SELECT * FROM users')
         return result;
       } catch (error) {
         throw error;
@@ -62,133 +52,144 @@ const loginRepository = {
         
   },
 
-    autenticate: async (email, simplePassword) => {
-        try {
-          //Primeiro verifica se usuário existe
-            const result = await pool.query('SELECT * FROM users WHERE email = $1', [email])
-          if (result.rowCount === 0){
-            const error = { success: false, error: 'Usuário inexistente' };
-            return error;
-          }
-          if (result.rows[0].status === 'deleted'){
-            const error = { success: false, error: 'Este usuário foi excluído' };
-            return error;
-          }
-          if (result.rows[0].status === 'banned'){
-            const error = { success: false, error: 'Este usuário está suspenso' };
-            return error;
-          }
-
-          //Agora é feito o processo de autenticação, usuário ganha um token
-          const user = result.rows[0];
-          const hashedPassword = user.password; // Assumindo que a senha já está armazenada de forma segura no banco de dados
-          const match = await comparePassword(simplePassword, hashedPassword);
-          if (!match) {
-            const error = { success: false, error: 'Senha incorreta' }
-            return error;
-          }
-
-          //Dados do token a ser gerado
-          const userToken = {
-            id: user.id,
-            username: user.username,
-            name: user.name,
-            userType: user.user_type,
-            profilePhoto: user.profile_photo,
-            premiumActive: user.premium_active
-          }
-          //Aqui é feito o processo de assinatura do token
-            const sessionToken = await jwt.sign({ user: userToken }, config.SECRET_KEY);
-            const success = { success: true, sessionToken: sessionToken, message: 'Token assinado com sucesso!' };
-            return success;
-
-          } catch (error) {
-            console.error({ error: 'Falha durante processo de assinatura do token' });
-          }
-    },
-
-    addUser: async (user) => {
-      // Procedimento realiza Transação - Utilizando conexão do tipo Client
-      const client = await pool.connect();
-    
-      const newUser = user;
-      
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      
-      // Aqui são feitas as validações, caso o usuário não exista ele procede com o registro
-      try {
-        if(newUser.username === null || newUser.username === "") {
-          const error = { success: false, error: 'Campo Apelido não pode estar vazio! Por favor, digite um Apelido'};
-          return error;
-        }
-
-        if (newUser.username.length > 15) {
-          const error = { success: false, error: 'Limite de caracteres para Apelido atingido! (max: 15)'};
-          return error;
-        }
-
-        if (!isNaN(newUser.username)) {
-          const error = { success: false, error: 'Por favor, insira pelo menos uma Letra no Apelido!'};
-          return error;
-        }
-
-        if(newUser.name === null || newUser.name === "") {
-          const error = { success: false, error: 'Campo Nome Completo não pode estar vazio! Por favor, digite Seu Nome'};
-          return error;
-        }
-    
-        if (!emailRegex.test(newUser.email)) {
-          const error = { success: false, error: 'Insira um endereço de email válido!' };
-          return error;
-        }
-
-        if (newUser.password.length < 8) {
-          const error = { success: false, error: 'A senha precisa ter pelo menos 8 caracteres'};
-          return error;
-        }
-
-        if (newUser.password !== newUser.password2) {
-          const error = { success: false, error: 'As senhas não coincidem!'};
-          return error;
-        }
-    
-        const test1 = await client.query('SELECT * FROM users WHERE username = $1', [newUser.username]);
-        if (test1.rowCount > 0) {
-          const error = { success: false, error: 'Usuário já existe'};
-          return error;
-        }
-    
-        const test2 = await client.query('SELECT * FROM users WHERE email = $1', [newUser.email]);
-        if (test2.rowCount > 0) {
-          const error = { success: false, error: 'Esse email já possui cadastro!'};
-          return error;
-        }
-
-        const hashedPassword = await hashPassword(newUser.password);
+  // Carrega todos os dados do usuário logado
+  getProfile: async (users_id) => {
+    try {
+      const result = await pool.query('SELECT * FROM users WHERE id = $1', [users_id])
+      return result;
+    } catch (error) {
+      throw error;
+    } 
         
-        await client.query('BEGIN');
-      
-        await client.query('INSERT INTO users (name, username, email, password, user_type, premium_active, profile_photo) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-          [newUser.name, newUser.username, newUser.email, hashedPassword, "user", false, newUser.profile_photo]);
-      
-        await client.query('COMMIT');
-    
-        const success = { success: true, message: 'Usuário cadastrado com sucesso!' };
-        return success;
-      } catch (err) {
-        await client.query('ROLLBACK');
-        console.error("Não foi possível registrar usuário", err);
-        const error = { success: false, error: "Não foi possível registrar usuário"};
-        return error;
-      } finally {
-        client.release();
-      }
-    },
+  },
 
-    updateUser: async (actualUser, userUpdate) => {
-      const username = actualUser;
-      const updatedUser = userUpdate;
+  autenticate: async (email, simplePassword) => {
+    try {
+      //Primeiro verifica se usuário existe
+        const result = await pool.query('SELECT * FROM users WHERE email = $1', [email])
+      if (result.rowCount === 0){
+        const error = { success: false, error: 'Usuário inexistente' };
+        return error;
+      }
+      if (result.rows[0].status === 'deleted'){
+        const error = { success: false, error: 'Este usuário foi excluído' };
+        return error;
+      }
+      if (result.rows[0].status === 'banned'){
+        const error = { success: false, error: 'Este usuário está suspenso' };
+        return error;
+      }
+
+      //Agora é feito o processo de autenticação, usuário ganha um token
+      const user = result.rows[0];
+      const hashedPassword = user.password; // Assumindo que a senha já está armazenada de forma segura no banco de dados
+      const match = await comparePassword(simplePassword, hashedPassword);
+      if (!match) {
+        const error = { success: false, error: 'Senha incorreta' }
+        return error;
+      }
+
+      //Dados do token a ser gerado
+      const userToken = {
+        id: user.id,
+        username: user.username,
+        name: user.name,
+        userType: user.user_type,
+        profilePhoto: user.profile_photo,
+        premiumActive: user.premium_active
+      }
+      //Aqui é feito o processo de assinatura do token
+        const sessionToken = await jwt.sign({ user: userToken }, config.SECRET_KEY);
+        const success = { success: true, sessionToken: sessionToken, message: 'Token assinado com sucesso!' };
+        return success;
+
+    } catch (error) {
+      console.error({ error: 'Falha durante processo de assinatura do token' });
+    }
+  },
+
+  addUser: async (user) => {
+    // Procedimento realiza Transação - Utilizando conexão do tipo Client
+    const client = await pool.connect();
+  
+    const newUser = user;
     
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    // Aqui são feitas as validações, caso o usuário não exista ele procede com o registro
+    try {
+      if(newUser.username === null || newUser.username === "") {
+        const error = { success: false, error: 'Campo Apelido não pode estar vazio! Por favor, digite um Apelido'};
+        return error;
+      }
+
+      if (newUser.username.length > 15) {
+        const error = { success: false, error: 'Limite de caracteres para Apelido atingido! (max: 15)'};
+        return error;
+      }
+
+      if (!isNaN(newUser.username)) {
+        const error = { success: false, error: 'Por favor, insira pelo menos uma Letra no Apelido!'};
+        return error;
+      }
+
+      if(newUser.name === null || newUser.name === "") {
+        const error = { success: false, error: 'Campo Nome Completo não pode estar vazio! Por favor, digite Seu Nome'};
+        return error;
+      }
+  
+      if (!emailRegex.test(newUser.email)) {
+        const error = { success: false, error: 'Insira um endereço de email válido!' };
+        return error;
+      }
+
+      if (newUser.password.length < 8) {
+        const error = { success: false, error: 'A senha precisa ter pelo menos 8 caracteres'};
+        return error;
+      }
+
+      if (newUser.password !== newUser.password2) {
+        const error = { success: false, error: 'As senhas não coincidem!'};
+        return error;
+      }
+  
+      const test1 = await client.query('SELECT * FROM users WHERE username = $1', [newUser.username]);
+      if (test1.rowCount > 0) {
+        const error = { success: false, error: 'Usuário já existe'};
+        return error;
+      }
+  
+      const test2 = await client.query('SELECT * FROM users WHERE email = $1', [newUser.email]);
+      if (test2.rowCount > 0) {
+        const error = { success: false, error: 'Esse email já possui cadastro!'};
+        return error;
+      }
+
+      const hashedPassword = await hashPassword(newUser.password);
+      
+      await client.query('BEGIN');
+    
+      await client.query('INSERT INTO users (name, username, email, password, user_type, premium_active, profile_photo) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+        [newUser.name, newUser.username, newUser.email, hashedPassword, "user", false, newUser.profile_photo]);
+    
+      await client.query('COMMIT');
+  
+      const success = { success: true, message: 'Usuário cadastrado com sucesso!' };
+      return success;
+    } catch (err) {
+      await client.query('ROLLBACK');
+      console.error("Não foi possível registrar usuário", err);
+      const error = { success: false, error: "Não foi possível registrar usuário"};
+      return error;
+    } finally {
+      client.release();
+    }
+  },
+
+  updateUser: async (actualUser, userUpdate) => {
+    const username = actualUser;
+    const updatedUser = userUpdate;
+  
     //Caso o usuário troque a senha, ela é hasheada novamente
     if (updatedUser.password){
       const hashedPassword = await hashPassword(updatedUser.password);
@@ -210,53 +211,113 @@ const loginRepository = {
     }
 
     //Procedimento realiza Transação - Utilizando conexão do tipo Client
-    const client = await pool.connect()
-        try {
-          //Aqui cria um novo objeto com as informações novas
-          const existingUser = test1.rows[0];
-          const newUser = { ...existingUser, ...updatedUser };
-          
-          //Aqui se desenrola o processo de atualização no banco
-          await client.query('BEGIN')
-
-          await client.query(`UPDATE users SET name = $1, username = $2, email = $3, password = $4, user_type = $5, status = $6, premium_active = $7, premium_date = $8, profile_photo = $9 WHERE ${isNaN(username) ? "username" : "id"} = $10`, 
-          [newUser.name, newUser.username, newUser.email, newUser.password, newUser.user_type, newUser.status, newUser.premium_active, newUser.premium_date, newUser.profile_photo, username]);
-
-          await client.query('COMMIT')
-           
-          const success = { success: true, message: 'Usuário atualizado com sucesso!' }
-          return success
-
-          } catch (err) {
-            await client.query('ROLLBACK')
-            console.error("Não foi possível atualizar o usuário", err);
-            const error = { success: false, error: "Não foi possível atualizar o usuário"};
-            return error
-        } finally {
-          client.release();
-        }          
-    },
-
-    deleteUser: async (username) => {
+    const client = await pool.connect();
+    try {
+      //Aqui cria um novo objeto com as informações novas
+      const existingUser = test1.rows[0];
+      const newUser = { ...existingUser, ...updatedUser };
       
-      //Tenta encontrar dados do usuário através do username, caso encontre o deleta permanentemente
-      //Caso a busca precise ser feita pelo id, basta apenas inseri-lo diretamente a rota normalmente
-        const result = await pool.query(`SELECT * FROM users WHERE ${isNaN(username) ? "username" : "id"} = $1`, [username]);
-        if (result.rowCount === 0) {
-          const error = {success: false, error: "Usuário não encontrado" }
-          return error;
-        }
-        try {
-          //await pool.query(`DELETE FROM users WHERE ${isNaN(username) ? "username" : "id"} = $1`, [username]);
-          await pool.query(`UPDATE users SET status = 'deleted' WHERE ${isNaN(username) ? "username" : "id"} = $1`, [username]);
-          const success = { success: true, message: "Usuário excluído com sucesso!"};
-          return success;
-        } catch (err) {
-          console.error("Erro ao excluir usuário", err);
-          const error = { success: false, error: "Erro ao excluir usuário"};
-          return error;
-        }
-    },
+      //Aqui se desenrola o processo de atualização no banco
+      await client.query('BEGIN')
+
+      await client.query(`UPDATE users SET name = $1, username = $2, email = $3, password = $4, user_type = $5, status = $6, premium_active = $7, premium_date = $8, profile_photo = $9 WHERE ${isNaN(username) ? "username" : "id"} = $10`, 
+      [newUser.name, newUser.username, newUser.email, newUser.password, newUser.user_type, newUser.status, newUser.premium_active, newUser.premium_date, newUser.profile_photo, username]);
+
+      await client.query('COMMIT')
+        
+      const success = { success: true, message: 'Usuário atualizado com sucesso!' }
+      return success
+
+    } catch (err) {
+      await client.query('ROLLBACK')
+      console.error("Não foi possível atualizar o usuário", err);
+      const error = { success: false, error: "Não foi possível atualizar o usuário"};
+      return error
+    } finally {
+      client.release();
+    }          
+  },
+
+  deleteUser: async (username) => {
+    
+    //Tenta encontrar dados do usuário através do username, caso encontre o deleta permanentemente
+    //Caso a busca precise ser feita pelo id, basta apenas inseri-lo diretamente a rota normalmente
+    const result = await pool.query(`SELECT * FROM users WHERE ${isNaN(username) ? "username" : "id"} = $1`, [username]);
+    if (result.rowCount === 0) {
+      const error = {success: false, error: "Usuário não encontrado" }
+      return error;
+    }
+    try {
+      //await pool.query(`DELETE FROM users WHERE ${isNaN(username) ? "username" : "id"} = $1`, [username]);
+      await pool.query(`UPDATE users SET status = 'deleted' WHERE ${isNaN(username) ? "username" : "id"} = $1`, [username]);
+      const success = { success: true, message: "Usuário excluído com sucesso!"};
+      return success;
+    } catch (err) {
+      console.error("Erro ao excluir usuário", err);
+      const error = { success: false, error: "Erro ao excluir usuário"};
+      return error;
+    }
+  },
+
+  forgotPassword: async function(email) {
+    try {
+      const result = await pool.query(`SELECT * FROM users WHERE email = $1`, [email]);
+
+      if (result.rowCount === 0){
+        const error = {success: false, error: "E-mail não encontrado" };
+        return error;
+      }
+
+      //Após verificado a presença do email no banco
+      //o sistema gera um token assinado com os dados do cliente que solicitou
+      //a alteração da senha
+
+      //Dados do token a ser gerado
+      const userToken = {
+      id: result.rows[0].id,
+      username: result.rows[0].username,
+      name: result.rows[0].name
+    };
+
+    const passRecoveryToken = await jwt.sign({ user: userToken }, configMail.MAIL_SECRET_KEY, { expiresIn: '4m' });
+    const success = { success: true, recoveryToken: passRecoveryToken, message: 'Um link de redefinição foi enviado ao e-mail solicitado!' };
+    return success;
+
+    } catch (err) {
+      console.error("Erro: ", err);
+      const error = { success: false, error: "Erro ao enviar a solicitação"};
+      return error;
+    } 
+  },
+
+  recoveryPassword: async (user_id, password) => {
+
+    const hashedPassword = await hashPassword(password);
+
+    //Procedimento realiza Transação - Utilizando conexão do tipo Client
+    const client = await pool.connect()
+    try {
+      
+      //Aqui se desenrola o processo de atualização no banco
+      await client.query('BEGIN')
+
+      await client.query(`UPDATE users SET password = $1 WHERE id = $2`, 
+      [hashedPassword, user_id]);
+
+      await client.query('COMMIT')
+      
+      const success = { success: true, message: 'Senha atualizada com Sucesso!' }
+      return success
+
+      } catch (err) {
+        await client.query('ROLLBACK')
+        console.error("Não foi possível atualizar a Senha", err);
+        const error = { success: false, error: "Não foi possível atualizar a Senha"};
+        return error
+    } finally {
+      client.release();
+    }
+  }
 }
 
 module.exports = loginRepository;

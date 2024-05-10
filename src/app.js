@@ -128,6 +128,14 @@ if(environment === "development"){
     res.sendFile(path.join(publicPath, 'index.html'));
   });
 
+  app.get('/forgot-password', (req, res) => {
+    res.sendFile(path.join(publicPath, 'index.html'));
+  });
+
+  app.get('/recovery-password/:token', (req, res) => {
+    res.sendFile(path.join(publicPath, 'index.html'));
+  });
+
   //As que precisam de verificação especial recebem seu middleware específico
   app.get('/admin', adminPermissionVerify, (req, res) => {
     res.sendFile(path.join(publicPath, 'index.html'));
