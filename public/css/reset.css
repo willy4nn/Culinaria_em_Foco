@@ -11,7 +11,7 @@ body {
   width: 100%;
   height: auto;
   position: relative;
-  background: var(--c2);
+  background: var(--p2y);
 }
 
 #root {

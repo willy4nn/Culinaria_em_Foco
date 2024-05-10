@@ -20,32 +20,21 @@
   overflow: hidden;
 }
 
-.form a {
-  color: var(--c7);
-  transition: color 0.3s ease;
-}
-
-.form a:hover {
-  color: var(--c8);
-}
-
-.form button {
-  align-self: center;
-}
-
 .main-login .signup-link {
   transition: color 0.3s ease;
-  color: var(--c8);
   text-align: center;
 }
 
-.main-login .signup-link:hover {
-  color: var(--c9);
+.main-login .signup-link a {
+  color: var(--p10y);
+  transition: color 0.3s ease;
+  transition: font-weight 0.3s ease, color 0.3s ease,
 }
 
-.interact-span:hover {
+.main-login .signup-link a:hover {
+  color: var(--p10z); 
   cursor: pointer;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 
