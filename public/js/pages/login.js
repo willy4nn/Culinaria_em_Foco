@@ -1,86 +1,95 @@
-// login.js
+//login.js
+
+// Importa as funções necessárias
 import createCustomEvent from '../eventModule.js';
 import setNavigation from '../setNavigation.js';
 import footer from './elements/footer.js';
 import { modalError } from './elements/modalError.js';
 
-// Exporta a função 'login' para que possa ser utilizada por outras partes do código
+// Função responsável por renderizar a página de login.
 export default function login() {
-  // Esta variável armazena o código HTML que representa o layout da página de login
+  // HTML que compõe a página de login.
   const loginContentHTML = `
-<header class="header header-login">
-  <div class="logo">
-    <img class= "logo-image" src="/assets/images/croissant-logo.svg" alt="Logo Chef's Corner" />
-    <span class="paragraph-medium">Culinária em Foco</span>
-  </div>
-  <div class="buttons">
-    <a class="button button-fill signup-button">Registrar</a>
-  </div>
-</header>
-<main class="main main-login">
-  <h1 class="primary-heading">Login</h1>
-  <div>
-    <form class="form">
-      <div class="inputs-container">
-        <div>
-          <input class="input paragraph-normal" id="email" type="text" name="email" placeholder="E-mail" />
-        </div>
-        <div>
-          <input class="input paragraph-normal" id="password" type="password" name="password" placeholder="Senha"/>
-        </div>
+    <header class="header header-login">
+      <div class="logo">
+        <img class= "logo-image" src="/assets/images/croissant-logo.svg" alt="Logo Chef's Corner" />
+        <span class="paragraph-medium">Culinária em Foco</span>
       </div>
-      <a id="forgot-password-span" class="paragraph-normal">Esqueceu sua senha?</a>
-      <button class="button button-fill" id="buttonSignIn">Sign In</button>
-    </form>
-  </div>
-  <p class="signup-link paragraph-medium">
-    <a id="signup-span">Não tem uma conta? Junte-se a nós!</a>
-  </p>
-</main>
+      <div class="buttons">
+        <a class="button button-fill signup-button">Registrar</a>
+      </div>
+    </header>
+    <main class="main main-login">
+      <h1 class="primary-heading">Login</h1>
+      <div>
+        <form class="form">
+          <div class="inputs-container">
+            <div>
+              <input class="input paragraph-normal" id="email" type="text" name="email" placeholder="E-mail" />
+            </div>
+            <div>
+              <input class="input paragraph-normal" id="password" type="password" name="password" placeholder="Senha"/>
+            </div>
+          </div>
+          <a id="forgot-password-span" class="paragraph-normal">Esqueceu sua senha?</a>
+          <button class="button button-fill" id="buttonSignIn">Sign In</button>
+        </form>
+      </div>
+      <p class="signup-link paragraph-medium">
+        <a id="signup-span">Não tem uma conta? Junte-se a nós!</a>
+      </p>
+    </main>
   `;
 
-  // Esta linha cria um novo elemento HTML do tipo 'div'
+  // Cria um elemento div para conter o conteúdo da página de login.
   const loginElement = document.createElement('div');
 
-  // Esta linha adiciona a classe 'login-element' ao elemento div criado
+  // Adiciona a classe "login-container" ao elemento div.
   loginElement.classList.add('login-container');
 
-  // Esta linha define o innerHTML do elemento div para o loginContentHTML (que contém o layout da página de login)
+  // Define o HTML dentro do elemento div como o conteúdo da página de login.
   loginElement.innerHTML = loginContentHTML;
 
-  //Adiciona o elemento footer
+  // Seleciona o elemento <main>.
   const main = loginElement.querySelector("main") 
 
-  //Modal de erro
+  // Desestrutura o retorno da função de modal de erro para obter o popupCard e a função showPopup.
   const { popupCard, showPopup } = modalError();
+
+  // Insere o popupCard após o elemento <main>.
   main.insertAdjacentElement("afterend", popupCard);
 
+  // Adiciona o rodapé à página de login.
   loginElement.append(footer())
 
-  // Esta linha seleciona o elemento com o id 'email' do loginElement (que é o campo de entrada de email)
+  // Seleciona o input de e-mail.
   const emailInput = loginElement.querySelector('#email');
 
-  // Esta linha seleciona o elemento com o id 'password' do loginElement (que é o campo de entrada da senha)
+  // Seleciona o input de senha.
   const passwordInput = loginElement.querySelector('#password');
 
-  // Esta linha seleciona o elemento com o id 'buttonSignIn' do loginElement (que é o botão de login)
+  // Seleciona o botão de login.
   const buttonSignIn = loginElement.querySelector('#buttonSignIn');
+
+  // Seleciona o link de registro.
   const signUpSpan = loginElement.querySelector('#signup-span');
 
+  // Seleciona o elemento do logo.
   const logo = loginElement.querySelector('.logo');
+
+  // Configura a navegação para a página inicial ao clicar no logo.
   setNavigation(logo, '/');
 
-  // Esta função adiciona um ouvinte de evento ao elemento buttonSignIn. Quando o botão é clicado, o código dentro da função será executado
+  // Adiciona um ouvinte de evento ao botão de login.
   buttonSignIn.addEventListener('click', (event) => {
-    // Esta linha evita o comportamento padrão do botão, que é enviar o formulário
+    // Impede o comportamento padrão do formulário.
     event.preventDefault();
-    // Esta linha define duas variáveis com nome de usuário e senha (altere-as para suas credenciais reais)
+
+    // Obtém o valor dos campos de e-mail e senha.
     const email = emailInput.value.toString();
     const password = passwordInput.value.toString();
 
-    
-
-    // Esta linha envia uma requisição POST para o servidor com o nome de usuário e senha no corpo da requisição
+    // Envia uma requisição POST para a API de autenticação.
     fetch(`/api/login/auth`, {
       method: 'POST',
       headers: {
@@ -89,42 +98,49 @@ export default function login() {
       body: JSON.stringify({ email, password }),
     })
       .then((response) => {
-        // Esta linha verifica se a resposta do servidor é bem-sucedida
+        // Verifica se a resposta da requisição não foi bem-sucedida.
         if (!response.ok) {
+          // Lança um erro com a mensagem de erro retornada pela API.
           return response.json().then((error) => {
             throw new Error(error.message)
           })
         };
 
-        // Esta linha retorna os dados da resposta em formato JSON
+        // Aguarda 3 segundos e dispara um evento personalizado de redirecionamento para a página inicial.
         setTimeout(() => {
           window.dispatchEvent(createCustomEvent('/home'));
-        }, 3000); 
+        }, 3000);
+
+        // Exibe um popup de sucesso.
         showPopup("Login efetuado com sucesso!", "Sucesso!", true);
         return response.json();
       })
       .then((data) => {
-        // Esta linha registra os dados recebidos do servidor no console (você pode substituir isso por sua própria lógica para lidar com a resposta)
+        // Exibe os dados retornados no console.
         console.log(data);
       })
       .catch((error) => {
+        // Exibe um popup de erro e registra o erro no console.
         showPopup(error);
-        // Esta linha captura qualquer erro que ocorra durante o processo de login
         console.error('Erro:', error);
       });
   });
 
-  signUpSpan.addEventListener('click', () => {
-    window.dispatchEvent(createCustomEvent('/register'));
-  });
+  // Configura a navegação para a página de registro ao clicar no botão de registro.
+  setNavigation(signUpSpan, '/register');
 
+  // Seleciona o botão de registro.
   const signupButton = loginElement.querySelector('.signup-button');
+
+  // Configura a navegação para a página de registro ao clicar no botão de registro.
   setNavigation(signupButton, '/register');
 
-
+  // Seleciona o link "Esqueceu sua senha?".
   const forgotPasswordSpan = loginElement.querySelector('#forgot-password-span');
+
+  // Configura a navegação para a página de recuperação de senha ao clicar no link "Esqueceu sua senha?".
   setNavigation(forgotPasswordSpan, '/forgot-password');
 
-  // Esta linha retorna o loginElement que contém todo o layout da página de login
+  // Retorna o elemento que contém o conteúdo da página de login.
   return loginElement;
 }
