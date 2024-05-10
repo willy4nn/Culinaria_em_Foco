@@ -2,13 +2,10 @@
 
 // Importa a função createCustomEvent do módulo de eventos
 import { dateFormat } from '../utils/dateFormat.js';
-import createCustomEvent from '../eventModule.js';
-import setNavigation from '../setNavigation.js';
 import displayModal from '../utils/modal.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
 import { modalError } from './elements/modalError.js';
-// import menuToggle from './elements/menuToggle.js';
 
 // Exporta a função principal que retorna a página principal
 export default function admin() {
@@ -64,7 +61,6 @@ export default function admin() {
   const main = adminElement.querySelector("main") 
   adminElement.insertBefore(header(), main)
   adminElement.append(footer())
-  // adminElement.append(menuToggle())
 
   //Modal de erro
   const { popupCard, showPopup } = modalError();
@@ -75,8 +71,7 @@ export default function admin() {
   function renderUsersTable(data){
 
       data.forEach((item) => {
-        
-          console.log(item);
+
           const tableRow = document.createElement('tr');
           const id = document.createElement('td');
           const name = document.createElement('td');
@@ -91,10 +86,6 @@ export default function admin() {
           const createdAt = document.createElement('td');
           const tdEdit = document.createElement('td');
           const tdDelete = document.createElement('td');
-
-          //const buttonEdit = document.createElement('button');
-          //const buttonConfirm = document.createElement('button');
-          //const buttonDelete = document.createElement('button');
           const buttonEdit = document.createElement('button');
           const buttonConfirm = document.createElement('button');
           const buttonDelete = document.createElement('button');
@@ -204,8 +195,6 @@ export default function admin() {
                 premium_date: inputPremiumDate.value,
               }
 
-              console.log("datou:",data);
-              
               updateUser(item.username, data)
               .then(() => {
                 contentTable.innerHTML = '';
@@ -253,40 +242,12 @@ export default function admin() {
       return response.json();
     })
     .then((response) => {
-      console.log(response);
       renderUsersTable(response);
     })
     .catch((error) => {
       console.error('Erro:', error);
     });
   }
-
-  // const logoutButton = adminElement.querySelector('.logout');
-  // logoutButton.addEventListener('click', () => {
-  //   fetch(`/api/login/logout`, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //   })
-  //     .then((response) => {
-  //       // Esta linha verifica se a resposta do servidor é bem-sucedida
-  //       if (!response.ok) {
-  //         throw new Error('Falha no logout');
-  //       }
-  //       // Esta linha retorna os dados da resposta em formato JSON
-  //       window.dispatchEvent(createCustomEvent('/login'));
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       // Esta linha registra os dados recebidos do servidor no console (você pode substituir isso por sua própria lógica para lidar com a resposta)
-  //       console.log(data);
-  //     })
-  //     .catch((error) => {
-  //       // Esta linha captura qualquer erro que ocorra durante o processo de login
-  //       console.error('Erro:', error);
-  //     });
-  // });
 
   // Retorna o elemento principal
   return adminElement;
@@ -314,8 +275,6 @@ async function updateUser(username, data) {
         return response.json();
       })
       .then((data) => {
-        
-        console.log(data);
         return;
       })
       .catch((err) => {
@@ -341,7 +300,6 @@ async function deleteUser(id) {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         return data;
       })
       .catch((err) => {

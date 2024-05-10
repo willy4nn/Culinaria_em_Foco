@@ -7,10 +7,6 @@ function importHTMLContentFiles(htmlContent) {
 // imageUris: Novos nomes das imagens para servir de referência de acesso
 const { newHtmlString, imageUrls, imageUris } = setFileName(htmlContent);
 
-console.log("newHtmlString::", newHtmlString);
-console.log("imageUrls::", imageUrls);
-console.log("imageUris::", imageUris);
-
 axios.post('/upload', { imageUrls, imageUris })
   .then(response => {
     console.log("res", response);
