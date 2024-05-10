@@ -39,7 +39,6 @@ function logo() {
 }
 
 function navigation(user) {
-  console.log('Usuário:', user)
   function createLink(text, adress){
     const link = document.createElement('li');
     link.classList.add('link');

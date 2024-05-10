@@ -34,7 +34,7 @@ export default function login() {
     </form>
   </div>
   <p class="signup-link paragraph-medium">
-    <a id="signup-span" class="interact-span">Não possui uma Conta? Cadastre-se</a>
+    <a id="signup-span">Não tem uma conta? Junte-se a nós!</a>
   </p>
 </main>
   `;
@@ -67,7 +67,8 @@ export default function login() {
   const buttonSignIn = loginElement.querySelector('#buttonSignIn');
   const signUpSpan = loginElement.querySelector('#signup-span');
 
-  const logoImage = loginElement.querySelector('.logo-image');
+  const logo = loginElement.querySelector('.logo');
+  setNavigation(logo, '/');
 
   // Esta função adiciona um ouvinte de evento ao elemento buttonSignIn. Quando o botão é clicado, o código dentro da função será executado
   buttonSignIn.addEventListener('click', (event) => {
@@ -120,9 +121,6 @@ export default function login() {
   const signupButton = loginElement.querySelector('.signup-button');
   setNavigation(signupButton, '/register');
 
-  logoImage.addEventListener("click", () => {
-    window.dispatchEvent(createCustomEvent(`/`));
-  })
   // Esta linha retorna o loginElement que contém todo o layout da página de login
   return loginElement;
 }
