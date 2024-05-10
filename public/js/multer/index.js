@@ -7,7 +7,7 @@ function importHTMLContentFiles(htmlContent) {
 // imageUris: Novos nomes das imagens para servir de referência de acesso
 const { newHtmlString, imageUrls, imageUris } = setFileName(htmlContent);
 
-axios.post('/upload', { imageUrls, imageUris })
+axios.post('/api/uploads/upload', { imageUrls, imageUris })
   .then(response => {
     console.log("res", response);
   })
@@ -28,7 +28,7 @@ async function importLocalFile(file, type) {
   formData.append('files', file);
 
 
-  return fetch("/upload_files", {
+  return fetch("/api/uploads/upload_files", {
       method: 'POST',
       body: formData,
       headers: {
@@ -60,7 +60,7 @@ function importFileURL(url) {
   console.log("imageUrls::", imageUrls);
   console.log("imageUris::", imageUris);
   
-  axios.post('/upload', { imageUrls, imageUris })
+  axios.post('/api/uploads/upload', { imageUrls, imageUris })
     .then(response => {
       console.log("res", response);
     })
@@ -84,7 +84,7 @@ function importHTMLContentFilesWithFetch(htmlContent) {
   
   const data =  { imageUrls, imageUris };
 
-  fetch(`/upload`, {
+  fetch(`/api/uploads/upload`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
