@@ -9,6 +9,7 @@ const repliesRepository = {
         try {
             const result = await pool.query(query, [posts_comments_id, users_id, content]);
             console.log("Dados inseridos com sucesso!");
+            console.log(result.rows);
             return result.rows;
             
         } catch (error) {
@@ -18,12 +19,28 @@ const repliesRepository = {
     },
 
     // GET all replies by comment ID and JOIN with users name and profile_photo
-    getRepliesByCommentId: async function (posts_comments_id) {
+    getRepliesByCommentId: async function (posts_comments_id, users_id) {
 
-        const query = "SELECT comments_replies.*, users.name, users.profile_photo FROM comments_replies JOIN users ON comments_replies.users_id = users.id WHERE comments_replies.posts_comments_id = $1";
+        //const query = "SELECT comments_replies.*, users.name, users.profile_photo FROM comments_replies JOIN users ON comments_replies.users_id = users.id WHERE comments_replies.posts_comments_id = $1";
+
+        // Testando uma nova query para a refatoração da página getPosts
+        const query = `
+        SELECT 
+            cr.*,
+            u.name,
+            u.profile_photo,
+            CASE WHEN EXISTS (SELECT 1 FROM replies_likes rl WHERE rl.comments_replies_id = cr.id AND rl.users_id = $2) THEN true ELSE false END AS is_liked
+        FROM 
+            comments_replies cr
+        JOIN 
+            users u ON cr.users_id = u.id
+        WHERE 
+            cr.posts_comments_id = $1;
+        `;
+
 
         try {
-            const result = await pool.query(query, [posts_comments_id]);
+            const result = await pool.query(query, [posts_comments_id, users_id]);
             console.log("Registros encontrados: ");
             console.table(result.rows);
 

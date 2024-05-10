@@ -19,10 +19,10 @@ const repliesController = {
     // GET ALL replies BY comment ID and JOIN with users name and profile_photo
     getRepliesByCommentId: async (req, res) => {
         const comments_id = req.query.comments_id;
-        console.log("replie by comment", comments_id);
-
+        const users_id = req.user.id;
+  
         try {
-            const response = await repliesRepository.getRepliesByCommentId(comments_id);
+            const response = await repliesRepository.getRepliesByCommentId(comments_id, users_id);
 
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {

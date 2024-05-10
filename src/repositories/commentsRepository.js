@@ -19,13 +19,31 @@ const commentsRepository = {
     },
 
     // GET all comments by post ID and JOIN with users name and profile_photo
-    getCommentsByPostId: async function (posts_id) {
+    getCommentsByPostId: async function (posts_id, users_id) {
 
         //const query = "SELECT posts_comments.*, users.name, users.profile_photo FROM posts_comments JOIN users ON posts_comments.users_id = users.id WHERE posts_comments.posts_id = $1";
-        const query = "SELECT pc.*, u.name, u.profile_photo FROM posts_comments pc JOIN users u ON pc.users_id = u.id JOIN posts p ON pc.posts_id = p.id WHERE p.status != 'deleted' AND pc.posts_id = $1;";
+        //const query = "SELECT pc.*, u.name, u.profile_photo FROM posts_comments pc JOIN users u ON pc.users_id = u.id JOIN posts p ON pc.posts_id = p.id WHERE p.status != 'deleted' AND pc.posts_id = $1;";
+
+        // Testando uma nova query para a refatoração da página getPosts
+        const query = `
+        SELECT 
+            pc.*,
+            u.name,
+            u.profile_photo,
+            CASE WHEN EXISTS (SELECT 1 FROM comments_likes cl WHERE cl.posts_comments_id = pc.id AND cl.users_id = $2) THEN true ELSE false END AS is_liked
+        FROM 
+            posts_comments pc
+        JOIN 
+            users u ON pc.users_id = u.id
+        JOIN 
+            posts p ON pc.posts_id = p.id
+        WHERE 
+            p.status != 'deleted' AND 
+            pc.posts_id = $1;
+        `;
 
         try {
-            const result = await pool.query(query, [posts_id]);
+            const result = await pool.query(query, [posts_id, users_id]);
             console.log("Registros encontrados: ");
             console.table(result.rows);
 
