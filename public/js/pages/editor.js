@@ -1,7 +1,6 @@
 import createCustomEvent from '../eventModule.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
-// import menuToggle from './elements/menuToggle.js';
 import { modalError } from './elements/modalError.js';
 
 // Exporta a função que retorna a página de login
@@ -14,8 +13,8 @@ export default function editor() {
       <h1 class="title">Editor</h1>
       <div class="">
 
-        <form method="post">
-          <textarea id="mytextarea">Hello, World!</textarea>
+        <form id="textarea-form" method="post">
+          
         </form>
         <button id="button">Imprimir</button>
 
@@ -27,6 +26,8 @@ export default function editor() {
     
   `;
 
+  //<textarea id="mytextarea">Hello, World!</textarea>
+
   const editorElement = document.createElement('div');
   editorElement.classList.add('create-post-element');
   editorElement.innerHTML = editorContentHTML;
@@ -35,69 +36,46 @@ export default function editor() {
   const main = editorElement.querySelector("main");
   editorElement.insertBefore(header(), main);
   editorElement.append(footer());
-  editorElement.append(menuToggle());
-  // Crie um elemento script
-  const axiosScriptElement = document.createElement('script');
-  const quillScriptElement = document.createElement('script');
-
-  // Defina o atributo src com o URL do script externo
-  /* axiosScriptElement.src = 'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js';
-  quillScriptElement.src = 'https://cdn.quilljs.com/1.0.0/quill.js';
-  quillScriptElement.id = 'quill-script';
-
-  // Adicione o elemento script ao final do corpo do documento
-  editorElement.appendChild(axiosScriptElement);
-  editorElement.appendChild(quillScriptElement); */
-
-  // Carrega o editor de texto
-  /* */
-
-  /* const popupError = modalError();
-  console.log("popup", popupError);
-  editorElement.appendChild(popupError); */
 
   const { popupCard, showPopup } = modalError();
-  main.appendChild(popupCard);
+  main.insertAdjacentElement("afterend", popupCard);
   
-  /* let popupCard = editorElement.getElementsByClassName("popup-card")[0];
-  let closeBtn = editorElement.querySelector("#close-btn"); */
+
+  const textareaForm = editorElement.querySelector("#textarea-form");
+
+
+  const cdnTinymce = document.createElement('script');
+  cdnTinymce.src = 'https://cdn.tiny.cloud/1/uwf3bfwp12rlz75gub5bslngqa8e0hdk16ddbzgp6pmc9myb/tinymce/7/tinymce.min.js';
+  editorElement.appendChild(cdnTinymce);
+
+  const textarea = document.createElement('textarea');
+  textarea.id = 'mytextarea';
+  textarea.style.display = 'none';
+  textareaForm.appendChild(textarea);
+
+  setTimeout(() => {
+    try {
+      const configTinymce = document.createElement('script');
+      configTinymce.src = '/js/tinymce.js';
+      editorElement.appendChild(configTinymce);
+      textarea.style.display = 'flex';
+    } catch (error) {
+      showPopup('O editor não conseguiu carregar corretamente, por favor atualize a página', 'Erro!', false);
+    }
+    
+  }, 1000); 
+
+ 
 
 
 
   const button = editorElement.querySelector("#button");
   button.addEventListener('click', () => {
-    showPopup();
+    const content = tinymce.activeEditor.getContent("myTextarea");
+    console.log(content);
   })
 
 
-  
-  
-
-  /* closeBtn.addEventListener("click", (e) => {
-    popupCard.style.transform = "translateY(100vh) translateX(-16px)";
-  }); */
-
-  
-  
-
-  //window.onload = showPopup();
 
   return editorElement;
 }
-{/* <div class="popup-card">
-        <button id="close-btn" class="popup-button">
-          <span class="material-symbols-outlined "popup-close-icon">close</span>
-        </button>
-
-        <div>
-          <span class="material-symbols-outlined popup-icon">forum</span>
-        </div>
-
-        <div class="popup-content">
-          <h3>Welcome Back!</h3>
-          <p>
-            This is a custom Automatic Popup window. You can close this popup by
-            clicking on the close icon on top right corner.
-          </p>
-        </div>
-      </div> */}

@@ -100,9 +100,25 @@ input[type='radio']:checked+.checkbox:hover {
   max-width: 148px;
   max-height: 80px;
   aspect-ratio: auto;
-  position: absolute;
+  position: relative;
+  /* position: absolute;
   top: 37vh;
-  left: 64vh;
+  left: 64vh; */
   border-radius: 8px;
   box-shadow: 1px 1px 4px #cccccc;
+}
+
+
+/* EDITOR TINYMCE */
+
+#editor-container {
+  background: var(--c2);
+  overflow: scroll;
+  min-height: 20rem;
+  max-height: 40rem;
+  /* padding: 2rem 5rem; */
+  border-bottom-right-radius: 24px;
+  border-bottom-left-radius: 24px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem;
 }
