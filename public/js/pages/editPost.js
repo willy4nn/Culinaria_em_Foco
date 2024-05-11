@@ -2,7 +2,6 @@ import createCustomEvent from '../eventModule.js';
 import { importHTMLContentFiles, importHTMLContentFilesWithFetch, importLocalFile } from '../multer/index.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
-// import menuToggle from './elements/menuToggle.js';
 
 // Exporta a função que retorna a página de login
 export default function editPost(postId) {
@@ -153,9 +152,7 @@ export default function editPost(postId) {
 
     getPostById(postId)
     .then(post => {
-      console.log("Aqui:", post)
       titleInput.value = post.title;
-      //categoryInputs.value = post.category;
       document.querySelector(`#${post.category}`).checked = true;
       editor.root.innerHTML = post.content;
       bannerPreview.src = post.banner;
@@ -173,7 +170,6 @@ export default function editPost(postId) {
         [ titleInput.value, categoryInputs.value, editor.root.innerHTML, bannerPreview.src ] = resetChanges;
         bannerInput.value = '';
 
-        if (bannerInput.files[0]) console.log("tem banner", bannerInput.files[0]);
       });
   
       buttonSaveAndPost.addEventListener('click', async (event) => {
@@ -210,7 +206,6 @@ export default function editPost(postId) {
     const posted_draft = true;
 
     const data = { title, category, content, banner, posted_draft };
-    console.log(data);
 
     fetch(`/api/posts/` + postId, {
       method: 'PUT',
@@ -227,7 +222,6 @@ export default function editPost(postId) {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
       })
       .catch((error) => {
         console.error('Erro:', error);
@@ -244,9 +238,7 @@ export default function editPost(postId) {
   }
   // Se clicar e não selecionar nenhum arquivo, o anterior é perdido.
   bannerInput.addEventListener('click', () => { 
-    console.log("entrou aqui;");
     bannerPreview.src = '/assets/images/default_image_banner.png';
-  
   });
   bannerInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
@@ -254,17 +246,14 @@ export default function editPost(postId) {
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       bannerPreview.src = imageUrl;
-      console.log("passou aqui");
     }
   });
-
 
   return editPostElement;
 }
 
 
 async function getPostById(id) {
-  console.log("aqui o id", id);
   return fetch('/api/posts/' + id)
   .then((response) => {
       if (response.status !== 200) {
@@ -275,7 +264,6 @@ async function getPostById(id) {
       return response.json();
   })
   .then((data) => {
-      console.log("get post :", data);
       return data.data[0];
   })
   .catch((error) => {

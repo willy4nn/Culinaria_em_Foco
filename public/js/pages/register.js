@@ -141,7 +141,6 @@ export default function register() {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
       })
       .catch((err) => {
         //alert(err)

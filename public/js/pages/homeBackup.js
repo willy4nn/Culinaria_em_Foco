@@ -89,7 +89,6 @@ function renderFeaturedNewsSection(news) {
       return;
     }
     banner.src = news[indexPost].banner;
-    console.log(news[0]);
     category.textContent = news[indexPost].category;
     posted.textContent = getTimeAgo(news[indexPost].updated_at);
     title.textContent = news[indexPost].title;
@@ -132,20 +131,10 @@ function renderNewsFeed(news) {
     </div>
   `
 
-  // console.log('📢 NOTÍCIAS DO FEED:', news);
-
   const newsFeed = document.createElement('section');
   newsFeed.innerHTML = newsFeedHTML;
 
   const newsFeedContent = newsFeed.querySelector('.news-feed-content');
-
-  if (!news) {
-    console.log('Não há notícias');
-  } else {
-    news.forEach((post, index) => {
-      console.log(`[📢] [${index}] # POSTAGEM : `, post);
-    });
-  }
 
   return newsFeed;
 }

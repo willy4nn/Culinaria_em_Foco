@@ -74,7 +74,6 @@ export default function forgotPassword() {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         showPopup(data.result.message, "Sucesso!", data.result.success);
         emailInput.value = '';
       })

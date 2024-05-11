@@ -116,14 +116,11 @@ const loginController = {
 
       const result = await loginRepository.forgotPassword(email);
 
-      console.log("result", result);
-
       if (!result.success) {
         return res.status(400).json({ message: result.error });
       }
 
       const recoveryUrl = `${req.protocol}://${req.get('host')}/recovery-password/${result.recoveryToken}`;
-      console.log("recoveryUrl: ", recoveryUrl);
 
       const domainData = {
         protocol: req.protocol,

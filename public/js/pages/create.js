@@ -206,6 +206,9 @@ export default function create() {
       showPopup("Marque uma Categoria para a Postagem")
       return
     }
+
+    buttonPost.classList.add("disabled");
+    buttonPost.disabled = true;
     
     category = category ? category.toLowerCase() : ''; // Fixando a categoria vazia se não houver seleção
     const content = editorContent.toString();
@@ -231,7 +234,7 @@ export default function create() {
         }
         setTimeout(() => {
           window.dispatchEvent(createCustomEvent('/create'));
-        }, 3000); 
+        }, 3000);
         showPopup("Post efetuado com sucesso!", "Sucesso!", true)
         return response.json();
       })
@@ -239,6 +242,8 @@ export default function create() {
         console.log(data);
       })
       .catch((error) => {
+        buttonPost.classList.remove("disabled");
+        buttonPost.disabled = false;
         showPopup(error)
         console.error('Erro:', error);
       });
