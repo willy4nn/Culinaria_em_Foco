@@ -43,6 +43,8 @@
 
 .profile-header .profile-name {
     font-size: 2em;
+    text-align: center;
+    line-height: 1em;
 }
 
 .my-profile-photo {
