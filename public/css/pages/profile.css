@@ -1,57 +1,73 @@
-/* MAIN */
-
-.profile-bg {
-    background-image: url("/assets/images/profile_background.webp");
+/* MAIN */  
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
-#profile-container {
+.profile-container .main {
     display: flex;
-    /* flex-direction: column; */
+    justify-content: center;
     align-items: center;
-    border: 1px solid #cccccc;
+    flex: 1;
+    padding: 2em 5em;
+}
+
+.profile-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 16px;
-    padding: 8px 20px;
-    width: 800px;
-    box-shadow: 0px 0px 12px #9e9e9e;
-    background-color: #f0f8ff00;
+    padding: 2em 4em;
+    max-width: 50em;
+    box-shadow: var(--shdh-default);
+    background: var(--p3y);
     margin: 40px;
     backdrop-filter: blur(20px);
+    display: flex;
+    gap: 2em;
+    flex-wrap: wrap;
 }
 
 
 /* HEADER */
 
-#profile-header {
+.profile-header {
+    height: 100%;
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* border-bottom: 1px solid #cccccc; */
-    padding: 16px 16px 24px 16px;
-    width: 50%;
-    color: white;
+    gap: 1em;
+}
+
+.profile-header .profile-name {
+    font-size: 2em;
 }
 
 .my-profile-photo {
-    border-radius: 50%;
-    border-style: solid;
-    min-width: 250px;
-    min-height: 250px;
-    max-width: 80px;
-    max-height: 80px;
-    border-color: #74c69d;
+    cursor: pointer;
+    width: 15em;
+    height: 15em;
+    object-fit: cover;
+    object-position: center;
+    border: 5px solid var(--bg-yellow);
+    border-radius: 100%;
     padding: 1px;
     aspect-ratio: 1 / 1;
+    transition: transform 0.3s ease;
+    position: relative;
 }
 
-#profile-username {}
+.my-profile-photo:hover {
+    border: 5px solid var(--bgh-yellow);
+    transform: scale(1.01);
+}
 
-#profile-name {}
 
 
 /* CONTENT */
-
 .wrapper {
-    padding: 20px;
     color: black;
 }
 
@@ -59,15 +75,13 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 12px 0px 4px 0px;
-    width: 100%;
     font-size: 20px;
-
+    flex: 1;
     display: flex;
-    border: 1px solid rgb(204, 204, 204);
     border-radius: 16px;
-    box-shadow: rgb(182, 174, 174) 0px 0px 4px;
-    background-color: rgb(255, 255, 255);
+    background: var(--p3y);
+    /* box-shadow: var(--shd-default); */
+    padding: 1em;
 }
 
 .profile-group {
@@ -79,14 +93,15 @@
 }
 
 .profile-group .label {
-    color: #a4a0a0;
+    color: var(--p6y);
     font-size: 18px;
+    text-align: center;
 }
 
 
 /* OPTIONS */
 
-#profile-options {
+.profile-options {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -97,26 +112,29 @@
 .options-group {
     display: flex;
     padding: 10px 0;
+    gap: 0.5em;
+    align-items: center;
+    justify-content: center;
 }
 
 .options-group button {
-    background: #ffffff;
-    border: 1px solid #cbcbcb;
-    color: #5e5e5e;
-    padding: 2px 8px;
+    background: var(--p3y);
+    border: 1px solid var(--p4y);
+    border-radius: 1rem;
+    color: var(--p8y);
+    padding: 0.5em 1em;
     font-size: 14px;
-    border-radius: 2px;
     font-family: 'Nunito', sans-serif;
     font-weight: 700;
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shd-default);
     margin: 0 2px;
+    cursor: pointer;
 }
 
 .options-group button:hover {
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
-    cursor: pointer;
+    background: var(--p4y);
+    box-shadow: var(--shdh-default);
 }
 
 
@@ -176,11 +194,38 @@
     font-size: 14px;
 }
 
-/* ANIMATION */
+@media (max-width: 850px) {
+      .profile-container .main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+        padding: 1em 2em;
+    }
+  }
 
-.clicked {
-    box-sizing: none;
-    transform: scale(0.95);
-    transition: transform 0.2s ease;
-    box-shadow: inset 1px 1px 0px rgba(0, 0, 0, 0.3) !important;
-}
+  @media (max-width: 650px) {
+    .profile-card {
+        gap: 0.5em;
+    }
+
+    .my-profile-photo {
+        width: 10em;
+        height: 10em;
+    }
+
+    .profile-options {
+        align-items: center;
+    }
+
+    .options-group {
+        flex-direction: column;
+    }
+  }
+
+
+  @media (max-width: 500px) {
+    .profile-card {
+        padding: 1em 2em;
+    }
+  }
