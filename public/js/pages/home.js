@@ -37,7 +37,7 @@ async function getNewsFeed(category) {
   if (!category) category = 'latest';
   
   // Define a URL com base na categoria fornecida
-  let url = category === 'latest' ? `/api/posts/latest?limit=9` : `/api/posts/category/${category}`;
+  let url = category === 'latest' ? `/api/posts/latest?limit=15` : `/api/posts/category/${category}`;
   
   try {
     // Faz uma solicitação fetch para a URL
@@ -240,7 +240,11 @@ function renderNewsFeed(news) {
       title.classList.add('paragraph-bold');
 
       image.classList.add('image');
-      image.src = post.banner;
+      // image.src = post.banner;
+
+      const numeroAleatorio = Math.floor(Math.random() * 100) + 1;
+      image.src = `https://source.unsplash.com/random?a=${numeroAleatorio}`;
+
 
       details.appendChild(category);
       details.appendChild(datePost);
