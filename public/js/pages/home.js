@@ -240,12 +240,8 @@ function renderNewsFeed(news) {
       title.classList.add('paragraph-bold');
 
       image.classList.add('image');
-      // image.src = post.banner;
-
-      const numeroAleatorio = Math.floor(Math.random() * 100) + 1;
-      image.src = `https://source.unsplash.com/random?a=${numeroAleatorio}`;
-
-
+      image.src = post.banner;
+  
       details.appendChild(category);
       details.appendChild(datePost);
 
