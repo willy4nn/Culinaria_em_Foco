@@ -7,55 +7,38 @@ import { dateFormat } from '../utils/dateFormat.js';
 export default function getPost(postId) {
   // HTML do elemento de login
   const getPostContentHTML = `
-
-    <main class=""> 
-
+    <main class="main">
       <div id="container">
-        <!-- <div id="buttons-temp">
-          <button id="button-get">Buscar</button>
-          <input id="input-id" placeholder="ID do Post"></input>
-        </div> 
-        </br> -->
-
         <div id="news-container">
           <div id="news-body"></div>
           <div id="news-interaction-buttons">
-
-          <span id="likes-quantity" class="likes-quantity"></span>
-          <button id="like-button" class="button-transparent">
-            <span id="like-icon" class="material-symbols-outlined">favorite</span>
-          </button>
-          <button id="favorite-button" class="button-transparent">
-            <span id="favorite-icon" class="material-symbols-outlined">bookmark_add</span>
-          </button>
-
-
+            <span id="likes-quantity" class="likes-quantity paragraph-bold"></span>
+            <button id="like-button" class="button-transparent">
+              <span id="like-icon" class="material-symbols-outlined">favorite</span>
+            </button>
+            <button id="favorite-button" class="button-transparent">
+              <span id="favorite-icon" class="material-symbols-outlined">bookmark_add</span>
+            </button>
           </div>
         </div>
-
         <div id="comments-container">
           <div id="comment-editor">
             <div id="input-container">
-              <textarea id="comment-textarea" placeholder="Adicionar comentário" rows="1"></textarea>
+              <textarea id="comment-textarea" class="paragraph-normal" placeholder="Adicionar comentário" rows="1"></textarea>
             </div>
             <div id="buttons-container">
               <button id="cancel-button" class="comment-button button-fill-cancel">Cancelar</button>
               <button id="comment-button" class="comment-button button-fill">Comentar</button>
             </div>
           </div>
-
-          <div id="comments-list">
-          </div>
+          <div id="comments-list"></div>
         </div>
-
       </div>
-
     </main>
-
   `;
 
   const getPostElement = document.createElement('div');
-  getPostElement.classList.add('create-post-element');
+  getPostElement.classList.add('get-post-container');
   getPostElement.innerHTML = getPostContentHTML;
 
   //Adiciona os elementos footer e header
@@ -109,6 +92,7 @@ export default function getPost(postId) {
   .then(({ userData, post, isliked, isfavorited }) => {
 
       const title = document.createElement('h1');
+      title.classList.add('post-heading')
       const content = document.createElement('div');
       title.innerText = post.title;
       content.innerHTML = post.content;
@@ -121,8 +105,8 @@ export default function getPost(postId) {
 
       banner.classList.add('post-banner');
       div.classList.add('post-details');
-      createdAtPost.classList.add('post-created-at');
-      content.classList.add('post-text-content');
+      createdAtPost.classList.add('post-created-at', 'paragraph-bold');
+      content.classList.add('post-text-content', 'paragraph-normal');
 
       div.appendChild(createdAtPost)
       newsBody.append(title, banner, content, div);
@@ -261,13 +245,13 @@ export default function getPost(postId) {
       div.classList.add('comment');
       headerDiv.classList.add('comment-header');
       leftHeaderDiv.classList.add('comment-left-header');
-      rightHeaderDiv.classList.add('comment-right-header');
+      rightHeaderDiv.classList.add('comment-right-header', 'paragraph-bold');
 
       profilePhoto.classList.add('profile-photo');
-      name.classList.add('user-name');
-      createdAt.classList.add('created-at');
+      name.classList.add('user-name', 'paragraph-bold');
+      createdAt.classList.add('created-at', 'paragraph-normal');
       separatorDot.classList.add('separator-dot');
-      content.classList.add('comment-content');
+      content.classList.add('comment-content', 'paragraph-normal');
 
       likeIcon.classList.add('material-symbols-outlined', 'comment-like');
       if (commentIsLiked) likeIcon.classList.add('liked');
