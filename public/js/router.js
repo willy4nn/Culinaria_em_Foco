@@ -8,13 +8,13 @@ import getPost from './pages/getPost.js';
 import editor from './pages/editor.js';
 import editPost from './pages/editPost.js';
 import dashboard from './pages/dashboard.js';
-import favorite from './pages/favorite.js';
+import favorites from './pages/favorites.js';
 import admin from './pages/admin.js';
 import forgotPassword from './pages/forgot-password.js';
 import recoveryPassword from './pages/recovery-password.js';
+import notFound from './pages/not-found.js';
 import create from './pages/create.js';
 import refactGetPost from './pages/refactGetPost.js';
-
 
 const router = {
   '/': function () {
@@ -30,7 +30,6 @@ const router = {
     return forgotPassword();
   },
   '/recovery-password/:token': function (params) {
-    console.log("token", params)
     return recoveryPassword(params.token);
   },
   '/home': function () {
@@ -44,11 +43,9 @@ const router = {
     return create();
   },
   '/post/:id': function (params) {
-    console.log("post id", params)
     return getPost(params.id);
   },
   '/post/edit/:id': function (params) {
-    console.log("post edit id", params)
     return editPost(params.id);
   },
   '/editor': function () {
@@ -57,8 +54,8 @@ const router = {
   '/dashboard': function () {
     return dashboard();
   },
-  '/favorite': function () {
-    return favorite();
+  '/favorites': function () {
+    return favorites();
   },
   '/profile': function () {
     return profile();
@@ -66,22 +63,12 @@ const router = {
   '/admin': function () {
     return admin();
   },
-  /* getPage: function (path) {
-    // Verifica se a rota possui um parâmetro dinâmico
-    const dynamicRoute = Object.keys(router).find(route => {
-        const routePattern = new RegExp(`^${route.replace(/:\w+/g, '\\w+')}$`);
-        return routePattern.test(path);
-    });
 
-    if (dynamicRoute) {
-        // Se a rota for dinâmica, extraia o parâmetro e chame a função associada
-        const param = path.split('/')[2]; // Extrai o ID da URL (/post/1)
-        return router[dynamicRoute]({ id: param }); // Passa o ID como parâmetro
-    } else {
-        // Se não for uma rota dinâmica, apenas chama a função associada
-        return router[path]();
-    }
-  }, */
+  // Adicione uma rota para lidar com páginas não encontradas
+  '*': function () {
+    return notFound();
+  },
+
   getPage: function (path) {
     // Verifica se a rota é a rota de edição de post
     if (path.startsWith('/post/edit/')) {
@@ -102,11 +89,15 @@ const router = {
       const param = path.substring(paramIndex); // Extrai o Token da URL (/recovery-password/token)
       return router['/recovery-password/:token']({ token: param }); // Passa o Token como parâmetro para a rota de exibição
     }
-
-    // Se não for uma rota dinâmica, apenas chama a função associada
-    return router[path]();
+    // Verifica se a função associada à rota existe
+    if (typeof router[path] === 'function') {
+      // Se existir, chama a função associada à rota
+      return router[path]();
+    } else {
+      // Se não existir, redireciona para a página 404
+      return router['*'](); // Ou qualquer função que você tenha definido para a página 404
+    }
   },
-
 };
 
 export default router;

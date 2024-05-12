@@ -20,7 +20,7 @@ const repliesController = {
     getRepliesByCommentId: async (req, res) => {
         const comments_id = req.query.comments_id;
         const users_id = req.user.id;
-  
+
         try {
             const response = await repliesRepository.getRepliesByCommentId(comments_id, users_id);
 

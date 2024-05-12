@@ -9,7 +9,7 @@ export default function createPost() {
   const createPostContentHTML = `
 
   <!-- ########## MAIN ########## -->
-<main class="main main-create-post"> 
+<main class="main"> 
   <!-- Título da página -->
   <h1 class="primary-heading">Create Post</h1>
 
@@ -17,7 +17,7 @@ export default function createPost() {
   <form class="editor-container">
     <!-- Campo para inserir o título do post -->
     <div class="input-container">
-      <input class="title-input tertiary-heading" id="title" type="text" name="title" placeholder="Untitled" />
+      <input class="title-input tertiary-heading" id="title" type="text" name="title" placeholder="Sem título" />
     </div>  
     <!-- Dropdown para selecionar a categoria do post -->
     <div class="select-category">
@@ -39,8 +39,8 @@ export default function createPost() {
 
     <!-- Upload de banner -->
     <div class="select-banner">
-      <label class="paragraph-medium" for='files'>Select Banner</label>
-      <input class="paragraph-medium" id='banner' type="file" name="files">
+      <label class="banner-label paragraph-medium" for='files'>Select Banner</label>
+      <input class="banner-input paragraph-medium" id='banner' type="file" name="files" alt="banner">
       <img id="banner-preview" class="create-post-banner">
     </div>
 
@@ -132,9 +132,16 @@ export default function createPost() {
   const titleInput = createPostElement.querySelector('#title');
   const categoryInputs = createPostElement.querySelectorAll('input[name="category"]');
 
+  const bannerLabel = createPostElement.querySelector('.banner-label');
   const bannerInput = createPostElement.querySelector('#banner');
+  
   const bannerPreview = createPostElement.querySelector('#banner-preview');
+  // Se clicar e não selecionar nenhum arquivo, o anterior é perdido.
   bannerPreview.src = '/assets/images/default_image_banner.png';
+
+  bannerLabel.addEventListener('click', () => {
+    bannerInput.click();
+  })
 
   const buttonPost = createPostElement.querySelector('#button-post');
   const buttonSave = createPostElement.querySelector('#button-save');
@@ -160,9 +167,7 @@ export default function createPost() {
     quillScriptElement.addEventListener('load', resolve);
   })])
   .then(([userData, _]) => {
-    // _ é uma convensão de nomenclatura para uma promisse ignorada (não será utilizada)
-      console.log("Carregou:", userData);
-
+      // _ é uma convensão de nomenclatura para uma promisse ignorada (não será utilizada)
       // Carrega o editor de texto
       const editor = new Quill('#editor', {
           modules: { toolbar: '#toolbar' },
@@ -194,17 +199,11 @@ export default function createPost() {
       console.error("Erro:", error);
   });
   
- 
-  // Se clicar e não selecionar nenhum arquivo, o anterior é perdido.
-  bannerInput.addEventListener('click', () => { 
-    console.log("entrou aqui;");
-    bannerPreview.src = '/assets/images/default_image_banner.png';
-  
-  });
   bannerInput.addEventListener("change", (e) => {
     const file = e.target.files[0];
 
     if (file) {
+      console.log('aopa');
       const imageUrl = URL.createObjectURL(file);
       bannerPreview.src = imageUrl;
     }
@@ -233,17 +232,16 @@ export default function createPost() {
       showPopup("Marque uma Categoria para a Postagem")
       return
     }
+
+    buttonPost.classList.add("disabled");
+    buttonPost.disabled = true;
     
     category = category ? category.toLowerCase() : ''; // Fixando a categoria vazia se não houver seleção
     const content = editorContent.toString();
     // Se tiver file armazena a imagem no back e retorna a uri, se não retorna vazio
     const banner = await importLocalFile(bannerInput.files[0], 'banner');
 
-    console.log('bn', bannerInput);
-    console.log('bn', bannerInput.files);
-
     const data = { title, category, content, banner, posted_draft };
-    console.log(data);
 
     fetch(`/api/posts/`, {
       method: 'POST',
@@ -263,9 +261,10 @@ export default function createPost() {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
       })
       .catch((error) => {
+        buttonPost.classList.remove("disabled");
+        buttonPost.disabled = false;
         showPopup(error)
         console.error('Erro:', error);
       });
@@ -285,7 +284,6 @@ async function getLogin() {
       return response.json();
   })
   .then((data) => {
-      console.log("get user :", data);
       return data;
   })
   .catch((error) => {

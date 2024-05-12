@@ -3,7 +3,6 @@
 // Importa a função createCustomEvent do módulo de eventos
 import createCustomEvent from '../eventModule.js';
 import setNavigation from '../setNavigation.js';
-import header from './elements/header.js';
 import footer from './elements/footer.js';
 import { modalError } from './elements/modalError.js';
 
@@ -79,7 +78,7 @@ export default function register() {
       <button class="button button-fill" id="buttonSignUp">Registrar</button>
     </form>
   </div>
-  <a class="signin-link paragraph-medium interact-span">Já possui uma conta? Entre!</a>
+  <a class="signin-link paragraph-medium interact-span">Tem cadastro? Faça login agora!</a>
 </main>
 
   `;
@@ -96,6 +95,9 @@ export default function register() {
   //Modal de erro
   const { popupCard, showPopup } = modalError();
   main.insertAdjacentElement("afterend", popupCard);
+
+  const logo = registerElement.querySelector('.logo');
+  setNavigation(logo, '/');
 
   const signinButton = registerElement.querySelector('.signin-button');
   const signinLink = registerElement.querySelector('.signin-link');
@@ -139,7 +141,6 @@ export default function register() {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
       })
       .catch((err) => {
         //alert(err)

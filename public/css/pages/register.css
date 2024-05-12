@@ -23,12 +23,13 @@
 .main-register .signin-link {
   cursor: pointer;
   transition: color 0.3s ease;
-  color: var(--c11);
+  color: var(--p10y);
   text-align: center;
 }
 
 .main-register .signin-link:hover {
-  color: var(--c12);
+  color: var(--p10z);
+  font-weight: 600;
 }
 
 @media (max-width:850px) {

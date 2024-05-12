@@ -21,7 +21,7 @@ const postsRepository = {
                 created_by,
                 updated_by,
             ]);
-            console.log("Dados inseridos com sucesso!");
+
             return result.rows;
             
         } catch (error) {
@@ -154,7 +154,6 @@ const postsRepository = {
         const query = "UPDATE posts SET title = $2, category = $3, content = $4, banner = $5, posted_draft = $6, status = $7, updated_at = CURRENT_TIMESTAMP, updated_by = $8 WHERE id = $1 AND status != 'deleted';";
         try {
             await pool.query(query, [id, title, category, content, banner, posted_draft, status, updated_by]);
-            console.log("Dados atualizados com sucesso!");
         } catch (error) {
             console.error("Erro ao atualizar dados: ", error);
             throw error;
@@ -169,7 +168,6 @@ const postsRepository = {
 
         try {
             await pool.query(query, [id]);
-            console.log("Dados excluídos com sucesso!");
 
             const success = { success: true, message: "Postagem excluída com sucesso!"};
             return success;

@@ -6,8 +6,6 @@ const pool = require('../database/postgres');
 //Configurações default de ambiente
 const { config, configMail } = require('../config/configFile');
 const jwt = require('jsonwebtoken');
-const verifyToken = require('../utils/verifyToken');
-
 const loginRepository = {
 
   getLogin: async (sessionToken) => {

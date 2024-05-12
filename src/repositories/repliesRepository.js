@@ -8,10 +8,8 @@ const repliesRepository = {
 
         try {
             const result = await pool.query(query, [posts_comments_id, users_id, content]);
-            console.log("Dados inseridos com sucesso!");
-            console.log(result.rows);
-            return result.rows;
-            
+
+            return result.rows;       
         } catch (error) {
             console.error("Erro ao inserir dados: ", error);
             throw error;
@@ -41,8 +39,6 @@ const repliesRepository = {
 
         try {
             const result = await pool.query(query, [posts_comments_id, users_id]);
-            console.log("Registros encontrados: ");
-            console.table(result.rows);
 
             return result.rows;
         } catch (error) {
@@ -58,9 +54,6 @@ const repliesRepository = {
 
         try {
             const result = await pool.query(query);
-            console.log("Registros encontrados: ");
-            console.table(result.rows);
-
             return result.rows;
         } catch (error) {
             console.error("Erro ao selecionar dados: ", error);
@@ -75,9 +68,6 @@ const repliesRepository = {
 
         try {
             const result = await pool.query(query, [id]);
-            console.log("Registros encontrados: ");
-            console.table(result.rows);
-
             return result.rows;
         } catch (error) {
             console.error("Erro ao selecionar dados: ", error);
@@ -91,11 +81,8 @@ const repliesRepository = {
         const query = "UPDATE comments_replies SET content = $2 WHERE id = $1 RETURNING *";
         try {
             const result = await pool.query(query, [id, content]);
-            console.log("Dados atualizados com sucesso!");
-
             return result.rows;
         } catch (error) {
-            console.error("Erro ao atualizar dados: ", error);
             throw error;
         }
     },
@@ -107,9 +94,7 @@ const repliesRepository = {
 
         try {
             await pool.query(query, [id]);
-            console.log("Dados excluídos com sucesso!");
         } catch (error) {
-            console.error("Erro ao excluir dados: ", error);
             throw error;
         }
     },

@@ -2,11 +2,9 @@
 
 // Importa a função createCustomEvent do módulo de eventos
 import { dateFormat } from '../utils/dateFormat.js';
-import createCustomEvent from '../eventModule.js';
 import setNavigation from '../setNavigation.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
-// import menuToggle from './elements/menuToggle.js';
 
 // Exporta a função principal que retorna a página principal
 export default function favorite() {
@@ -61,11 +59,8 @@ export default function favorite() {
 
 
   function renderNews(data){
-    // For apenas para testar a renderização com mais dados
-    //for(let i=0; i<10; i++) {
 
       data.forEach((item, index) => {
-          // console.log(item);
           const divContainer = document.createElement('div');
           const divDetails = document.createElement('div');
           const divBanner = document.createElement('div');
@@ -76,14 +71,12 @@ export default function favorite() {
           const commentsQuantity = document.createElement('span');
           const likesQuantity = document.createElement('span');
 
-          //divBanner.style.backgroundImage = `linear-gradient(to right, rgba(0, 0, 0, .7), rgba(0, 0, 0, .7)), url(${item.banner})`;
           divBanner.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0) 43.75%, rgb(0, 0, 0) 100%), url(${item.banner})`;
           title.innerText = item.title;
           category.innerText = item.category.charAt(0).toUpperCase() + item.category.slice(1);
           created_at.innerText = dateFormat(item.created_at);
           commentsQuantity.innerText = item.comments_quantity > 1 ? `${item.comments_quantity} comentários` : `${item.comments_quantity} comentários`;
           likesQuantity.innerText = item.likes_quantity > 1 ? `${item.likes_quantity} likes` : `${item.likes_quantity} like`;
-          console.log("category", category.innerText);
 
           if (category.innerText == 'Trends') category.style.backgroundColor = '#1f7e93';
           if (category.innerText == 'Interviews') category.style.backgroundColor = '#5d34a7';
@@ -104,7 +97,6 @@ export default function favorite() {
 
           setNavigation(divContainer, `/post/${item.id}`);
       });
-   // }
   }
 
   // Retorna o elemento principal

@@ -15,8 +15,6 @@ const transporter = nodemailer.createTransport({
 // async..await is not allowed in global scope, must use a wrapper
 async function mail(destinationAddress, content, domainData) {
 
-    console.log("dest", destinationAddress);
-    console.log("sender", configMail.MAIL_USER, configMail.MAIL_PASS);
     try {
         const info = await transporter.sendMail({
             from: {
@@ -43,12 +41,11 @@ async function mail(destinationAddress, content, domainData) {
                     <p style="font-size:1.2em;">Atenciosamente,<br />${domainData.protocol}://${domainData.host}</p>
                 </div>
             </div>
-            `, // Cointeúdo em HTML
+            `, // Conteúdo em HTML
         });
         
         
         if (info.messageId) {
-            console.log("Message sent: %s", info.messageId);
             const success = { success: true, message: 'E-mail enviado com sucesso!' };
             return success;
         }

@@ -1,10 +1,5 @@
 function setFileName(htmlString){
 
-    // Inseguro XSS
-    /* var elem = document.createElement('textarea');
-    elem.innerHTML = htmlString;
-    var decodedHtmlString = elem.value; */
-
     // Expressão regular para encontrar todas as ocorrências de src em tags img
     //const pattern = /<img src="([^"]+)">/g;
     // Expressão regular para encontrar todas as ocorrências de src em tags img e ignorar /uploads/posts_media

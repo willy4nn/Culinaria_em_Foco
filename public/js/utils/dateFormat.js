@@ -10,7 +10,6 @@ function dateFormat(date){
     const minutos = addZero(data.getMinutes());
     const segundos = addZero(data.getSeconds());
 
-    //const dataFormatada = `${dia}/${mes}/${ano} ${horas}:${minutos}:${segundos}`;
     const dataFormatada = `${dia}/${mes}/${ano} ${horas}:${minutos}`;
 
     return(dataFormatada);
@@ -28,7 +27,6 @@ function dateFormatUS(date){
     const minutos = addZero(data.getMinutes());
     const segundos = addZero(data.getSeconds());
 
-    //const dataFormatada = `${ano}/${mes}/${dia} ${horas}:${minutos}:${segundos}`;
     const dataFormatada = `${ano}/${mes}/${dia} ${horas}:${minutos}`;
 
     return(dataFormatada);
@@ -36,13 +34,8 @@ function dateFormatUS(date){
 
 function renewDate(subscriptionDate) {
     const receivedDate = new Date(subscriptionDate);
-  
     const currentDate = new Date('2024/12/17');
-    console.log(currentDate);
-  
     const receivedDay = receivedDate.getDate().toString().padStart(2, '0');
-    const receivedMonth = (receivedDate.getMonth() + 1).toString().padStart(2, '0');
-    const receivedYear = receivedDate.getFullYear();
 
     const currentDay = currentDate.getDate().toString().padStart(2, '0');
     const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');

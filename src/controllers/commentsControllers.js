@@ -7,8 +7,6 @@ const commentsController = {
         const { posts_id, content } = req.body;
         const users_id = req.user.id;
 
-        console.log(posts_id, users_id, content);
-
         try {
             const response = await commentsRepository.createComment(
                 posts_id,

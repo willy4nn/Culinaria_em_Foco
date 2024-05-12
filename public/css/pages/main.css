@@ -13,9 +13,6 @@
   display: flex;
   gap: 2rem;
   align-self: center;
-  /* ( Esse estilo em específicos eu deveria aplicar ao .main-container ) */
-  /* ( Porém como o header e footer não estão componentizados, também seriam afetado. ) */
-  /* ( padding ) */
   padding: 4rem 5rem;
 }
 

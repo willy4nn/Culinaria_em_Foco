@@ -16,18 +16,20 @@
   font-family: 'Nunito', sans-serif;
   font-weight: 500;
   transition: background-color 0.3s ease, color 0.3s ease,
-    border-color 0.3s ease, box-shadow 0.3s ease;
+  border-color 0.3s ease, box-shadow 0.3s ease;
   box-shadow: var(--shd-default);
   width: fit-content;
 }
 
 .button:hover {
+  cursor: pointer;
   box-shadow:var(--shdh-default);
 }
 
 .button-fill {
   background: var(--bg-yellow);
   border: 1px solid var(--dark-yellow);
+  color: var(--dark-yellow);
 }
 
 .button-fill:hover {
@@ -35,16 +37,23 @@
 }
 
 .button-line {
-  border: 1px solid var(--dark-yellow);
-  color: var(--p2);
-}
-
-.button:hover {
-  cursor: pointer;
+  background: var(--p3y);
+  border: 1px solid var(--p12y);
+  color: var(--p12y);
 }
 
 .button-line:hover {
-  background: var(--bgh-gray);
-  border: 1px solid var(--dark-yellow);
-  color: var(--dark-yellow);
+  background: var(--p3z);
+  border: 1px solid var(--p12z);
+  color: var(--p12z);
+}
+
+.disabled {
+  opacity: 0.5; 
+  cursor: not-allowed; 
+}
+
+.disabled:hover {
+  opacity: 0.5; 
+  cursor: not-allowed; 
 }

@@ -39,7 +39,6 @@ function logo() {
 }
 
 function navigation(user) {
-  console.log('Usuário:', user)
   function createLink(text, adress){
     const link = document.createElement('li');
     link.classList.add('link');
@@ -75,15 +74,10 @@ function navigation(user) {
     {
       user: 'user',
       text: 'Favoritos',
-      address: '/favorite'
+      address: '/favorites'
     },
     {
       user: 'editor',
-      text: 'Postagens',
-      address: '/dashboard'
-    },
-    {
-      user: 'admin',
       text: 'Postagens',
       address: '/dashboard'
     },
@@ -126,7 +120,6 @@ function navigation(user) {
       return response.json();
     })
     .then((data) => {
-      console.log(data);
     })
     .catch((error) => {
       console.error('Erro:', error);
@@ -134,12 +127,13 @@ function navigation(user) {
   });
 
   links.forEach((link) => {
-    if (link.user == 'admin' && user.user_type == 'user' || link.user == 'admin' && user.user_type == 'editor') {
+    if (user.user_type == "user" && link.user != "user") {
       return;
     }
-    if (link.user == 'editor' && user.user_type == 'user') {
+    if (user.user_type == "editor" && link.user == "admin") {
       return;
     }
+
     const item = createLink(link.text, link.address);
     item.classList.add('item');
     list.appendChild(item);
