@@ -8,6 +8,8 @@ try {
         mobile: {
             plugins: 'preview importcss tinydrive searchreplace autolink autosave save directionality visualblocks visualchars fullscreen image link media codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars linkchecker emoticons',
         },
+        block_unsupported_drop: true,
+        automatic_uploads: false,
     });
   } catch (error) {
     console.error("O editor não carregour corretamente, reiniciando...");
