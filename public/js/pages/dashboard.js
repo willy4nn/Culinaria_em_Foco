@@ -89,13 +89,13 @@ export default function dashboard() {
             <td class="paragraph-normal">Status: ${item.status.charAt(0).toUpperCase() + item.status.slice(1)}</td>
             <td class="paragraph-normal">Comentários: ${item.comments_quantity}</td>
             <td class="paragraph-normal">Curtidas: ${item.likes_quantity}</td>
-            <td class="paragraph-medium"><button class="table-button button-line vizualize">Visualzar</button></td>
+            <td class="paragraph-medium"><button class="table-button button-line visualize">Visualzar</button></td>
             <td class="paragraph-medium"><button class="table-button button-fill">Editar</button></td>
             <td class="paragraph-medium"><button class="table-button button-delete">Deletar</button></td>
           `;
 
-          const vizualizeButton = tableRow.querySelector('.vizualize');
-          setNavigation(vizualizeButton, `/post/${item.id}`);
+          const visualizeButton = tableRow.querySelector('.visualize');
+          setNavigation(visualizeButton, `/post/${item.id}`);
 
           tableRow.querySelector('.table-button.button-fill').addEventListener('click', (e) => {
             window.dispatchEvent(createCustomEvent(`/post/edit/${item.id}`));
