@@ -25,9 +25,10 @@ const commentsController = {
     // GET ALL COMMENTS BY POST ID AND JOIN WITH USERS NAME
     getCommentsByPostId: async (req, res) => {
         const posts_id = req.query.posts_id;
+        const users_id = req.user.id;
 
         try {
-            const response = await commentsRepository.getCommentsByPostId(posts_id);
+            const response = await commentsRepository.getCommentsByPostId(posts_id, users_id);
 
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {

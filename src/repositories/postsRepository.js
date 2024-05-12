@@ -31,13 +31,26 @@ const postsRepository = {
     },
 
     // GET BY ID
-    getPost: async function (id) {
+    getPost: async function (id, users_id) {
 
         //const query = "SELECT * FROM posts WHERE id = $1";
-        const query = "SELECT * FROM posts WHERE id = $1 AND status != 'deleted';";
+        //const query = "SELECT * FROM posts WHERE id = $1 AND status != 'deleted';";
+
+        // Testando uma nova query para a refatoração da página getPosts
+        const query = `
+        SELECT 
+            posts.*,
+            CASE WHEN EXISTS (SELECT 1 FROM posts_likes WHERE posts_id = posts.id AND users_id = $2) THEN true ELSE false END AS is_liked,
+            CASE WHEN EXISTS (SELECT 1 FROM favorite_posts WHERE posts_id = posts.id AND users_id = $2) THEN true ELSE false END AS is_favorited
+        FROM 
+            posts
+        WHERE 
+            posts.id = $1 AND 
+            posts.status != 'deleted';
+        `;
 
         try {
-            const result = await pool.query(query, [id]);
+            const result = await pool.query(query, [id, users_id]);
             return result.rows;
         } catch (error) {
             console.error("Erro ao selecionar dados: ", error);
