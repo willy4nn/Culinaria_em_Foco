@@ -91,5 +91,8 @@ export default function forgotPassword() {
     window.dispatchEvent(createCustomEvent(`/`));
   })
 
+  const signupButton = forgotPasswordElement.querySelector('.signup-button');
+  setNavigation(signupButton, '/register');
+
   return forgotPasswordElement;
 }
