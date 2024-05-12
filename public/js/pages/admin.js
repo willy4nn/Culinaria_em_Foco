@@ -6,56 +6,31 @@ import displayModal from '../utils/modal.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
 import { modalError } from './elements/modalError.js';
+import setNavigation from '../setNavigation.js';
 
 // Exporta a função principal que retorna a página principal
 export default function admin() {
   // HTML do elemento principal
   const adminContentHTML = `
-
-    <main>
-      
-      <div id="container-admin">
-
+    <main class="main">
         <div id="container-header">
             <h1 class="secondary-heading">Administrador</h1>
         </div>
-
-        <div id="admin-content">
-        <div class="table-header">
-          <table cellpadding="0" cellspacing="0" border="0" class="admin-format">
-            <thead>
-              <tr>
-                <th>Id</th>
-                <th>Nome</th>
-                <th>Username</th>
-                <th>E-mail At</th>
-                <th>Tipo</th>
-                <th>Status</th>
-                <th>Premium</th>
-                <th>Premium Data</th>
-                <th>Foto</th>
-                <th>Data Cadastro</th>
-                <th>Editar</th>
-                <th>Deletar</th>
-              </tr>
-            </thead>
+        <div class="admin-content">
+          <table id="content-table">
+            <tbody></tbody>
           </table>
         </div>
-        <div class="table-content">
-          <table id="content-table" class="admin-format">
-          </table>
-        </div>
-
-      </div>
     </main>
   `;
 
   // Cria o elemento principal
   const adminElement = document.createElement('div');
+  adminElement.classList.add('admin-container');
   adminElement.innerHTML = adminContentHTML;
 
   const containerAdmin = adminElement.querySelector('#container-admin');
-  const contentTable = adminElement.querySelector('#content-table');
+  const contentTable = adminElement.querySelector('tbody');
 
   //Adiciona os elementos footer e header
   const main = adminElement.querySelector("main") 
@@ -89,8 +64,8 @@ export default function admin() {
           const buttonEdit = document.createElement('button');
           const buttonConfirm = document.createElement('button');
           const buttonDelete = document.createElement('button');
-
-          id.innerText = item.id;
+          
+          id.innerText = 'ID:' + item.id;
           name.innerText = item.name;
           username.innerText = item.username;
           email.innerText = item.email;
@@ -100,19 +75,20 @@ export default function admin() {
           premiumDate.innerText = dateFormat(item.premium_date);
           profilePhotoImg.src = item.profile_photo || '/assets/images/default_profile_normal.png';
           createdAt.innerText = dateFormat(item.created_at);
-
+          
           profilePhotoImg.classList.add('admin-profile-image');
           buttonConfirm.style.display = 'none';
           buttonEdit.classList.add('table-button', 'button-fill');
           buttonConfirm.classList.add('table-button', 'button-fill');
-          buttonDelete.classList.add('table-button', 'button-delete');
           tdEdit.classList.add('group-table-button');
-
+          buttonDelete.classList.add('table-button', 'button-delete');
+  
           buttonEdit.innerHTML = 'Editar';
           buttonConfirm.innerHTML = 'Confirmar';
           buttonDelete.innerHTML = 'Deletar';
-
+          
           profilePhoto.appendChild(profilePhotoImg);
+          
           tdEdit.append(buttonEdit, buttonConfirm);
           tdDelete.appendChild(buttonDelete);
 

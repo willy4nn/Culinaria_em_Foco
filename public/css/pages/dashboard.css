@@ -18,7 +18,7 @@
     justify-content: center;
     flex-direction: row;
     gap: 1em;
-    overflow: scroll;
+    overflow-x: scroll;
     border-radius: 1.5em;
     border: 1px solid var(--p11y);
 }
@@ -32,8 +32,6 @@
     grid-template-rows: repeat(9, 1fr);
     justify-content: space-around;
     width: 100%;
-
-
 }
 
 .dashboard-container .dashboard-content .content-table thead tr th {
@@ -51,7 +49,6 @@
 }
 .dashboard-container .dashboard-content .content-table tbody tr {
     display: grid;
-    /* grid-template-rows: repeat(10, 1fr); */
     grid-template-rows: repeat(10, 1fr);
 }
 
@@ -75,7 +72,7 @@
     transition: background-color 0.3s ease, color 0.3s ease,
 }
 
-.dashboard-container button.vizualize {
+.dashboard-container button.visualize {
     background: #b9ff3f;
 }
 
