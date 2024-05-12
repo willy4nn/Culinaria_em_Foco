@@ -15,32 +15,30 @@ export default function profile() {
   // HTML do elemento de login
   const profileContentHTML = `
 
-    <main class="profile-bg"> 
-
-      <div id="profile-container">
-
-        <div id="profile-header">
+    <main class="main"> 
+      <div class="profile-card">
+        <div id="profile-header" class="profile-header">
           <img id="profile-photo" class="my-profile-photo"></img>
-          <h1 id="profile-name">Nome Sobrenome</h1>
-          <p id="profile-username">Username</p>
+          <h1 id="profile-name" class="profile-name paragraph-bold">Nome Sobrenome</h1>
+          <p id="profile-username" class="profile-username paragraph-medium">Username</p>
         </div>
         <div id="profile-wrapper" class="wrapper">
           <div id="profile-content" class="profile-content">
             <div class="profile-group">
-              <span class="label">E-mail</span>
-              <span id="profile-email"></span>
+              <span class="label paragraph-normal">E-mail</span>
+              <span id="profile-email" class="paragraph-normal"></span>
             </div>
             <div class="profile-group">
-              <span class="label">Tipo de usuário</span>
-              <span id="profile-user-type"></span>
+              <span class="label paragraph-normal">Tipo de usuário</span>
+              <span id="profile-user-type" class="paragraph-normal"></span>
             </div>
             <div class="profile-group">
-              <span class="label">Premium</span>
-              <span id="profile-premium-active"></span>
+              <span class="label paragraph-normal">Premium</span>
+              <span id="profile-premium-active" class="paragraph-normal"></span>
             </div>
             <div class="profile-group">
-              <span class="label">Renovação da assinatura</span>
-              <span id="profile-premium-date"></span>
+              <span class="label paragraph-normal">Renovação da assinatura</span>
+              <span id="profile-premium-date" class="paragraph-normal"></span>
             </div>
           </div>
 
@@ -68,9 +66,9 @@ export default function profile() {
             </div>
           </div>
 
-          <div id="profile-options">
+          <div id="profile-options" class="profile-options">
             <div class="options-group">
-              <button id="edit-button">Editar Perfil</button>
+              <button id="edit-button" class="edit-button">Editar Perfil</button>
               <button id="favorite-button">Favoritos</button>
               <button id="premium-button">Assinar Premium</button>
             </div>
@@ -90,7 +88,7 @@ export default function profile() {
   `;
 
   const profileElement = document.createElement('div');
-  profileElement.classList.add('profile-element');
+  profileElement.classList.add('profile-container');
   profileElement.innerHTML = profileContentHTML;
 
   //Adiciona os elementos footer e header
@@ -130,7 +128,6 @@ export default function profile() {
   const cancelButton = profileElement.querySelector('#cancel-button');
   const confirmButton = profileElement.querySelector('#confirm-button');
 
-  
   (function loadProfile() {
   
     getUserData().then(profileData => {
@@ -176,7 +173,7 @@ export default function profile() {
 
       favoriteButton.addEventListener('click', () => {
         animationClick(favoriteButton);
-        window.dispatchEvent(createCustomEvent('/favorite'));
+        window.dispatchEvent(createCustomEvent('/favorites'));
       });
 
       premiumButton.addEventListener('click', () => {
@@ -295,8 +292,6 @@ export default function profile() {
   
   return profileElement;
 }
-
-
 
 async function getUserData() {
   return fetch('/api/login/profile/')

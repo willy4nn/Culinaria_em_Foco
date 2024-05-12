@@ -10,6 +10,7 @@
     flex: 1;
     padding: 2rem 5rem;
     gap: 2rem;
+
 }
 
 .favorites-container .favorites-content {
@@ -27,8 +28,18 @@
     border-radius: 1.5rem;
     cursor: pointer;
     gap: 0.5em;
-    transition: box-shadow 0.3s ease, background-color 0.3s ease;
     box-shadow: var(--shd-default);
+    transition: box-shadow 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+}
+
+.favorites-container .favorites-news-card:hover {
+    background: var(--bgh-yellow);
+    box-shadow: var(--shdh-default);
+    transform: scale(1.01);
+}
+
+.favorites-container .favorites-news-card:not(:hover) {
+    transform: scale(1);
 }
 
 .favorites-container .favorites-news-card .details {

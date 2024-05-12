@@ -164,7 +164,8 @@ const loginRepository = {
       }
 
       const hashedPassword = await hashPassword(newUser.password);
-      
+      const success = { success: true, message: 'Usuário cadastrado com sucesso!' };
+      return success;
       await client.query('BEGIN');
     
       await client.query('INSERT INTO users (name, username, email, password, user_type, premium_active, profile_photo) VALUES ($1, $2, $3, $4, $5, $6, $7)',
@@ -172,8 +173,7 @@ const loginRepository = {
     
       await client.query('COMMIT');
   
-      const success = { success: true, message: 'Usuário cadastrado com sucesso!' };
-      return success;
+      
     } catch (err) {
       await client.query('ROLLBACK');
       console.error("Não foi possível registrar usuário", err);

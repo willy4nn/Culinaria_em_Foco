@@ -14,6 +14,7 @@ import forgotPassword from './pages/forgot-password.js';
 import recoveryPassword from './pages/recovery-password.js';
 import notFound from './pages/not-found.js';
 import create from './pages/create.js';
+import refactGetPost from './pages/refactGetPost.js';
 
 const router = {
   '/': function () {

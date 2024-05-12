@@ -10,7 +10,8 @@ function renderPage(page) {
 
 // Ouvinte para o evento customizado 'onstatechange'
 window.addEventListener('onstatechange', function (event) {
-  const newPath = event.detail.path;
+  // Regex para ignorar barra no final do path
+  const newPath = event.detail.path.replace(/\/$/, '');
   const page = router.getPage(newPath);
   history.pushState({}, '', newPath);
   renderPage(page);
@@ -18,12 +19,14 @@ window.addEventListener('onstatechange', function (event) {
 
 // Ouvinte para o evento popstate
 window.addEventListener('popstate', function () {
-  const newPath = document.location.pathname;
+  // Regex para ignorar barra no final do path
+  const newPath = document.location.pathname.replace(/\/$/, '');
   const page = router.getPage(newPath);
   renderPage(page);
 });
 
 // Obtém o caminho da página atual e renderiza a página correspondente
-const initialPath = document.location.pathname;
+// Regex para ignorar barra no final do path
+const initialPath = document.location.pathname.replace(/\/$/, '');
 const initialPage = router.getPage(initialPath);
 renderPage(initialPage);

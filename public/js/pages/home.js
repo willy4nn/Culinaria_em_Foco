@@ -37,7 +37,7 @@ async function getNewsFeed(category) {
   if (!category) category = 'latest';
   
   // Define a URL com base na categoria fornecida
-  let url = category === 'latest' ? `/api/posts/latest?limit=9` : `/api/posts/category/${category}`;
+  let url = category === 'latest' ? `/api/posts/latest?limit=15` : `/api/posts/category/${category}`;
   
   try {
     // Faz uma solicitação fetch para a URL
@@ -241,7 +241,7 @@ function renderNewsFeed(news) {
 
       image.classList.add('image');
       image.src = post.banner;
-
+  
       details.appendChild(category);
       details.appendChild(datePost);
 

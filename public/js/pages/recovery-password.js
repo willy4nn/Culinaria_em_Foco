@@ -1,6 +1,7 @@
 // login.js
 
 import createCustomEvent from '../eventModule.js';
+import setNavigation from '../setNavigation.js';
 import footer from './elements/footer.js';
 import { modalError } from './elements/modalError.js';
 
@@ -102,6 +103,9 @@ export default function recoveryPassword(token) {
         showPopup(data.result.message, "Sucesso!", data.result.success);
         firstPassword.value = '';
         secondPassword.value = '';
+        setTimeout(() => {
+          window.dispatchEvent(createCustomEvent('/login'));
+        }, 2000);
       })
       .catch((error) => {
         buttonConfirm.classList.remove("disabled");
@@ -118,6 +122,9 @@ export default function recoveryPassword(token) {
   logoImage.addEventListener("click", () => {
     window.dispatchEvent(createCustomEvent(`/`));
   })
+
+  const signupButton = recoveryPasswordElement.querySelector('.signup-button');
+  setNavigation(signupButton, '/register');
 
   return recoveryPasswordElement;
 }

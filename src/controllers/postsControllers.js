@@ -30,9 +30,10 @@ const postsController = {
     // GET BY ID
     getPost: async (req, res) => {
         const id = req.params.id;
+        const users_id = req.user.id;
 
         try {
-            const response = await postsRepository.getPost(id);
+            const response = await postsRepository.getPost(id, users_id);
 
             res.status(200).json({ data: response, status: 200 });
         } catch (error) {
