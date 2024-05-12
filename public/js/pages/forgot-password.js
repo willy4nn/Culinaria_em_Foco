@@ -55,6 +55,10 @@ export default function forgotPassword() {
   buttonRecoveryPassword.addEventListener('click', (event) => {
     event.preventDefault();
 
+    //Desabilita temporáriamente os botôes a fim de não lancar mais chamadas na api
+    buttonRecoveryPassword.classList.add("disabled");
+    buttonRecoveryPassword.disabled = true;
+
     const email = emailInput.value.toString();
 
     fetch(`/api/login/forgot-password`, {
@@ -74,10 +78,18 @@ export default function forgotPassword() {
         return response.json();
       })
       .then((data) => {
+
+        // Aguarda 3 segundos e dispara um evento personalizado de redirecionamento para a página inicial.
+        setTimeout(() => {
+          window.dispatchEvent(createCustomEvent('/login'));
+        }, 3000);
+
         showPopup(data.result.message, "Sucesso!", data.result.success);
         emailInput.value = '';
       })
       .catch((error) => {
+        buttonRecoveryPassword.classList.remove("disabled");
+        buttonRecoveryPassword.disabled = false;
         showPopup(error.message, 'Erro!', false);
         console.error('Erro:', error);
       });
