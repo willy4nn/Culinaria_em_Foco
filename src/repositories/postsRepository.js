@@ -41,9 +41,13 @@ const postsRepository = {
         SELECT 
             posts.*,
             CASE WHEN EXISTS (SELECT 1 FROM posts_likes WHERE posts_id = posts.id AND users_id = $2) THEN true ELSE false END AS is_liked,
-            CASE WHEN EXISTS (SELECT 1 FROM favorite_posts WHERE posts_id = posts.id AND users_id = $2) THEN true ELSE false END AS is_favorited
+            CASE WHEN EXISTS (SELECT 1 FROM favorite_posts WHERE posts_id = posts.id AND users_id = $2) THEN true ELSE false END AS is_favorited,
+            users.profile_photo AS created_by_photo,
+            users.name AS created_by_name
         FROM 
             posts
+        JOIN
+            users ON posts.created_by = users.id
         WHERE 
             posts.id = $1 AND 
             posts.status != 'deleted';

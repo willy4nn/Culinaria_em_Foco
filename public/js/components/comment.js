@@ -25,6 +25,7 @@ function mainCommentTextarea() {
     cancelButton.id = 'cancel-button';
     commentButton.id = 'comment-button';
 
+    commentTextarea.classList.add('paragraph-normal');
     cancelButton.classList.add('comment-button', 'button-fill-cancel');
     commentButton.classList.add('comment-button', 'button-fill');
 
@@ -109,13 +110,13 @@ async function renderComment(comment) {
     div.classList.add('comment');
     headerDiv.classList.add('comment-header');
     leftHeaderDiv.classList.add('comment-left-header');
-    rightHeaderDiv.classList.add('comment-right-header');
+    rightHeaderDiv.classList.add('comment-right-header', 'paragraph-bold');
 
     profilePhoto.classList.add('profile-photo');
-    name.classList.add('user-name');
-    createdAt.classList.add('created-at');
+    name.classList.add('user-name', 'paragraph-bold');
+    createdAt.classList.add('created-at', 'paragraph-normal');
     separatorDot.classList.add('separator-dot');
-    content.classList.add('comment-content');
+    content.classList.add('comment-content', 'paragraph-normal');
 
     likeIcon.classList.add('material-symbols-outlined', 'comment-like');
     if (comment.is_liked) likeIcon.classList.add('liked');
