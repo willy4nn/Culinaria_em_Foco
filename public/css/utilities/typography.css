@@ -29,6 +29,14 @@
   color: var(--p13y);
 }
 
+.post-heading {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 3rem;
+  line-height: 3.5rem;
+  color: var(--p12y);
+}
+
 /* ########## BODY REGULAR ########## */
 .paragraph-normal {
   font-family: 'Nunito', sans-serif;
