@@ -113,7 +113,7 @@ export default function login() {
         // Aguarda 3 segundos e dispara um evento personalizado de redirecionamento para a página inicial.
         setTimeout(() => {
           window.dispatchEvent(createCustomEvent('/home'));
-        }, 3000);
+        }, 2000);
 
         // Exibe um popup de sucesso.
         showPopup("Login efetuado com sucesso!", "Sucesso!", true);

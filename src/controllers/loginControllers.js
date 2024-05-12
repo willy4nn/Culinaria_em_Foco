@@ -85,7 +85,7 @@ const loginController = {
         return res.status(400).json({ message: result.error });
       }
 
-      res.status(201).json({ message: 'Usuário adicionado com sucesso' });
+      res.status(201).json({ message: 'Usuário cadastrado com sucesso' });
   },
 
   updateUser: async (req, res) => {

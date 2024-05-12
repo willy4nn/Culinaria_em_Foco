@@ -137,10 +137,15 @@ export default function register() {
             );
           });
         }
-        window.dispatchEvent(createCustomEvent('/login'));
+        
         return response.json();
       })
       .then((data) => {
+        console.log(data);
+        showPopup(data.data.message, 'Sucesso!', true);
+        /* setTimeout(() => {
+          window.dispatchEvent(createCustomEvent('/login'));
+        }, 2000); */
       })
       .catch((err) => {
         //alert(err)

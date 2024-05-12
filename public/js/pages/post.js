@@ -188,7 +188,7 @@ export default function createPost() {
         event.preventDefault();
 
         // Trata o conteúdo princial da postagem e salva as imagens no storage
-        const content = importHTMLContentFiles(editor.root.innerHTML);
+        const content = importHTMLContentFilesWithFetch(editor.root.innerHTML);
 
         // Salva a postagem como rascunho
         submitPost(false, content, userData.id);

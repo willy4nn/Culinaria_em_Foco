@@ -94,7 +94,7 @@ export default function create() {
       createPostElement.appendChild(configTinymce);
       textarea.style.display = 'flex';
     } catch (error) {
-      showPopup('O editor não conseguiu carregar corretamente, por favor atualize a página', 'Erro!', false);
+      showPopup('Falha ao carregar o editor', 'Erro!', false);
     }
     
   }, 1000);
