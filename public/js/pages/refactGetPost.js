@@ -14,48 +14,30 @@ let userLogged;
 export default function refactGetPost(postId) {
   // HTML do elemento de login
   const getPostContentHTML = `
-
-    <main class=""> 
-
+    <main class="main"> 
       <div id="container">
-        <!-- <div id="buttons-temp">
-          <button id="button-get">Buscar</button>
-          <input id="input-id" placeholder="ID do Post"></input>
-        </div> 
-        </br> -->
-
         <div id="news-container">
           <div id="news-body"></div>
           <div id="news-interaction-buttons">
-
-          <span id="likes-quantity" class="likes-quantity"></span>
+          <span id="likes-quantity" class="likes-quantity paragraph-bold"></span>
           <button id="like-button" class="button-transparent">
             <span id="like-icon" class="material-symbols-outlined">favorite</span>
           </button>
           <button id="favorite-button" class="button-transparent">
             <span id="favorite-icon" class="material-symbols-outlined">bookmark_add</span>
           </button>
-
-
           </div>
         </div>
-
         <div id="comments-container">
           <!-- append mainCommentTextarea -->
-
-          <div id="comments-list">
-          </div>
-
+          <div id="comments-list"></div>
         </div>
-
       </div>
-
     </main>
-
   `;
 
   const getPostElement = document.createElement('div');
-  getPostElement.classList.add('create-post-element');
+  getPostElement.classList.add('get-post-container');
   getPostElement.innerHTML = getPostContentHTML;
 
   //Adiciona os elementos footer e header
@@ -66,10 +48,8 @@ export default function refactGetPost(postId) {
   //main.appendChild(popupCard);
   main.insertAdjacentElement("afterend", popupCard);
   
-  const newsContainer = getPostElement.querySelector('#news-container');
   const newsBody = getPostElement.querySelector('#news-body');
 
-  const newsInteractionButtons = getPostElement.querySelector('#news-interaction-buttons');
   const likesQuantity = getPostElement.querySelector('#likes-quantity');
   const buttonLike = getPostElement.querySelector('#like-button');
   const buttonFavorite = getPostElement.querySelector('#favorite-button');
@@ -81,8 +61,6 @@ export default function refactGetPost(postId) {
   commentsContainer.insertBefore(commentEditor, commentsContainer.firstChild);
 
   const commentTextarea = getPostElement.querySelector('#comment-textarea');
-  const buttonsContainer = getPostElement.querySelector('#buttons-container');
-  const buttonCancel = getPostElement.querySelector('#cancel-button');
   const buttonComment = getPostElement.querySelector('#comment-button');
   const commentsList = getPostElement.querySelector('#comments-list');
 
@@ -105,18 +83,32 @@ export default function refactGetPost(postId) {
     content.innerHTML = post.content;
     
     const banner = document.createElement('img');
-    const div = document.createElement('div');
+    const divPostDetails = document.createElement('div');
+    const divCreatedBy = document.createElement('div');
+    const createdByName = document.createElement('span');
+    const createdByPhoto = document.createElement('img');
     const createdAtPost = document.createElement('span');
+
     banner.src = post.banner;
+    createdByName.innerText = `Por ${post.created_by_name}`;
+    createdByPhoto.src = post.created_by_photo;
     createdAtPost.innerText = dateFormat(post.created_at);
 
+    title.classList.add('post-heading');
     banner.classList.add('post-banner');
-    div.classList.add('post-details');
+    divPostDetails.classList.add('post-details');
+    divCreatedBy.classList.add('post-created-by');
+    createdByPhoto.classList.add('profile-photo');
     createdAtPost.classList.add('post-created-at');
-    content.classList.add('post-text-content');
+    content.classList.add('post-text-content', 'paragraph-normal');
 
-    div.appendChild(createdAtPost)
-    newsBody.append(title, banner, content, div);
+    if (post.created_by_photo) divCreatedBy.appendChild(createdByPhoto);
+    else createdByName.classList.add('pad-top');
+
+    divCreatedBy.appendChild(createdByName);
+
+    divPostDetails.append(divCreatedBy, createdAtPost);
+    newsBody.append(title, banner, content, divPostDetails);
 
     let liked = post.is_liked ? true : false;
     let favorited = post.is_favorited ? true : false;
@@ -145,7 +137,6 @@ export default function refactGetPost(postId) {
 
     buttonFavorite.addEventListener('click', async () => {
       const newFavorited = await favoritePost(postId);
-      console.log("newfavorited", newFavorited);
 
       if (newFavorited) {
         favoriteIcon.classList.add('favorited');

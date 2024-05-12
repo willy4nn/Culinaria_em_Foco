@@ -43,7 +43,7 @@ const router = {
     return create();
   },
   '/post/:id': function (params) {
-    return getPost(params.id);
+    return refactGetPost(params.id);
   },
   '/post/edit/:id': function (params) {
     return editPost(params.id);
