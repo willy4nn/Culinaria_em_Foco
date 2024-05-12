@@ -1,5 +1,5 @@
 import createCustomEvent from '../eventModule.js';
-import { importLocalFile } from '../multer/index.js';
+import { importLocalFile } from '../utils/upload_file/upload_files.js';
 import { animationClick } from '../utils/animation.js';
 import { renewDate } from '../utils/dateFormat.js';
 import displayModal from '../utils/modal.js';

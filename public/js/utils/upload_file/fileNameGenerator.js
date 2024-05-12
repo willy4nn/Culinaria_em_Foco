@@ -1,9 +1,11 @@
 function setFileName(htmlString){
+     // Remover "../.." do início de cada string adicionado pelo tinymce, se presente
+     htmlString = htmlString.replace(/(\.\.\/)+/g, '/');
 
-    // Expressão regular para encontrar todas as ocorrências de src em tags img
-    //const pattern = /<img src="([^"]+)">/g;
     // Expressão regular para encontrar todas as ocorrências de src em tags img e ignorar /uploads/posts_media
-    const pattern = /<img src="(?!\/uploads\/posts_media\/)([^"]+)">/g;
+    //const pattern = /<img src="(?!\/uploads\/posts_media\/)([^"]+)">/g;
+    const pattern = /<img((?:(?!src=["']\/uploads\/posts_media\/).)*?)src=["']((?!\/uploads\/posts_media\/)[^"']+)["'](.*?)\/?>/g;
+    // Atualizado para funcioanr com tinymce e capturar os atributos de tamanho.
 
     // Contador para gerar os ids
     let counter = 1;
@@ -12,7 +14,14 @@ function setFileName(htmlString){
     const imageUris = [];
 
     // Função para substituir a ocorrência de src por um id combinado com o nome da imagem
-    function replaceSrc(match, src) {
+    function replaceSrc(match, attributes, src, rest) {
+        // Capturando os atributos width e height, se estiverem presentes
+        const widthMatch = rest.match(/width\s*=\s*["']?(\d+|[^"'\s]+)/);
+        const heightMatch = rest.match(/height\s*=\s*["']?(\d+|[^"'\s]+)/);
+
+        const widthAttribute = widthMatch ? ` width="${widthMatch[1]}"` : '';
+        const heightAttribute = heightMatch ? ` height="${heightMatch[1]}"` : '';
+
         let newId;
         let ext = '';
         
@@ -48,7 +57,8 @@ function setFileName(htmlString){
         const folderPath = "/uploads/posts_media/";
 
         // Retorna o novo nome junto ao path
-        return `<img src="${folderPath}${newId}">`;
+        return `<img${attributes} src="${folderPath}${newId}"${widthAttribute}${heightAttribute}>`;
+        // Ajustada para preservar os atributos de tamanho
     }
 
     // Substituir todas as ocorrências de src por ids combinados com o nome da imagem

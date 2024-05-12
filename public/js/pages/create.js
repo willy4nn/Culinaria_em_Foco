@@ -1,5 +1,5 @@
 import createCustomEvent from '../eventModule.js';
-import { importHTMLContentFiles, importHTMLContentFilesWithFetch, importLocalFile } from '../multer/index.js';
+import { importHTMLContentFiles, importHTMLContentFilesWithFetch, importLocalFile } from '../utils/upload_file/upload_files.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
 import { modalError } from './elements/modalError.js';
@@ -73,35 +73,40 @@ export default function create() {
   const { popupCard, showPopup } = modalError();
   main.insertAdjacentElement("afterend", popupCard);
 
-  // Novo editor
-  //const textareaForm = createPostElement.querySelector("#textarea-form");
+  // Função para carregar o script da CDN do TinyMCE
   const editorContainer = createPostElement.querySelector("#editor-container");
-
-  const cdnTinymce = document.createElement('script');
-  cdnTinymce.src = 'https://cdn.tiny.cloud/1/uwf3bfwp12rlz75gub5bslngqa8e0hdk16ddbzgp6pmc9myb/tinymce/7/tinymce.min.js';
-  createPostElement.appendChild(cdnTinymce);
 
   const textarea = document.createElement('textarea');
   textarea.id = 'mytextarea';
   textarea.style.display = 'none';
   editorContainer.appendChild(textarea);
 
+  // Função para carregar o script da CDN do TinyMCE
+  function carregarCDN() {
+    return new Promise((resolve, reject) => {
+        const cdnTinymce = document.createElement('script');
+        cdnTinymce.src = 'https://cdn.tiny.cloud/1/uwf3bfwp12rlz75gub5bslngqa8e0hdk16ddbzgp6pmc9myb/tinymce/7/tinymce.min.js';
+        cdnTinymce.onload = resolve;
+        cdnTinymce.onerror = reject;
+        createPostElement.appendChild(cdnTinymce);
+    });
+  }
+
   const configTinymce = document.createElement('script');
-  setTimeout(() => {
+  // Função para carregar o script de configuração do TinyMCE após o carregamento da CDN
+  async function carregarConfiguracaoTinymce() {
     try {
-      //const configTinymce = document.createElement('script');
-      configTinymce.src = '/js/tinymce.js';
-      createPostElement.appendChild(configTinymce);
-      textarea.style.display = 'flex';
+        await carregarCDN(); // Aguarda o carregamento da CDN
+        
+        configTinymce.src = '/js/utils/upload_file/tinymce.js';
+        createPostElement.appendChild(configTinymce);
+        textarea.style.display = 'flex';
     } catch (error) {
-      showPopup('Falha ao carregar o editor', 'Erro!', false);
+        showPopup('Falha ao carregar o editor', 'Erro!', false);
     }
-    
-  }, 1000);
-  // end Novo Editor
-
-
-
+  }
+  carregarConfiguracaoTinymce(); // Inicia o processo de carregamento da configuração do TinyMCE
+  // Fim do carregamento do editor Tinymce
 
   const titleInput = createPostElement.querySelector('#title');
   const categoryInputs = createPostElement.querySelectorAll('input[name="category"]');
@@ -113,61 +118,41 @@ export default function create() {
   const buttonPost = createPostElement.querySelector('#button-post');
   const buttonSave = createPostElement.querySelector('#button-save');
 
-  // Crie um elemento script
-  //const axiosScriptElement = document.createElement('script');
-
-  // Defina o atributo src com o URL do script externo
-  //axiosScriptElement.src = 'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js';
-
-  // Adicione o elemento script ao final do corpo do documento
-  //createElement.appendChild(axiosScriptElement);
-
-
-
-  // Carrega os dados do usuário logado
-  // Todas as requisições que dependam do ID do usuário ou do Editor serão feitas aqui dentro
-  // Apenas teste utilizei uma abordagem diferente do getPost.js para efetuar um carregamento paralelo
-  Promise.all([getLogin(), new Promise((resolve, reject) => {
-    configTinymce.addEventListener('load', resolve);
-  })])
-  .then(([userData, _]) => {
+  // Aguarda o carregamento do editor de texto
+  Promise.all([
+    new Promise((resolve, reject) => {
+        configTinymce.addEventListener('load', resolve);
+    })
+  ])
+  .then(([_]) => {
     // _ é uma convensão de nomenclatura para uma promisse ignorada (não será utilizada)
-      console.log("Carregou:", userData);
 
-      // Carrega o editor de texto
-      /* const editor = new Quill('#editor', {
-          modules: { toolbar: '#toolbar' },
-          theme: 'snow',
-      }); */
+    buttonPost.addEventListener('click', (event) => {
+      event.preventDefault();
+      // Trata o conteúdo princial da postagem e salva as imagens no storage
+      console.log("before", tinymce.activeEditor.getContent("myTextarea"));
+      const content = importHTMLContentFilesWithFetch(tinymce.activeEditor.getContent("myTextarea"));
 
-      buttonPost.addEventListener('click', (event) => {
-        event.preventDefault();
+      console.log("content", content);
 
-        // Trata o conteúdo princial da postagem e salva as imagens no storage
-        //const content = importHTMLContentFilesWithFetch(editor.root.innerHTML);
-        const content = tinymce.activeEditor.getContent("myTextarea");
+      // Efetua a postagem
+      submitPost(true, content);
+    });
 
-        // Efetua a postagem
-        submitPost(true, content, userData.id);
-      });
+    buttonSave.addEventListener('click', (event) => {
+      event.preventDefault();
+      // Trata o conteúdo princial da postagem e salva as imagens no storage
+      const content = importHTMLContentFilesWithFetch(tinymce.activeEditor.getContent("myTextarea"));
 
-      buttonSave.addEventListener('click', (event) => {
-        event.preventDefault();
-
-        // Trata o conteúdo princial da postagem e salva as imagens no storage
-        //const content = importHTMLContentFiles(editor.root.innerHTML);
-        const content = tinymce.activeEditor.getContent("myTextarea");
-
-        // Salva a postagem como rascunho
-        submitPost(false, content, userData.id);
-      });
+      // Salva a postagem como rascunho
+      submitPost(false, content);
+    });
   })
   .catch(error => {
       showPopup(error)
       console.error("Erro:", error);
   });
   
- 
   // Se clicar e não selecionar nenhum arquivo, o anterior é perdido.
   bannerInput.addEventListener('click', () => { 
     console.log("entrou aqui;");
@@ -183,7 +168,7 @@ export default function create() {
     }
   });
 
-  async function submitPost(posted_draft, editorContent, users_id) {
+  async function submitPost(posted_draft, editorContent) {
     const title = titleInput.value.toString();
     let category;
     categoryInputs.forEach((input) => {
@@ -250,24 +235,4 @@ export default function create() {
   }
 
   return createPostElement;
-}
-
-async function getLogin() {
-  return fetch('/api/login/user')
-  .then((response) => {
-      if (response.status !== 200) {
-          return response.json().then(errorResponse => {
-              throw errorResponse;
-          });
-      }
-      return response.json();
-  })
-  .then((data) => {
-      console.log("get user :", data);
-      return data;
-  })
-  .catch((error) => {
-      //displayError(error.error);
-      console.error('Erro:', error.error);
-  });
 }
