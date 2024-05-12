@@ -1,7 +1,8 @@
 import createCustomEvent from '../eventModule.js';
-import { importHTMLContentFiles, importHTMLContentFilesWithFetch, importLocalFile } from '../multer/index.js';
+import { importHTMLContentFiles, importHTMLContentFilesWithFetch, importLocalFile } from '../utils/upload_file/upload_files.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
+import { modalError } from './elements/modalError.js';
 
 // Exporta a função que retorna a página de login
 export default function editPost(postId) {
@@ -44,64 +45,9 @@ export default function editPost(postId) {
       </div>
   
       <div class="editor input-container">
-        <!-- Barra de ferramentas do editor de texto -->
-        <div id="toolbar">
-          <!-- Formatação de texto -->
-          <span class="ql-formats">
-            <select class="ql-font"></select>
-            <select class="ql-size"></select>
-          </span>
-          <!-- Estilos de texto -->
-          <span class="ql-formats">
-            <button class="ql-bold"></button>
-            <button class="ql-italic"></button>
-            <button class="ql-underline"></button>
-            <button class="ql-strike"></button>
-          </span>
-          <!-- Cores de texto -->
-          <span class="ql-formats">
-            <select class="ql-color"></select>
-            <select class="ql-background"></select>
-          </span>
-          <!-- Script e cabeçalhos -->
-          <span class="ql-formats">
-            <button class="ql-script" value="sub"></button>
-            <button class="ql-script" value="super"></button>
-          </span>
-          <span class="ql-formats">
-            <button class="ql-header" value="1"></button>
-            <button class="ql-header" value="2"></button>
-            <button class="ql-blockquote"></button>
-            <button class="ql-code-block"></button>
-          </span>
-          <!-- Listas -->
-          <span class="ql-formats">
-            <button class="ql-list" value="ordered"></button>
-            <button class="ql-list" value="bullet"></button>
-            <button class="ql-indent" value="-1"></button>
-            <button class="ql-indent" value="+1"></button>
-          </span>
-          <!-- Alinhamento e direção do texto -->
-          <span class="ql-formats">
-            <button class="ql-direction" value="rtl"></button>
-            <select class="ql-align"></select>
-          </span>
-          <!-- Links, imagens, vídeos e fórmulas -->
-          <span class="ql-formats">
-            <button class="ql-link"></button>
-            <button class="ql-image"></button>
-            <button class="ql-video"></button>
-            <button class="ql-formula"></button>
-          </span>
-          <!-- Limpar formatação -->
-          <span class="ql-formats">
-            <button class="ql-clean"></button>
-          </span>
-        </div>
-          
         <!-- Editor de texto -->
-        <div id="editor">
-          <p>Hello World!</p>
+        <div id="editor-container">
+          <!-- Editor será adicionado aqui via js -->
         </div>
       </div>
 
@@ -119,44 +65,77 @@ export default function editPost(postId) {
   editPostElement.innerHTML = editPostContentHTML;
 
   //Adiciona os elementos footer e header
-  const main = editPostElement.querySelector("main") 
-  editPostElement.insertBefore(header(), main)
-  editPostElement.append(footer())
+  const main = editPostElement.querySelector("main") ;
+  editPostElement.insertBefore(header(), main);
+  editPostElement.append(footer());
+
+  //Modal de erro
+  const { popupCard, showPopup } = modalError();
+  main.insertAdjacentElement("afterend", popupCard);
+
+  // Inicio do carregamento do editor Tinymce
+  const editorContainer = editPostElement.querySelector("#editor-container");
+
+  const textarea = document.createElement('textarea');
+  textarea.id = 'mytextarea';
+  textarea.style.display = 'none';
+  editorContainer.appendChild(textarea);
+
+  // Função para carregar o script da CDN do TinyMCE
+  function carregarCDN() {
+    return new Promise((resolve, reject) => {
+        const cdnTinymce = document.createElement('script');
+        cdnTinymce.src = 'https://cdn.tiny.cloud/1/uwf3bfwp12rlz75gub5bslngqa8e0hdk16ddbzgp6pmc9myb/tinymce/7/tinymce.min.js';
+        cdnTinymce.onload = resolve;
+        cdnTinymce.onerror = reject;
+        editPostElement.appendChild(cdnTinymce);
+    });
+  }
+
+  const configTinymce = document.createElement('script');
+  // Função para carregar o script de configuração do TinyMCE após o carregamento da CDN
+  async function carregarConfiguracaoTinymce() {
+    try {
+        await carregarCDN(); // Aguarda o carregamento da CDN
+        
+        configTinymce.src = '/js/utils/upload_file/tinymce.js';
+        editPostElement.appendChild(configTinymce);
+        textarea.style.display = 'flex';
+    } catch (error) {
+        showPopup('Falha ao carregar o editor', 'Erro!', false);
+    }
+  }
+  carregarConfiguracaoTinymce(); // Inicia o processo de carregamento da configuração do TinyMCE
+  // Fim do carregamento do editor Tinymce
 
   const titleInput = editPostElement.querySelector('#title');
-  const categoryInputs = editPostElement.querySelectorAll(
-    'input[name="category"]'
-  );
+  const categoryInputs = editPostElement.querySelectorAll('input[name="category"]');
   const bannerInput = editPostElement.querySelector('#banner');
   const bannerPreview = editPostElement.querySelector('#banner-preview');
 
   const buttonDiscard = editPostElement.querySelector('#button-discard');
   const buttonSaveAndPost = editPostElement.querySelector('#button-save-and-post');
 
-  // Crie um elemento script
-  const quillScriptElement = document.createElement('script');
-
-  // Defina o atributo src com o URL do script externo
-  quillScriptElement.src = 'https://cdn.quilljs.com/1.0.0/quill.js';
-  quillScriptElement.id = 'quill-script';
-
-  // Adicione o elemento script ao final do corpo do documento
-  editPostElement.appendChild(quillScriptElement);
-
-  // Carrega o editor de texto
-  quillScriptElement.addEventListener('load', function() {
-    var editor = new Quill('#editor', {
-      modules: { toolbar: '#toolbar' },
-      theme: 'snow'
-    });
+  // Aguarda o carregamento do editor de texto
+  Promise.all([
+    new Promise((resolve, reject) => {
+        configTinymce.addEventListener('load', resolve);
+    })
+  ])
+  .then(([_]) => {
 
     getPostById(postId)
     .then(post => {
+
+
       titleInput.value = post.title;
       document.querySelector(`#${post.category}`).checked = true;
-      editor.root.innerHTML = post.content;
       bannerPreview.src = post.banner;
 
+      setTimeout(() => {
+        tinymce.activeEditor.setContent(post.content);
+      }, 500); 
+      
       const resetChanges = [post.title, post.category, post.content, post.banner];
 
       // Se clicar e não selecionar nenhum arquivo, o anterior é perdido e o seletor fica vazio
@@ -167,11 +146,12 @@ export default function editPost(postId) {
         event.preventDefault();
         
         // Volta todos os dados orignais do post
-        [ titleInput.value, categoryInputs.value, editor.root.innerHTML, bannerPreview.src ] = resetChanges;
+        [ titleInput.value, categoryInputs.value, , bannerPreview.src ] = resetChanges; // ignorando o terceiro parâmetro
+        tinymce.activeEditor.setContent(resetChanges[2]);
         bannerInput.value = '';
 
       });
-  
+
       buttonSaveAndPost.addEventListener('click', async (event) => {
         event.preventDefault();
   
@@ -179,7 +159,7 @@ export default function editPost(postId) {
         const banner = await bannerChange(bannerInput.files[0], post.banner);
 
         // Trata o conteúdo princial da postagem e salva as imagens no storage
-        const content = importHTMLContentFilesWithFetch(editor.root.innerHTML);
+        const content = importHTMLContentFilesWithFetch(tinymce.activeEditor.getContent("myTextarea"));
 
         // Salva a postagem como rascunho
         updatePost(content, banner);

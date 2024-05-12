@@ -1,5 +1,5 @@
 import createCustomEvent from '../eventModule.js';
-import { importHTMLContentFiles, importHTMLContentFilesWithFetch, importLocalFile } from '../multer/index.js';
+import { importHTMLContentFiles, importHTMLContentFilesWithFetch, importLocalFile } from '../utils/upload_file/upload_files.js';
 import header from './elements/header.js';
 import footer from './elements/footer.js';
 import { modalError } from './elements/modalError.js';
@@ -179,7 +179,7 @@ export default function createPost() {
 
         // Trata o conteúdo princial da postagem e salva as imagens no storage
         const content = importHTMLContentFilesWithFetch(editor.root.innerHTML);
-
+        return;
         // Efetua a postagem
         submitPost(true, content, userData.id);
       });

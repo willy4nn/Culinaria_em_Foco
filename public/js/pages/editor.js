@@ -56,7 +56,7 @@ export default function editor() {
   setTimeout(() => {
     try {
       const configTinymce = document.createElement('script');
-      configTinymce.src = '/js/tinymce.js';
+      configTinymce.src = '/js/utils/upload_file/tinymce.js';
       editorElement.appendChild(configTinymce);
       textarea.style.display = 'flex';
     } catch (error) {
