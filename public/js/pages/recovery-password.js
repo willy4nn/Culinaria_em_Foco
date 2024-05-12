@@ -59,6 +59,10 @@ export default function recoveryPassword(token) {
   buttonConfirm.addEventListener('click', (event) => {
     event.preventDefault();
 
+    //Desabilita temporáriamente os botôes a fim de não lancar mais chamadas na api
+    buttonConfirm.classList.add("disabled");
+    buttonConfirm.disabled = true;
+
     const form = {
       firstPassword: firstPassword.value,
       secondPassword: secondPassword.value
@@ -67,6 +71,8 @@ export default function recoveryPassword(token) {
     const erro = validatePassword(form);
 
     if (erro) {
+      buttonConfirm.classList.remove("disabled");
+      buttonConfirm.disabled = false;
       showPopup(erro, "Erro!", false);
       return;
     }
@@ -88,6 +94,12 @@ export default function recoveryPassword(token) {
         return response.json();
       })
       .then((data) => {
+
+        // Aguarda 3 segundos e dispara um evento personalizado de redirecionamento para a página inicial.
+        setTimeout(() => {
+          window.dispatchEvent(createCustomEvent('/login'));
+        }, 3000);
+
         showPopup(data.result.message, "Sucesso!", data.result.success);
         firstPassword.value = '';
         secondPassword.value = '';
@@ -96,9 +108,10 @@ export default function recoveryPassword(token) {
         }, 2000);
       })
       .catch((error) => {
+        buttonConfirm.classList.remove("disabled");
+        buttonConfirm.disabled = false;
         showPopup(error.message, 'Erro!', false);
         console.error('Erro:', error);
-        
       });
   });
 
