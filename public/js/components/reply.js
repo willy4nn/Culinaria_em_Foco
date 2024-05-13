@@ -1,5 +1,5 @@
 import { getRepliesByCommentId, likeReply } from "../api/replyAPI.js";
-import { getTimeAgo, loaderr } from "./animation2.js";
+import { getTimeAgo, loaderr } from "../utils/animation.js";
 
 // Solicita a requisição de respostas, envelopa o resultado em um container e lida a animação de loading
 async function loadRepliesByCommentId(repliedCommentDiv, repliedCommentId) {
