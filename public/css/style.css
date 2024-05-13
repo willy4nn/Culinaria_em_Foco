@@ -22,5 +22,5 @@
 @import './pages/home.css';
 @import './pages/admin.css';
 @import './pages/profile.css';
-@import './components/menuToggle.css';
-@import './components/popup.css'
+@import './components/popup.css';
+@import './pages/not-found.css';

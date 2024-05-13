@@ -1,0 +1,26 @@
+.not-found-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.not-found-container .main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex: 1;
+    gap: 1rem;
+    padding: 2rem 5rem;
+}
+
+.not-found-container .main .secondary-heading {
+    text-align: center;
+}
+
+@media (max-width: 400px) {
+    .not-found-container .main .secondary-heading {
+        font-size: 2rem;
+        line-height: 2.5rem;
+    }
+}

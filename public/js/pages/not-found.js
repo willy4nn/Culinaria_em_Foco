@@ -6,26 +6,24 @@ import header from './elements/header.js'
 // Função principal que renderiza a página inicial
 export default function notFound() {
   // HTML do conteúdo da página inicial
-  function createNotFoundContentHTML() {
-    const homeContentHTML = `
-    <main class="main main-home">
-Não há nada por aqui...
-Mas você pode acessar outros posts, por favor volte para a <a>Home</a>
+  function notFoundContentHTML() {
+    const html = `
+    <main class="main">
+      <h1 class="secondary-heading">Página não encontrada<h1>
+      <p class="paragraph-bold">
+        Não há nada por aqui...
+      </p>
     </main>
   `;
-    return homeContentHTML;
+    return html;
   }
 
   // Cria um elemento div para a página inicial
   const notFoundElement = document.createElement('div');
-  notFoundElement.classList.add('home-container');
-  notFoundElement.innerHTML = createNotFoundContentHTML();
+  notFoundElement.classList.add('not-found-container');
+  notFoundElement.innerHTML = notFoundContentHTML();
 
-  const main = notFoundElement.querySelector("main") 
-  const buttonHome = notFoundElement.querySelector("a")
-
-  setNavigation(buttonHome, "/home")
-
+  const main = notFoundElement.querySelector("main");
   notFoundElement.insertBefore(header(), main)
   notFoundElement.append(footer())
 
