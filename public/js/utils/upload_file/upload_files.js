@@ -43,7 +43,7 @@ async function importLocalFile(file, type) {
   })
   .then((data) => {
     console.log("multer res", data);
-    const uri = `${data.data.destination.replace("./public/", "/")}/${data.data.filename}`;
+    const uri = `/uploads/posts_banner/${data.data.filename}`;
     return uri;
   })
   .catch((error) => ("Error:", error));

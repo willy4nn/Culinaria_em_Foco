@@ -179,7 +179,6 @@ export default function createPost() {
 
         // Trata o conteúdo princial da postagem e salva as imagens no storage
         const content = importHTMLContentFilesWithFetch(editor.root.innerHTML);
-        return;
         // Efetua a postagem
         submitPost(true, content, userData.id);
       });
