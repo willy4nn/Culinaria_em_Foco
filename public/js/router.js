@@ -38,7 +38,6 @@ const router = {
   '/home': function () {
     return home();
   },
-  
   '/post': function () {
     return createPost();
   },

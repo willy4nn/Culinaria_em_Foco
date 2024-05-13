@@ -100,12 +100,9 @@ function navigation(user) {
   const logoutButtonIcon = document.createElement('img');
   logoutButtonIcon.src = '../../../assets/images/signout.svg';
 
-  const overlay = document.createElement('div');
-
   toggleButton.addEventListener('click', () => {
     list.classList.toggle('show');
     document.body.classList.toggle('no-scroll');
-    
   });
 
   logoutButton.addEventListener('click', () => {
