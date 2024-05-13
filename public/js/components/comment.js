@@ -137,7 +137,7 @@ async function renderComment(comment) {
     openReplyTextarea.innerText = 'Responder';
     //showRepliesButton.innerText = `${comment.replies_quantity} replies`
     showRepliesNumber.innerText = comment.replies_quantity
-    showRepliesComplement.innerText = comment.replies_quantity > 1 ? 'repostas' : 'reposta';
+    showRepliesComplement.innerText = comment.replies_quantity > 1 ? 'respostas' : 'resposta';
     console.log("sssss",showRepliesComplement.innerText);
     showArrowIcon.innerText = 'arrow_drop_down';
     
