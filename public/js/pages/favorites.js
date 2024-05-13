@@ -85,6 +85,7 @@ export default function favorites() {
       comments.textContent = 'Comentários: ' + favorite.comments_quantity;
 
       const datePost = document.createElement('p');
+      datePost.classList.add('paragraph-normal')
       datePost.textContent = getTimeAgo(favorite.updated_at)
 
       const interactions = document.createElement('div');

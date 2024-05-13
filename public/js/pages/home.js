@@ -79,8 +79,8 @@ function renderFeaturedNewsSection(news) {
           </div>
           <div class="info">
             <div class="details">
-              <span class="category"></span>
-              <span class="posted"></span>
+              <span class="category paragraph-normal"></span>
+              <span class="posted paragraph-normal"></span>
             </div>
             <p class="featured-news-info-title paragraph-bold"></p>
           </div>
@@ -94,6 +94,8 @@ function renderFeaturedNewsSection(news) {
   
   // Define o conteúdo HTML da seção
   featuredNewsSection.innerHTML = featuredNewsSectionHTML;
+
+  const info = featuredNewsSection.querySelector('.info');
 
   // Seleciona elementos dentro da seção
   const banner = featuredNewsSection.querySelector('.home-banner-image');
@@ -133,6 +135,8 @@ function renderFeaturedNewsSection(news) {
     category.textContent = news[indexPost].category;
     posted.textContent = getTimeAgo(news[indexPost].updated_at);
     title.textContent = news[indexPost].title;
+    setNavigation(banner, `/post/${news[indexPost].id}`);
+    setNavigation(info, `/post/${news[indexPost].id}`);
   }
 
   // Função para atualizar o índice da postagem exibida
@@ -285,6 +289,7 @@ function renderNewsFeed(news) {
 }
 
 // Função home que exporta por padrão
+// Função home que exporta por padrão
 export default function home() {
   // Função para criar o HTML do conteúdo da página inicial
   function createHomeContentHTML() {
@@ -304,23 +309,23 @@ export default function home() {
 
   // Insere o cabeçalho antes do elemento principal
   homeElement.insertBefore(header(), main);
-  
-  // Adiciona o rodapé ao final do elemento principal
-  homeElement.append(footer());
 
   // Obtém notícias em destaque e renderiza a seção de notícias em destaque
   getFeaturedNews(3).then(news => {
     const featuredNewsSection = renderFeaturedNewsSection(news.data);
-    const mainElement = homeElement.querySelector('.main-home');
-    mainElement.appendChild(featuredNewsSection);
+    main.appendChild(featuredNewsSection); // Adiciona a seção de notícias em destaque após o cabeçalho
+
+    // Obtém o feed de notícias e renderiza o feed de notícias (sem esperar pela conclusão)
+    getNewsFeed().then(news => {
+      const newsFeedSection = renderNewsFeed(news.data);
+      main.appendChild(newsFeedSection); // Adiciona o feed de notícias após a seção de notícias em destaque
+    });
   });
 
-  // Obtém o feed de notícias e renderiza o feed de notícias
-  getNewsFeed().then(news => {
-    const newsFeedSection = renderNewsFeed(news.data);
-    main.appendChild(newsFeedSection);
-  });
+  // Adiciona o rodapé ao final do elemento principal
+  homeElement.append(footer());
 
   // Retorna o elemento da página inicial
   return homeElement;
 }
+

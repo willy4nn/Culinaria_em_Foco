@@ -192,7 +192,6 @@ export default function getPost(postId) {
       favoriteIcon.innerText = 'bookmark_added';
       favoriteIcon.classList.add('favorited');
     }
-    
   }
 
   commentEditor.addEventListener('click', function() {

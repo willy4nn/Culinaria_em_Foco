@@ -14,7 +14,7 @@ export default function admin() {
   const adminContentHTML = `
     <main class="main">
         <div id="container-header">
-            <h1 class="secondary-heading">Administrador</h1>
+            <h1 class="primary-heading">Admin</h1>
         </div>
         <div class="admin-content">
           <table id="content-table">
@@ -70,11 +70,13 @@ export default function admin() {
           username.innerText = item.username;
           email.innerText = item.email;
           userType.innerText = item.user_type.toUpperCase();
-          status.innerText = item.status.toUpperCase();
-          premiumActive.innerText = item.premium_active;
-          premiumDate.innerText = dateFormat(item.premium_date);
+          status.innerText = `Status: ${item.status.toUpperCase()}`
+          premiumActive.innerText = `Premium: ${item.premium_active}`
+          premiumDate.innerText = `Expiração do Premium:
+          ${dateFormat(item.premium_date)}`
           profilePhotoImg.src = item.profile_photo || '/assets/images/default_profile_normal.png';
-          createdAt.innerText = dateFormat(item.created_at);
+          createdAt.innerText = `Conta Criada:
+          ${dateFormat(item.created_at)}`
           
           profilePhotoImg.classList.add('admin-profile-image');
           buttonConfirm.style.display = 'none';
@@ -93,7 +95,7 @@ export default function admin() {
           tdDelete.appendChild(buttonDelete);
 
           tableRow.append(id, name, username, email, userType, status, premiumActive, 
-            premiumDate, profilePhoto, createdAt, tdEdit, tdDelete
+            premiumDate, createdAt, tdEdit, tdDelete
           );
             
           contentTable.appendChild(tableRow);

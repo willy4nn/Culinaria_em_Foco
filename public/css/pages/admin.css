@@ -7,7 +7,7 @@
 .admin-container .main {
     display: flex;
     flex-direction: column;
-    gap: 2em;
+    gap: 1em;
     padding: 2em 5em;
     flex: 1;
 }

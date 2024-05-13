@@ -53,7 +53,12 @@
 /* FORGOT PASSWORD */
 
 #forgot-password-span {
-  color: #999999;
+  color: var(--p8y);
+  transition: color 0.3s ease;
+}
+
+#forgot-password-span:hover {
+  color: var(--p10y);
 }
 
 .inputs-container.forgot-password {
