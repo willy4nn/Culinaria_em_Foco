@@ -17,6 +17,9 @@ import create from './pages/create.js';
 import refactGetPost from './pages/refactGetPost.js';
 
 const router = {
+  '': function () {
+    return main();
+  },
   '/': function () {
     return main();
   },

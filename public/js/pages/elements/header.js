@@ -84,7 +84,7 @@ function navigation(user) {
     {
       user: 'editor',
       text: 'Postar',
-      address: '/post'
+      address: '/create'
     },
     {
       user: 'admin',
@@ -100,10 +100,13 @@ function navigation(user) {
   const logoutButtonIcon = document.createElement('img');
   logoutButtonIcon.src = '../../../assets/images/signout.svg';
 
+  const overlay = document.createElement('div');
+
   toggleButton.addEventListener('click', () => {
     list.classList.toggle('show');
     document.body.classList.toggle('no-scroll');
-  })
+    
+  });
 
   logoutButton.addEventListener('click', () => {
   fetch('/api/login/logout', {
