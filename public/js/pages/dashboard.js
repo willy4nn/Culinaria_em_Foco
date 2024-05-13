@@ -94,7 +94,7 @@ export default function dashboard() {
             <td class="paragraph-normal">${translate(item.status)}</td>
             <td class="paragraph-normal">${item.comments_quantity}</td>
             <td class="paragraph-normal">${item.likes_quantity}</td>
-            <td class="paragraph-medium"><button class="table-button button-line visualize">Visualzar</button></td>
+            <td class="paragraph-medium"><button class="table-button button-line visualize">Visualizar</button></td>
             <td class="paragraph-medium"><button class="table-button button-fill">Editar</button></td>
             <td class="paragraph-medium"><button class="table-button button-delete">Deletar</button></td>
           `;
