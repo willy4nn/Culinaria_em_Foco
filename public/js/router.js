@@ -20,6 +20,9 @@ const router = {
   '': function () {
     return main();
   },
+  '/': function () {
+    return main();
+  },
   '/login': function () {
     return login();
   },

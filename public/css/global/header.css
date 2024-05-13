@@ -21,13 +21,13 @@
   border-radius: 5rem;
   border: 1px solid transparent;
   cursor: pointer;
-  transition: box-shadow 0.3s ease; /* Incluindo a transição aqui */
+  transition: box-shadow 0.3s ease;
 }
 
 .header .logo span {
-  -webkit-user-select: none; /* Safari */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   white-space: nowrap;
 }
@@ -82,10 +82,10 @@
   width: 1rem;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
   .header .navigation .toggle {
+    cursor: pointer;
     display: flex;
-    position: fixed;
     z-index: 10;
     top: 3rem;
     right: 5rem;
@@ -97,7 +97,7 @@
 
   .header .navigation .list {
     flex-direction: column;
-    border: 1px solid var(--c4);
+    border: 1px solid var(--p4y);
     height: 100%;
     position: fixed;
     top: 0;
@@ -108,8 +108,8 @@
     z-index: 5;
     padding-inline: 3rem;
     align-items: center;
-    background: var(--c3);
-    transition: right 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    background: var(--p3y);
+    transition: right 0.3s ease-in-out, opacity 0.3s ease-in-out;
   }
 
   .header .navigation .list.show {
@@ -127,6 +127,17 @@
 @media (max-width: 850px) {
   .header {
     padding: 1rem 2rem;
+  }
+
+  .header .navigation .toggle {
+    top: 3rem;
+    right: 2rem;
+  }
+  
+  .header .navigation .list {
+    padding-inline: 2rem;
+    padding: 0rem 2em 0em 4em;
+    align-items: end;
   }
 
   .header .buttons {
