@@ -5,7 +5,7 @@ import footer from './elements/footer.js';
 import { modalError } from './elements/modalError.js';
 
 // Exporta a função que retorna a página de login
-export default function create() {
+export default function createPost() {
   const createPostContentHTML = `
 
   <!-- ########## MAIN ########## -->
@@ -86,6 +86,7 @@ export default function create() {
     return new Promise((resolve, reject) => {
         const cdnTinymce = document.createElement('script');
         cdnTinymce.src = 'https://cdn.tiny.cloud/1/uwf3bfwp12rlz75gub5bslngqa8e0hdk16ddbzgp6pmc9myb/tinymce/7/tinymce.min.js';
+        cdnTinymce.referrerPolicy = 'origin';
         cdnTinymce.onload = resolve;
         cdnTinymce.onerror = reject;
         createPostElement.appendChild(cdnTinymce);

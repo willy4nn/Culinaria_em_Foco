@@ -128,6 +128,7 @@ async function renderComment(comment) {
 
     profilePhoto.src = comment.profile_photo || '../../uploads/profile_photo/default_profile_normal.png';
     name.innerText = comment.name ;
+    name.title = comment.name;
     createdAt.innerText = getTimeAgo(comment.created_at);
     separatorDot.innerText = '·';
     content.innerHTML = comment.content;
