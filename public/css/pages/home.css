@@ -40,6 +40,7 @@
     border-top-right-radius: 24px;
     border-bottom-right-radius: 24px;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .featured-news-content .banner img {
@@ -76,6 +77,7 @@
 }
 
 .featured-news-content .info {
+    cursor: pointer;
     width: fit-content;
     padding: 1rem 2rem;
     border-bottom-left-radius: 24px;

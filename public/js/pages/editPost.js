@@ -39,8 +39,8 @@ export default function editPost(postId) {
   
       <!-- Upload de banner -->
       <div class="select-banner">
-        <label class="paragraph-medium" for='files'>Selecione o Banner</label>
-        <input class="paragraph-medium" id='banner' type="file" name="files">
+        <label class="banner-label paragraph-medium" for='files'>Select Banner</label>
+        <input class="banner-input paragraph-medium" id='banner' type="file" name="files" alt="banner">
         <img id="banner-preview" class="create-post-banner">
       </div>
   
@@ -61,7 +61,7 @@ export default function editPost(postId) {
   `;
 
   const editPostElement = document.createElement('div');
-  editPostElement.classList.add('edit-post-element');
+  editPostElement.classList.add('edit-post-container');
   editPostElement.innerHTML = editPostContentHTML;
 
   //Adiciona os elementos footer e header
@@ -110,24 +110,33 @@ export default function editPost(postId) {
 
   const titleInput = editPostElement.querySelector('#title');
   const categoryInputs = editPostElement.querySelectorAll('input[name="category"]');
+
+  const bannerLabel = editPostElement.querySelector('.banner-label');
+
   const bannerInput = editPostElement.querySelector('#banner');
   const bannerPreview = editPostElement.querySelector('#banner-preview');
 
   const buttonDiscard = editPostElement.querySelector('#button-discard');
   const buttonSaveAndPost = editPostElement.querySelector('#button-save-and-post');
 
+  
+  bannerLabel.addEventListener('click', () => {
+    bannerInput.click();
+  })
+
+  
   // Aguarda o carregamento do editor de texto
   Promise.all([
     new Promise((resolve, reject) => {
-        configTinymce.addEventListener('load', resolve);
+      configTinymce.addEventListener('load', resolve);
     })
   ])
   .then(([_]) => {
-
+    
     getPostById(postId)
     .then(post => {
-
-
+      
+      
       titleInput.value = post.title;
       document.querySelector(`#${post.category}`).checked = true;
       bannerPreview.src = post.banner;
@@ -140,7 +149,7 @@ export default function editPost(postId) {
 
       // Se clicar e não selecionar nenhum arquivo, o anterior é perdido e o seletor fica vazio
       // Isso implica que usuário não quer alterar o banner, então retorna a imagem original.
-      bannerInput.addEventListener('click', () => { bannerPreview.src = '/assets/images/default_image_banner.png'; });
+      bannerInput.addEventListener('click', () => { bannerPreview.src = '/assets/images/default_image_banner.png'; });  
    
       buttonDiscard.addEventListener('click', (event) => {
         event.preventDefault();

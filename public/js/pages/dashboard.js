@@ -15,7 +15,7 @@ export default function dashboard() {
     <main class="main">
       <div id="container-dashboard">
           <div id="container-header">
-              <h1 class="secondary-heading">Postagens</h1>
+              <h1 class="primary-heading">Postagens</h1>
           </div>
           <div class="dashboard-content">
               <table id="content-table" class="content-table dashboard-format">

@@ -82,6 +82,43 @@
   width: 1rem;
 }
 
+@keyframes blurAnimation {
+  from {
+    backdrop-filter: blur(0);
+  }
+  to {
+    backdrop-filter: blur(5px);
+  }
+}
+
+@keyframes blurAnimationOut {
+  from {
+    backdrop-filter: blur(5px);
+  }
+  to {
+    backdrop-filter: blur(0);
+  }
+}
+
+.navigation .overlay {
+  width: 100%;
+  height: 100%;
+  display: none;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 3;
+}
+
+.navigation .overlay.blur {
+  animation: blurAnimation 0.3s ease forwards;
+  display: block;
+}
+
+.navigation .overlay:not(.blur) {
+  animation: blurAnimationOut 0.3s ease forwards;
+}
+
 @media (max-width: 1100px) {
   .header .navigation .toggle {
     cursor: pointer;

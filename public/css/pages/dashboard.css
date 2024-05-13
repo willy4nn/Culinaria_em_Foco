@@ -1,5 +1,8 @@
-.dashboard-container img {
-    display: none;
+
+#container-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .dashboard-container {
@@ -14,11 +17,11 @@
 }
 
 .dashboard-container .dashboard-content .content-table {
+    overflow-x: scroll;
     display: flex;
     justify-content: center;
     flex-direction: row;
     gap: 1em;
-    overflow-x: scroll;
     border-radius: 1.5em;
     border: 1px solid var(--p11y);
 }
@@ -44,7 +47,7 @@
 
 .dashboard-container .dashboard-content .content-table tbody {
     display: flex;
-    justify-content: space-around;
+    justify-content: start;
     width: 100%;
 }
 .dashboard-container .dashboard-content .content-table tbody tr {
@@ -63,7 +66,7 @@
     border: 1px solid var(--p4y);
 }
 
-.dashboard-container button {
+.dashboard-container .main button {
     border: 1px solid var(--p11y);
     background: var(--bg-yellow);
     padding: 1em 2em;
@@ -72,21 +75,21 @@
     transition: background-color 0.3s ease, color 0.3s ease,
 }
 
-.dashboard-container button.visualize {
+.dashboard-container .main button.visualize {
     background: #b9ff3f;
 }
 
-.dashboard-container button:hover {
+.dashboard-container .main button:hover {
     columns: var(--bgh-yellow);
 }
 
-.dashboard-container button.button-delete {
+.dashboard-container .main button.button-delete {
     border: 1px solid var(--p11y);
     color: var(--p11y);
     background: #ff6735;
 }
 
-.dashboard-container button.button-delete:hover {
+.dashboard-container .main button.button-delete:hover {
     background: #fd6330;
 }
 

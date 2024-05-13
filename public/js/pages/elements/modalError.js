@@ -30,9 +30,9 @@ function modalError() {
 
     function showPopup(errorText, errorTitle, status) {
         if (status) {
-            divSpan.style.background = '#0080007d';
+            divSpan.style.background = '#06d6a0';
         } else {
-        divSpan.style.background = '#ff00007d';
+        divSpan.style.background = '#ef233c';
         }
         title.innerText = errorTitle || '';
         text.innerText = errorText;
