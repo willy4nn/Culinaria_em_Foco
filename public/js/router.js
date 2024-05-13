@@ -5,7 +5,6 @@ import register from './pages/register.js';
 import profile from './pages/profile.js';
 import createPost from './pages/post.js';
 import getPost from './pages/getPost.js';
-import editor from './pages/editor.js';
 import editPost from './pages/editPost.js';
 import dashboard from './pages/dashboard.js';
 import favorites from './pages/favorites.js';
@@ -14,7 +13,6 @@ import forgotPassword from './pages/forgot-password.js';
 import recoveryPassword from './pages/recovery-password.js';
 import notFound from './pages/not-found.js';
 import create from './pages/create.js';
-import refactGetPost from './pages/refactGetPost.js';
 
 const router = {
   '': function () {
@@ -45,13 +43,10 @@ const router = {
     return create();
   },
   '/post/:id': function (params) {
-    return refactGetPost(params.id);
+    return getPost(params.id);
   },
   '/post/edit/:id': function (params) {
     return editPost(params.id);
-  },
-  '/editor': function () {
-    return editor();
   },
   '/dashboard': function () {
     return dashboard();

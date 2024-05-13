@@ -85,10 +85,6 @@ if(environment === "development"){
     res.sendFile(path.join(publicPath, 'index.html'));
   });
 
-  app.get('/editor', editorPermissionVerify, (req, res) => {
-    res.sendFile(path.join(publicPath, 'index.html'));
-  });
-  
   app.get('/create', editorPermissionVerify, (req, res) => {
     res.sendFile(path.join(publicPath, 'index.html'));
   });

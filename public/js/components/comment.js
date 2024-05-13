@@ -1,6 +1,6 @@
 import { getCommentsByPostId, likeComment } from "../api/commentAPI.js";
 import { createReply } from "../api/replyAPI.js";
-import { userLogged } from "../pages/refactGetPost.js";
+import { userLogged } from "../pages/getPost.js";
 import getTimeAgo from "../utils/getTimeAgo.js";
 import { loadRepliesByCommentId, renderReply } from "./reply.js";
 
@@ -171,24 +171,25 @@ async function renderComment(comment) {
 
     // Mostrar respostas, faz a requisição na primeira, oculta/desoculta nas subsequentes
     showRepliesButton.addEventListener('click', async () => {
-        if (newReplies.childNodes.length === 0) {
-            console.log("TESTENOW", div, comment.id);
-            newReplies.appendChild( await loadRepliesByCommentId(div, comment.id));
-            shownReply = true;
-            showArrowIcon.innerText = 'arrow_drop_up';
-
-        } else {
-            if (!shownReply) {
+        if (!shownReply) {
+            if (newReplies.childNodes.length === 0) {
+                console.log("TESTENOW", div, comment.id);
+                shownReply = true;
+                newReplies.appendChild( await loadRepliesByCommentId(div, comment.id));
+                showArrowIcon.innerText = 'arrow_drop_up';
+    
+            } else {
                 newReplies.style.display = 'block';
                 shownReply = true;
                 showArrowIcon.innerText = 'arrow_drop_up';
-
-            } else {
-                newReplies.style.display = 'none';
-                shownReply = false;
-                showArrowIcon.innerText = 'arrow_drop_down';
             }
+
+        } else {
+            newReplies.style.display = 'none';
+            shownReply = false;
+            showArrowIcon.innerText = 'arrow_drop_down';
         }
+        
     });
 
 
