@@ -11,35 +11,35 @@ export default function createPost() {
   <!-- ########## MAIN ########## -->
   <main class="main main-create-post"> 
     <!-- Título da página -->
-    <h1 class="primary-heading">Create Post</h1>
+    <h1 class="primary-heading">Criar Postagem</h1>
 
     <!-- Formulário para criar post -->
     <form class="editor-container">
       <!-- Campo para inserir o título do post -->
       <div class="input-container">
-        <input class="title-input tertiary-heading" id="title" type="text" name="title" placeholder="Untitled" />
+        <input class="title-input tertiary-heading" id="title" type="text" name="title" placeholder="Sem título" />
       </div>  
       <!-- Dropdown para selecionar a categoria do post -->
       <div class="select-category">
         <input type="radio" id="interviews" name="category" value="interviews">
-        <label class="checkbox" for="interviews">Interviews</label><br>
+        <label class="checkbox" for="interviews">Entrevistas</label><br>
 
         <input type="radio" id="reviews" name="category" value="reviews">
-        <label class="checkbox" for="reviews">Reviews</label><br>
+        <label class="checkbox" for="reviews">Análises</label><br>
 
         <input type="radio" id="stories" name="category" value="stories">
-        <label class="checkbox" for="stories">Stories</label><br>
+        <label class="checkbox" for="stories">Histórias</label><br>
 
         <input type="radio" id="tips" name="category" value="tips">
-        <label class="checkbox" for="tips">Tips</label><br>
+        <label class="checkbox" for="tips">Dicas</label><br>
 
         <input type="radio" id="trends" name="category" value="trends">
-        <label class="checkbox" for="trends">Trends</label><br>
+        <label class="checkbox" for="trends">Tendências</label><br>
       </div>
 
       <!-- Upload de banner -->
       <div class="select-banner">
-        <label class="paragraph-medium" for='files'>Select Banner</label>
+        <label class="paragraph-medium" for='files'>Selecionar Banner</label>
         <input class="paragraph-medium" id='banner' type="file" name="files">
         <img id="banner-preview" class="create-post-banner">
       </div>
@@ -53,8 +53,9 @@ export default function createPost() {
 
       <!-- Botões para salvar ou postar o conteúdo -->
       <div class="buttons">
-        <button class="button button-line" id="button-save">Save</button>
-        <button class="button button-fill" id="button-post">Post</button>
+        <button class="button button-line" id="button-discard">Apagar</button>
+        <button class="button button-line" id="button-save">Salvar</button>
+        <button class="button button-fill" id="button-post">Postar</button>
       </div>
     </form>
   </main>
@@ -116,6 +117,7 @@ export default function createPost() {
   const bannerPreview = createPostElement.querySelector('#banner-preview');
   bannerPreview.src = '/assets/images/default_image_banner.png';
 
+  const buttonDiscard = createPostElement.querySelector('#button-discard');
   const buttonPost = createPostElement.querySelector('#button-post');
   const buttonSave = createPostElement.querySelector('#button-save');
 
@@ -127,6 +129,20 @@ export default function createPost() {
   ])
   .then(([_]) => {
     // _ é uma convensão de nomenclatura para uma promisse ignorada (não será utilizada)
+
+    buttonDiscard.addEventListener('click', (event) => {
+      event.preventDefault();
+      
+      titleInput.value = '';
+      categoryInputs.forEach((input) => {
+        if (input.checked) {
+          input.checked = false;
+        }
+      });
+      bannerInput.value = '';
+      bannerPreview.src = '/assets/images/default_image_banner.png';
+      tinymce.activeEditor.setContent('');
+    });
 
     buttonPost.addEventListener('click', (event) => {
       event.preventDefault();
