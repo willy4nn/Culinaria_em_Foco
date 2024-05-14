@@ -65,6 +65,7 @@ async function renderReply(reply, repliedCommentDiv) {
 
     profilePhoto.src = reply.profile_photo || '../../uploads/profile_photo/default_profile_normal.png';
     name.innerText = reply.name ;
+    name.title = reply.name;
     createdAt.innerText = getTimeAgo(reply.created_at);
     separatorDot.innerText = '·';
     content.innerHTML = reply.content;

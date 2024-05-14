@@ -7,6 +7,7 @@ import header from './elements/header.js';
 import footer from './elements/footer.js';
 import displayModal from '../utils/modal.js';
 import setNavigation from '../setNavigation.js';
+import { translate } from '../utils/translate.js';
 
 // Exporta a função principal que retorna a página principal
 export default function dashboard() {
@@ -51,6 +52,7 @@ export default function dashboard() {
   dashboardElement.insertBefore(header(), main);
   dashboardElement.append(footer());
 
+  const contentTable = dashboardElement.querySelector('#content-table');
   const contentTableBody = dashboardElement.querySelector('#content-table-body');
 
   getPostsByEditorId();
@@ -77,19 +79,22 @@ export default function dashboard() {
   }
 
   function renderNews(data){
+      // Insere o header no início da tabela
+      contentTable.insertBefore(tableHeader(), contentTable.firstChild);
+
       data.forEach((item, index) => {
           const tableRow = document.createElement('tr');
 
           tableRow.innerHTML = `
             <td class="paragraph-normal">${item.title}</td>
             <!--<td><img src="${item.banner}" class="banner-image"></td>-->
-            <td class="paragraph-normal">Categoria: ${item.category.charAt(0).toUpperCase() + item.category.slice(1)}</td>
-            <td class="paragraph-normal">Postagem: ${dateFormat(item.created_at)}</td>
-            <td class="paragraph-normal">Exibição: ${item.posted_draft ? 'Posted' : 'Draft'}</td>
-            <td class="paragraph-normal">Status: ${item.status.charAt(0).toUpperCase() + item.status.slice(1)}</td>
-            <td class="paragraph-normal">Comentários: ${item.comments_quantity}</td>
-            <td class="paragraph-normal">Curtidas: ${item.likes_quantity}</td>
-            <td class="paragraph-medium"><button class="table-button button-line visualize">Visualzar</button></td>
+            <td class="paragraph-normal">${translate(item.category)}</td>
+            <td class="paragraph-normal">${dateFormat(item.created_at)}</td>
+            <td class="paragraph-normal">${item.posted_draft ? 'Postado' : 'Rascunho'}</td>
+            <td class="paragraph-normal">${translate(item.status)}</td>
+            <td class="paragraph-normal">${item.comments_quantity}</td>
+            <td class="paragraph-normal">${item.likes_quantity}</td>
+            <td class="paragraph-medium"><button class="table-button button-line visualize">Visualizar</button></td>
             <td class="paragraph-medium"><button class="table-button button-fill">Editar</button></td>
             <td class="paragraph-medium"><button class="table-button button-delete">Deletar</button></td>
           `;
@@ -126,6 +131,44 @@ export default function dashboard() {
 
   // Retorna o elemento principal
   return dashboardElement;
+}
+
+// Função que gera o header
+function tableHeader() {
+  const thead = document.createElement('thead');
+  const row = document.createElement('tr');
+  const title = document.createElement('th');
+  /* const banner = document.createElement('th'); */
+  const category = document.createElement('th');
+  const createdAt = document.createElement('th');
+  const postedDraft = document.createElement('th');
+  const status = document.createElement('th');
+  const comments = document.createElement('th');
+  const likes = document.createElement('th');
+  const visualize = document.createElement('th');
+  const edit = document.createElement('th');
+  const exclude = document.createElement('th');
+
+  thead.classList.add('table-header-thead');
+  /* [title, banner, category, createdAt, postedDraft, status, comments, likes, visualize, edit, exclude].forEach((element) => {
+    element.classList.add('paragraph-normal');
+  });*/
+  title.innerText = 'Título';
+  /* banner.innerText = 'Banner'; */
+  category.innerText = 'Categoria';
+  createdAt.innerText = 'Postagem';
+  postedDraft.innerText = 'Exibição';
+  status.innerText = 'Status';
+  comments.innerText = 'Comentários';
+  likes.innerText = 'Curtidas';
+  visualize.innerText = 'Visualizar';
+  edit.innerText = 'Editar';
+  exclude.innerText = 'Deletar';
+
+  row.append(title, category, createdAt, postedDraft, status, comments, likes, visualize, edit, exclude);
+  thead.appendChild(row);
+
+  return thead;
 }
 
 async function deletePost(id) {

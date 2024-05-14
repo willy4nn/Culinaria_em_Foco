@@ -3,7 +3,6 @@ import home from './pages/home.js';
 import login from './pages/login.js';
 import register from './pages/register.js';
 import profile from './pages/profile.js';
-import createPost from './pages/post.js';
 import getPost from './pages/getPost.js';
 import editPost from './pages/editPost.js';
 import dashboard from './pages/dashboard.js';
@@ -12,7 +11,7 @@ import admin from './pages/admin.js';
 import forgotPassword from './pages/forgot-password.js';
 import recoveryPassword from './pages/recovery-password.js';
 import notFound from './pages/not-found.js';
-import create from './pages/create.js';
+import createPost from './pages/create.js';
 
 const router = {
   '': function () {
@@ -36,11 +35,8 @@ const router = {
   '/home': function () {
     return home();
   },
-  '/post': function () {
-    return createPost();
-  },
   '/create': function () {
-    return create();
+    return createPost();
   },
   '/post/:id': function (params) {
     return getPost(params.id);
