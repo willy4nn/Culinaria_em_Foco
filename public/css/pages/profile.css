@@ -22,11 +22,11 @@
     max-width: 50em;
     box-shadow: var(--shdh-default);
     background: var(--p3y);
-    margin: 40px;
     backdrop-filter: blur(20px);
     display: flex;
     gap: 2em;
     flex-wrap: wrap;
+    width: 100%;
 }
 
 

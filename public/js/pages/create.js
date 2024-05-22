@@ -113,6 +113,7 @@ export default function createPost() {
   const titleInput = createPostElement.querySelector('#title');
   const categoryInputs = createPostElement.querySelectorAll('input[name="category"]');
 
+  const selectBanner = createPostElement.querySelector('.select-banner label');
   const bannerInput = createPostElement.querySelector('#banner');
   const bannerPreview = createPostElement.querySelector('#banner-preview');
   bannerPreview.src = '/assets/images/default_image_banner.png';
@@ -120,6 +121,10 @@ export default function createPost() {
   const buttonDiscard = createPostElement.querySelector('#button-discard');
   const buttonPost = createPostElement.querySelector('#button-post');
   const buttonSave = createPostElement.querySelector('#button-save');
+
+  selectBanner.addEventListener('click', () => {
+    bannerInput.click();
+  })
 
   // Aguarda o carregamento do editor de texto
   Promise.all([
