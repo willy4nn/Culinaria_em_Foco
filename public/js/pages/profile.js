@@ -14,7 +14,6 @@ const { popupCard, showPopup } = modalError();
 export default function profile() {
   // HTML do elemento de login
   const profileContentHTML = `
-
     <main class="main"> 
       <div class="profile-card">
         <div id="profile-header" class="profile-header">
@@ -41,7 +40,6 @@ export default function profile() {
               <span id="profile-premium-date" class="paragraph-normal"></span>
             </div>
           </div>
-
           <div id="profile-edit" class="profile-content">
             <div class="profile-group">
               <span class="label-edit">Nome</span>
@@ -65,7 +63,6 @@ export default function profile() {
               <input id="current-password-input" placeholder="Senha atual" type="password"></input>
             </div>
           </div>
-
           <div id="profile-options" class="profile-options">
             <div class="options-group">
               <button id="edit-button" class="edit-button">Editar Perfil</button>
@@ -73,7 +70,6 @@ export default function profile() {
               <button id="premium-button">Assinar Premium</button>
             </div>
           </div>
-
           <div id="edit-options">
             <div class="options-group">
               <button id="cancel-button">Cancelar</button>
@@ -82,9 +78,7 @@ export default function profile() {
           </div>
         </div>
       </div>
-
     </main>
-
   `;
 
   const profileElement = document.createElement('div');

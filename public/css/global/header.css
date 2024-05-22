@@ -177,7 +177,7 @@
     align-items: end;
   }
 
-  .header .buttons {
+  .header .signup-button {
       display: none;
     }
 }
